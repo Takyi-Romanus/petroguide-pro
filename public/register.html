@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register — PetroGuide Pro</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="auth-page">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <div class="logo-icon">⛽</div>
+        PetroGuide Pro
+      </div>
+      <h1 class="auth-title">Create your account</h1>
+      <p class="auth-subtitle">Join the petroleum engineering community</p>
+
+      <div id="alert" class="alert hidden"></div>
+
+      <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <input type="text" id="fullName" class="form-control" placeholder="e.g. Kofi Mensah" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Email address</label>
+        <input type="email" id="email" class="form-control" placeholder="you@example.com" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" id="password" class="form-control" placeholder="At least 6 characters" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">I am a...</label>
+        <select id="role" class="form-control">
+          <option value="student">Student</option>
+          <option value="engineer">Petroleum Engineer</option>
+        </select>
+      </div>
+
+      <button onclick="doRegister()" class="btn btn-primary w-full" id="submitBtn" style="justify-content:center; padding:0.75rem;">
+        Create Account →
+      </button>
+
+      <div class="auth-footer">
+        Already have an account? <a href="/auth/login">Sign in</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    async function doRegister() {
+      const btn = document.getElementById('submitBtn');
+      const alertEl = document.getElementById('alert');
+      const fullName = document.getElementById('fullName').value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const role = document.getElementById('role').value;
+
+      if (!fullName || !email || !password) {
+        alertEl.textContent = 'Please fill in all fields';
+        alertEl.className = 'alert alert-error';
+        return;
+      }
+
+      btn.textContent = 'Creating account...';
+      btn.disabled = true;
+
+      try {
+        const res = await fetch('/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ fullName, email, password, role })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          window.location.href = data.redirect;
+        } else {
+          alertEl.textContent = data.message;
+          alertEl.className = 'alert alert-error';
+          btn.textContent = 'Create Account →';
+          btn.disabled = false;
+        }
+      } catch (err) {
+        alertEl.textContent = 'Network error. Please try again.';
+        alertEl.className = 'alert alert-error';
+        btn.textContent = 'Create Account →';
+        btn.disabled = false;
+      }
+    }
+  </script>
+  <script src="/petroai-widget.js"></script>
+</body>
+</html>

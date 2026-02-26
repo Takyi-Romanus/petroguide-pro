@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hazard Reports — PetroGuide Pro</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/" class="navbar-brand">
+      <div class="logo-icon">⛽</div>
+      PetroGuide<span class="sub"> Pro</span>
+    </a>
+    <ul class="navbar-nav">
+      <li><a href="/learn">Learn</a></li>
+      <li><a href="/hazards" class="active">Hazards</a></li>
+      <li><a href="/careers">Careers</a></li>
+    </ul>
+    <div class="navbar-actions" id="navActions">
+      <a href="/auth/login" class="btn btn-outline">Log In</a>
+      <a href="/auth/register" class="btn btn-primary">Get Started</a>
+    </div>
+  </nav>
+
+  <div class="page-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-section">Navigation</div>
+      <ul class="sidebar-menu">
+        <li><a href="/dashboard"><span class="menu-icon">📊</span> Dashboard</a></li>
+        <li><a href="/learn"><span class="menu-icon">🎓</span> Learning Modules</a></li>
+        <li><a href="/hazards" class="active"><span class="menu-icon">⚠️</span> Hazard Reports</a></li>
+        <li><a href="/careers"><span class="menu-icon">💼</span> Career Board</a></li>
+      </ul>
+      <div class="sidebar-section" style="margin-top:1rem;">Filter by Severity</div>
+      <ul class="sidebar-menu">
+        <li><a href="#" onclick="filterSev('')"><span>🔴</span> All Incidents</a></li>
+        <li><a href="#" onclick="filterSev('critical')"><span>💥</span> Critical</a></li>
+        <li><a href="#" onclick="filterSev('high')"><span>🔴</span> High</a></li>
+        <li><a href="#" onclick="filterSev('medium')"><span>🟡</span> Medium</a></li>
+        <li><a href="#" onclick="filterSev('low')"><span>🟢</span> Low</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <div class="page-header">
+        <div>
+          <h1>⚠️ Hazard Reports</h1>
+          <p>Real-time safety incident tracking for petroleum operations</p>
+        </div>
+        <button class="btn btn-danger" onclick="openReportModal()">+ Report Hazard</button>
+      </div>
+
+      <!-- Summary cards -->
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:1rem; margin-bottom:1.5rem;" id="summaryCards">
+        <div class="dash-stat" style="flex-direction:column; text-align:center; gap:0.5rem;">
+          <div style="font-size:2rem;">📊</div>
+          <h3 id="totalCount">—</h3>
+          <p>Total Reports</p>
+        </div>
+        <div class="dash-stat" style="flex-direction:column; text-align:center; gap:0.5rem; border-left:3px solid var(--danger);">
+          <div style="font-size:2rem;">🔴</div>
+          <h3 id="criticalCount">—</h3>
+          <p>Critical</p>
+        </div>
+        <div class="dash-stat" style="flex-direction:column; text-align:center; gap:0.5rem; border-left:3px solid var(--warning);">
+          <div style="font-size:2rem;">🟡</div>
+          <h3 id="activeCount">—</h3>
+          <p>Active</p>
+        </div>
+        <div class="dash-stat" style="flex-direction:column; text-align:center; gap:0.5rem; border-left:3px solid var(--success);">
+          <div style="font-size:2rem;">✅</div>
+          <h3 id="resolvedCount">—</h3>
+          <p>Resolved</p>
+        </div>
+      </div>
+
+      <div id="hazardsContainer">
+        <div class="loading"><div class="spinner"></div> Loading reports...</div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Report Modal -->
+  <div class="modal-overlay" id="reportModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>⚠️ Report a Hazard</h2>
+        <button class="modal-close" onclick="closeReportModal()">✕</button>
+      </div>
+      <div id="reportAlert" class="alert hidden"></div>
+      <div class="form-group">
+        <label class="form-label">Incident Title *</label>
+        <input type="text" id="rTitle" class="form-control" placeholder="Brief description of the hazard">
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+        <div class="form-group">
+          <label class="form-label">Category *</label>
+          <select id="rCategory" class="form-control">
+            <option value="spill">Oil/Chemical Spill</option>
+            <option value="fire">Fire</option>
+            <option value="gas_leak">Gas Leak</option>
+            <option value="explosion">Explosion</option>
+            <option value="equipment_failure">Equipment Failure</option>
+            <option value="injury">Injury</option>
+            <option value="environmental">Environmental</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Severity *</label>
+          <select id="rSeverity" class="form-control">
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+            <option value="critical">Critical</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Location *</label>
+        <input type="text" id="rLocation" class="form-control" placeholder="e.g. Well Pad A, Block 7">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description *</label>
+        <textarea id="rDescription" class="form-control" placeholder="Describe what happened, observed conditions, and immediate actions taken..."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Your Name (optional)</label>
+        <input type="text" id="rName" class="form-control" placeholder="Leave blank for anonymous report">
+      </div>
+      <button onclick="submitReport()" class="btn btn-danger w-full" style="justify-content:center;" id="submitReportBtn">
+        Submit Report
+      </button>
+    </div>
+  </div>
+
+  <script>
+    let allHazards = [];
+    let currentSev = '';
+
+    async function loadHazards() {
+      const res = await fetch('/api/hazards');
+      const data = await res.json();
+      allHazards = data.data || [];
+      
+      // Update summary
+      document.getElementById('totalCount').textContent = allHazards.length;
+      document.getElementById('criticalCount').textContent = allHazards.filter(h => h.severity === 'critical' || h.severity === 'high').length;
+      document.getElementById('activeCount').textContent = allHazards.filter(h => h.status !== 'resolved').length;
+      document.getElementById('resolvedCount').textContent = allHazards.filter(h => h.status === 'resolved').length;
+
+      renderHazards(allHazards);
+    }
+
+    function renderHazards(hazards) {
+      const container = document.getElementById('hazardsContainer');
+      if (!hazards.length) {
+        container.innerHTML = '<p style="color:var(--text-light);">No hazard reports found.</p>';
+        return;
+      }
+      container.innerHTML = `<div class="hazard-list">${hazards.map(h => {
+        const time = new Date(h.createdAt).toLocaleString();
+        return `
+        <div class="hazard-card ${h.severity}">
+          <div>
+            <span class="hazard-severity sev-${h.severity}">${h.severity.toUpperCase()}</span>
+          </div>
+          <div class="hazard-body">
+            <h3>${h.title}</h3>
+            <p>${h.description}</p>
+            <div class="hazard-meta">
+              <span>📍 ${h.location}</span>
+              <span>🏷 ${h.category?.replace('_',' ')}</span>
+              <span>👤 ${h.reportedByName || 'Anonymous'}</span>
+              <span>🕐 ${time}</span>
+              <span class="status-badge status-${h.status}">${h.status}</span>
+            </div>
+          </div>
+        </div>`;
+      }).join('')}</div>`;
+    }
+
+    function filterSev(sev) {
+      currentSev = sev;
+      const filtered = sev ? allHazards.filter(h => h.severity === sev) : allHazards;
+      renderHazards(filtered);
+    }
+
+    function openReportModal() { document.getElementById('reportModal').classList.add('open'); }
+    function closeReportModal() { document.getElementById('reportModal').classList.remove('open'); }
+
+    async function submitReport() {
+      const btn = document.getElementById('submitReportBtn');
+      const alertEl = document.getElementById('reportAlert');
+      const title = document.getElementById('rTitle').value;
+      const category = document.getElementById('rCategory').value;
+      const severity = document.getElementById('rSeverity').value;
+      const location = document.getElementById('rLocation').value;
+      const description = document.getElementById('rDescription').value;
+      const reportedByName = document.getElementById('rName').value;
+
+      if (!title || !location || !description) {
+        alertEl.textContent = 'Please fill in all required fields';
+        alertEl.className = 'alert alert-error';
+        return;
+      }
+
+      btn.textContent = 'Submitting...'; btn.disabled = true;
+
+      try {
+        const res = await fetch('/api/hazards', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ title, category, severity, location, description, reportedByName })
+        });
+        const data = await res.json();
+        if (data.success) {
+          closeReportModal();
+          allHazards.unshift(data.data);
+          renderHazards(allHazards);
+          document.getElementById('totalCount').textContent = allHazards.length;
+          // Reset form
+          ['rTitle','rLocation','rDescription','rName'].forEach(id => document.getElementById(id).value = '');
+        }
+      } catch (e) {
+        alertEl.textContent = 'Submission failed. Please try again.';
+        alertEl.className = 'alert alert-error';
+      }
+
+      btn.textContent = 'Submit Report'; btn.disabled = false;
+    }
+
+    // Nav auth check
+    fetch('/api/me').then(r => r.json()).then(d => {
+      if (d.user) {
+        document.getElementById('navActions').innerHTML = `
+          <a href="/dashboard" class="btn btn-outline">Dashboard</a>
+          <button onclick="fetch('/auth/logout',{method:'POST'}).then(()=>location.href='/')" class="btn btn-primary btn-sm">Log Out</button>
+        `;
+      }
+    });
+
+    loadHazards();
+  </script>
+    <script src="/petroai-widget.js"></script>
+</body>
+</html>

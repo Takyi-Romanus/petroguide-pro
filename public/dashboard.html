@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — PetroGuide Pro</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/" class="navbar-brand">
+      <div class="logo-icon">⛽</div>
+      PetroGuide<span class="sub"> Pro</span>
+    </a>
+    <ul class="navbar-nav">
+      <li><a href="/learn">Learn</a></li>
+      <li><a href="/hazards">Hazards</a></li>
+      <li><a href="/careers">Careers</a></li>
+    </ul>
+    <div class="navbar-actions">
+      <span id="userGreet" style="color:rgba(255,255,255,0.7); font-size:0.85rem;"></span>
+      <button onclick="logout()" class="btn btn-outline btn-sm">Log Out</button>
+    </div>
+  </nav>
+
+  <div class="page-wrapper">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-section">Navigation</div>
+      <ul class="sidebar-menu">
+        <li><a href="/dashboard" class="active"><span class="menu-icon">📊</span> Dashboard</a></li>
+        <li><a href="/learn"><span class="menu-icon">🎓</span> Learning Modules</a></li>
+        <li><a href="/hazards"><span class="menu-icon">⚠️</span> Hazard Reports</a></li>
+        <li><a href="/careers"><span class="menu-icon">💼</span> Career Board</a></li>
+      </ul>
+      <div class="sidebar-section" style="margin-top:1rem;">Account</div>
+      <ul class="sidebar-menu">
+        <li><a href="#"><span class="menu-icon">👤</span> My Profile</a></li>
+        <li><a href="#" onclick="logout()"><span class="menu-icon">🚪</span> Log Out</a></li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="page-header">
+        <div>
+          <h1 id="welcomeMsg">Welcome back! 👋</h1>
+          <p>Here's what's happening on PetroGuide Pro today.</p>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="dash-stats">
+        <div class="dash-stat">
+          <div class="dash-stat-icon ic-blue">👥</div>
+          <div>
+            <h3 id="statUsers">—</h3>
+            <p>Total Users</p>
+          </div>
+        </div>
+        <div class="dash-stat">
+          <div class="dash-stat-icon ic-amber">🎓</div>
+          <div>
+            <h3 id="statModules">—</h3>
+            <p>Learning Modules</p>
+          </div>
+        </div>
+        <div class="dash-stat">
+          <div class="dash-stat-icon ic-red">⚠️</div>
+          <div>
+            <h3 id="statHazards">—</h3>
+            <p>Safety Reports</p>
+          </div>
+        </div>
+        <div class="dash-stat">
+          <div class="dash-stat-icon ic-green">💼</div>
+          <div>
+            <h3 id="statCareers">—</h3>
+            <p>Open Positions</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="card mb-3">
+        <div class="card-header">
+          <h2>Quick Actions</h2>
+        </div>
+        <div class="card-body" style="display:flex; gap:1rem; flex-wrap:wrap;">
+          <a href="/learn" class="btn btn-primary">🎓 Start Learning</a>
+          <a href="/hazards" class="btn btn-outline" style="border-color:var(--border); color:var(--text);">⚠️ Report Hazard</a>
+          <a href="/careers" class="btn btn-outline" style="border-color:var(--border); color:var(--text);">💼 Browse Jobs</a>
+        </div>
+      </div>
+
+      <!-- Recent Hazards -->
+      <div class="card">
+        <div class="card-header">
+          <h2>⚠️ Recent Safety Reports</h2>
+          <a href="/hazards" class="btn btn-sm btn-outline" style="border-color:var(--border); color:var(--text);">View All</a>
+        </div>
+        <div class="card-body" id="recentHazards">
+          <div class="loading"><div class="spinner"></div> Loading...</div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    let currentUser = null;
+
+    async function init() {
+      // Check auth
+      const meRes = await fetch('/api/me');
+      const meData = await meRes.json();
+      if (!meData.user) { window.location.href = '/auth/login'; return; }
+      currentUser = meData.user;
+
+      document.getElementById('userGreet').textContent = currentUser.fullName;
+      document.getElementById('welcomeMsg').textContent = `Welcome back, ${currentUser.fullName.split(' ')[0]}! 👋`;
+
+      // Load stats
+      const statsRes = await fetch('/api/stats');
+      const statsData = await statsRes.json();
+      if (statsData.success) {
+        document.getElementById('statUsers').textContent = statsData.data.users.toLocaleString();
+        document.getElementById('statModules').textContent = statsData.data.modules;
+        document.getElementById('statHazards').textContent = statsData.data.hazards;
+        document.getElementById('statCareers').textContent = statsData.data.careers;
+      }
+
+      // Load hazards
+      const hRes = await fetch('/api/hazards');
+      const hData = await hRes.json();
+      const container = document.getElementById('recentHazards');
+      if (hData.success && hData.data.length) {
+        container.innerHTML = `<div class="hazard-list">${hData.data.slice(0,3).map(h => `
+          <div class="hazard-card ${h.severity}">
+            <div>
+              <span class="hazard-severity sev-${h.severity}">${h.severity.toUpperCase()}</span>
+            </div>
+            <div class="hazard-body">
+              <h3>${h.title}</h3>
+              <p>${h.description.substring(0, 100)}...</p>
+              <div class="hazard-meta">
+                <span>📍 ${h.location}</span>
+                <span>👤 ${h.reportedByName || 'Anonymous'}</span>
+                <span class="status-badge status-${h.status}">${h.status}</span>
+              </div>
+            </div>
+          </div>
+        `).join('')}</div>`;
+      } else {
+        container.innerHTML = '<p style="color:var(--text-light); font-size:0.875rem;">No hazard reports yet.</p>';
+      }
+    }
+
+    async function logout() {
+      await fetch('/auth/logout', { method: 'POST' });
+      window.location.href = '/';
+    }
+
+    init();
+  </script>
+  <script src="/petroai-widget.js"></script>
+</body>
+</html>

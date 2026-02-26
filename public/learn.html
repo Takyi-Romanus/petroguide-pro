@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Learning Modules — PetroGuide Pro</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/" class="navbar-brand">
+      <div class="logo-icon">⛽</div>
+      PetroGuide<span class="sub"> Pro</span>
+    </a>
+    <ul class="navbar-nav">
+      <li><a href="/learn" class="active">Learn</a></li>
+      <li><a href="/hazards">Hazards</a></li>
+      <li><a href="/careers">Careers</a></li>
+    </ul>
+    <div class="navbar-actions" id="navActions">
+      <a href="/auth/login" class="btn btn-outline">Log In</a>
+      <a href="/auth/register" class="btn btn-primary">Get Started</a>
+    </div>
+  </nav>
+
+  <div class="page-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-section">Explore</div>
+      <ul class="sidebar-menu">
+        <li><a href="/dashboard"><span class="menu-icon">📊</span> Dashboard</a></li>
+        <li><a href="/learn" class="active"><span class="menu-icon">🎓</span> Learning Modules</a></li>
+        <li><a href="/hazards"><span class="menu-icon">⚠️</span> Hazard Reports</a></li>
+        <li><a href="/careers"><span class="menu-icon">💼</span> Career Board</a></li>
+      </ul>
+      <div class="sidebar-section" style="margin-top:1rem;">Categories</div>
+      <ul class="sidebar-menu">
+        <li><a href="#" onclick="filterCat('drilling')"><span class="menu-icon">🔩</span> Drilling</a></li>
+        <li><a href="#" onclick="filterCat('reservoir')"><span class="menu-icon">🪨</span> Reservoir</a></li>
+        <li><a href="#" onclick="filterCat('production')"><span class="menu-icon">🏭</span> Production</a></li>
+        <li><a href="#" onclick="filterCat('safety')"><span class="menu-icon">🦺</span> Safety & HSE</a></li>
+        <li><a href="#" onclick="filterCat('environment')"><span class="menu-icon">🌿</span> Environment</a></li>
+        <li><a href="#" onclick="filterCat('digital')"><span class="menu-icon">💻</span> Digital & Data</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <div class="page-header">
+        <div>
+          <h1>🎓 Learning Modules</h1>
+          <p>Interactive petroleum engineering courses for students and professionals</p>
+        </div>
+      </div>
+
+      <!-- Search & Filter -->
+      <div style="display:flex; gap:1rem; margin-bottom:1.5rem; flex-wrap:wrap;">
+        <input type="text" id="searchInput" class="form-control" placeholder="🔍 Search modules..." style="max-width:320px;" oninput="searchModules()">
+        <select id="levelFilter" class="form-control" style="max-width:160px;" onchange="applyFilters()">
+          <option value="">All Levels</option>
+          <option value="beginner">Beginner</option>
+          <option value="intermediate">Intermediate</option>
+          <option value="advanced">Advanced</option>
+        </select>
+      </div>
+
+      <div class="filter-bar" id="catFilter">
+        <button class="filter-btn active" onclick="filterCat('')">All Categories</button>
+        <button class="filter-btn" onclick="filterCat('drilling')">⛏ Drilling</button>
+        <button class="filter-btn" onclick="filterCat('reservoir')">🪨 Reservoir</button>
+        <button class="filter-btn" onclick="filterCat('production')">🏭 Production</button>
+        <button class="filter-btn" onclick="filterCat('safety')">🦺 Safety</button>
+        <button class="filter-btn" onclick="filterCat('environment')">🌿 Environment</button>
+        <button class="filter-btn" onclick="filterCat('digital')">💻 Digital</button>
+      </div>
+
+      <div id="modulesContainer">
+        <div class="loading"><div class="spinner"></div> Loading modules...</div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Module Detail Modal -->
+  <div class="modal-overlay" id="moduleModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="modalTitle">Module Title</h2>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <script>
+    let allModules = [];
+    let currentCat = '';
+
+    const categoryEmojis = { drilling:'⛏', reservoir:'🪨', production:'🏭', safety:'🦺', environment:'🌿', digital:'💻' };
+
+    async function loadModules() {
+      const res = await fetch('/api/modules');
+      const data = await res.json();
+      allModules = data.data || [];
+      renderModules(allModules);
+    }
+
+    function renderModules(modules) {
+      const container = document.getElementById('modulesContainer');
+      if (!modules.length) {
+        container.innerHTML = '<p style="color:var(--text-light);">No modules found.</p>';
+        return;
+      }
+      container.innerHTML = `<div class="modules-grid">${modules.map(m => `
+        <div class="module-card" onclick="openModule(${JSON.stringify(m).replace(/"/g,'&quot;')})">
+          <div class="module-thumb ${m.category}">
+            <span style="color:white; font-size:3rem;">${categoryEmojis[m.category] || '📚'}</span>
+          </div>
+          <div class="module-info">
+            <div class="module-category">${m.category.toUpperCase()}</div>
+            <h3>${m.title}</h3>
+            <p>${m.description.substring(0, 100)}...</p>
+            <div class="module-meta">
+              <span>⏱ ${m.duration} min &nbsp; ⭐ ${m.rating}</span>
+              <span class="badge badge-${m.level}">${m.level}</span>
+            </div>
+          </div>
+        </div>
+      `).join('')}</div>`;
+    }
+
+    function filterCat(cat) {
+      currentCat = cat;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      const btns = document.querySelectorAll('.filter-btn');
+      btns.forEach(b => { if (b.textContent.toLowerCase().includes(cat || 'all')) b.classList.add('active'); });
+      applyFilters();
+    }
+
+    function searchModules() { applyFilters(); }
+
+    function applyFilters() {
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      const level = document.getElementById('levelFilter').value;
+      let filtered = allModules;
+      if (currentCat) filtered = filtered.filter(m => m.category === currentCat);
+      if (level) filtered = filtered.filter(m => m.level === level);
+      if (search) filtered = filtered.filter(m =>
+        m.title.toLowerCase().includes(search) || m.description.toLowerCase().includes(search)
+      );
+      renderModules(filtered);
+    }
+
+    function openModule(m) {
+      document.getElementById('modalTitle').textContent = m.title;
+      document.getElementById('modalBody').innerHTML = `
+        <div style="margin-bottom:1rem;">
+          <span class="badge badge-${m.level}" style="margin-right:0.5rem;">${m.level}</span>
+          <span style="font-size:0.8rem; color:var(--text-light);">⏱ ${m.duration} min &nbsp; ⭐ ${m.rating} &nbsp; 👥 ${m.enrolledCount} enrolled</span>
+        </div>
+        <p style="margin-bottom:1rem; color:var(--text-light); font-size:0.9rem;">${m.description}</p>
+        <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom:1.5rem;">
+          ${(m.tags || []).map(t => `<span style="background:#f1f5f9; padding:0.2rem 0.6rem; border-radius:4px; font-size:0.75rem;">${t}</span>`).join('')}
+        </div>
+        <div style="background:#f8fafc; border-radius:10px; padding:1.5rem; margin-bottom:1.5rem;">
+          <h3 style="font-size:1rem; margin-bottom:0.75rem; color:var(--primary);">📋 What You'll Learn</h3>
+          <ul style="list-style:none; display:flex; flex-direction:column; gap:0.5rem;">
+            <li>✅ Core ${m.category} engineering concepts</li>
+            <li>✅ Industry best practices and standards</li>
+            <li>✅ Real-world case studies and applications</li>
+            <li>✅ Interactive quizzes to test your knowledge</li>
+          </ul>
+        </div>
+        <button onclick="startModule('${m._id}')" class="btn btn-primary" style="width:100%; justify-content:center; padding:0.75rem;">
+          🚀 Start Module
+        </button>
+      `;
+      document.getElementById('moduleModal').classList.add('open');
+    }
+
+    function closeModal() {
+      document.getElementById('moduleModal').classList.remove('open');
+    }
+
+    function startModule(id) {
+      alert('Module player coming soon! You would begin the interactive lesson here with videos, readings, and quizzes.');
+      closeModal();
+    }
+
+    // Nav auth check
+    fetch('/api/me').then(r => r.json()).then(d => {
+      if (d.user) {
+        document.getElementById('navActions').innerHTML = `
+          <a href="/dashboard" class="btn btn-outline">Dashboard</a>
+          <button onclick="fetch('/auth/logout',{method:'POST'}).then(()=>location.href='/')" class="btn btn-primary btn-sm">Log Out</button>
+        `;
+      }
+    });
+
+    loadModules();
+  </script>
+    <script src="/petroai-widget.js"></script>
+</body>
+</html>

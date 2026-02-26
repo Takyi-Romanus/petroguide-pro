@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PetroGuide Pro — NextGen Petro-Tech</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+<link rel="manifest" href="/images/site.webmanifest">
+  <style>
+    .sdg-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; }
+    .sdg-card {
+      background: white; border-radius: 12px; padding: 1.5rem;
+      border: 1px solid var(--border); text-align: center;
+    }
+    .sdg-num {
+      font-size: 2.5rem; font-weight: 900; color: var(--accent);
+      line-height: 1; margin-bottom: 0.5rem;
+    }
+    .sdg-label { font-size: 0.78rem; color: var(--text-light); }
+    .cta-section {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white; text-align: center; padding: 5rem 2rem;
+    }
+    .cta-section h2 { font-size: 2.25rem; font-weight: 800; margin-bottom: 1rem; }
+    .cta-section p { color: rgba(255,255,255,0.75); max-width: 480px; margin: 0 auto 2rem; }
+    footer {
+      background: var(--primary); color: rgba(255,255,255,0.6);
+      text-align: center; padding: 2rem;
+      font-size: 0.85rem;
+    }
+    footer span { color: var(--accent); }
+    .team-link { color: rgba(255,255,255,0.8); text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <a href="/" class="navbar-brand">
+      <div class="logo-icon">
+        <img src="/images/favicon.ico" alt="PetroGuide Pro">
+      </div>
+      PetroGuide<span class="sub"> Pro</span>
+    </a>
+    <ul class="navbar-nav">
+      <li><a href="/learn" class="active">Learn</a></li>
+      <li><a href="/hazards">Hazard Reports</a></li>
+      <li><a href="/careers">Careers</a></li>
+    </ul>
+    <div class="navbar-actions" id="navActions">
+      <a href="/auth/login" class="btn btn-outline">Log In</a>
+      <a href="/auth/register" class="btn btn-primary">Get Started</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-bg-pattern"></div>
+    <div class="hero-content">
+        <div class="hero-text">
+        <div class="hero-badge">
+          ✦ NextGen Petro-Tech &nbsp;|&nbsp; Guiding the Future of Energy
+        </div>
+        <h1>The Smart Platform for <span class="highlight">Petroleum Professionals</span></h1>
+        <p>PetroGuide Pro delivers real-time guidance, interactive learning, hazard reporting, and AI-powered assistance to engineers and students across the energy sector.</p>
+        <div class="hero-actions">
+          <a href="/auth/register" class="btn btn-primary btn-lg">Get Started Free →</a>
+          <a href="/learn" class="btn btn-outline btn-lg">Explore Modules</a>
+        </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+      <div class="stats-inner">
+        <div class="stat-item">
+          <span class="num" id="statUsers">1,247</span>
+          <span class="label">Active Users</span>
+        </div>
+        <div class="stat-item">
+          <span class="num" id="statModules">6</span>
+          <span class="label">Learning Modules</span>
+        </div>
+        <div class="stat-item">
+          <span class="num" id="statHazards">3</span>
+          <span class="label">Safety Reports</span>
+        </div>
+        <div class="stat-item">
+          <span class="num" id="statCareers">4</span>
+          <span class="label">Job Listings</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <div style="background: white; padding: 5rem 0;">
+    <div class="section" style="padding-top: 0;">
+      <div class="section-header">
+        <h2>Everything You Need in One Platform</h2>
+        <p>Designed for petroleum engineers, students, and safety officers across the energy sector</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon ic-blue">🎓</div>
+          <h3>Interactive Learning</h3>
+          <p>Master petroleum engineering fundamentals through structured modules covering drilling, reservoir, production, and more.</p>
+          <a href="/learn">Explore Modules →</a>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon ic-red">⚠️</div>
+          <h3>Hazard Reporting</h3>
+          <p>Report and track safety incidents in real time. Classify severity, attach locations, and monitor resolution status.</p>
+          <a href="/hazards">View Reports →</a>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon ic-amber">💼</div>
+          <h3>Career Opportunities</h3>
+          <p>Discover internships and full-time positions with leading oil and gas companies in Ghana and beyond.</p>
+          <a href="/careers">Browse Jobs →</a>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon ic-purple">🤖</div>
+          <h3>AI-Powered Assistant</h3>
+          <p>Get instant answers to technical petroleum engineering questions — from Darcy's Law to well control procedures.</p>
+          <a href="/ai-assistant">Ask PetroAI →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SDG Alignment -->
+  <div style="padding: 5rem 0; background: var(--bg);">
+    <div class="section" style="padding-top: 0;">
+      <div class="section-header">
+        <h2>Aligned with Global SDGs</h2>
+        <p>PetroGuide Pro is built with Agenda 2030 in mind, supporting sustainable development goals through technology.</p>
+      </div>
+      <div class="sdg-grid">
+        <div class="sdg-card">
+          <div class="sdg-num">SDG 7</div>
+          <strong>Affordable & Clean Energy</strong>
+          <p class="sdg-label mt-2">Improving energy efficiency through digital optimization tools</p>
+        </div>
+        <div class="sdg-card">
+          <div class="sdg-num">SDG 8</div>
+          <strong>Decent Work & Growth</strong>
+          <p class="sdg-label mt-2">Connecting workers with smart career tools and opportunities</p>
+        </div>
+        <div class="sdg-card">
+          <div class="sdg-num">SDG 9</div>
+          <strong>Industry & Innovation</strong>
+          <p class="sdg-label mt-2">Driving digital transformation in petroleum infrastructure</p>
+        </div>
+        <div class="sdg-card">
+          <div class="sdg-num">SDG 13</div>
+          <strong>Climate Action</strong>
+          <p class="sdg-label mt-2">Reducing waste and emissions through smart reporting</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <h2>Ready to Elevate Your Practice?</h2>
+    <p>Join over 1,200 petroleum professionals and students already using PetroGuide Pro to work smarter and safer.</p>
+    <a href="/auth/register" class="btn btn-primary btn-lg">Create Your Free Account</a>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 <span>Takyi Romanus</span> — PetroGuide Pro &nbsp;|&nbsp; Group Twenty-One (21)</p>
+  </footer>
+
+  <script src="/petroai-widget.js"></script>
+  <script src="/script.js"></script>
+
+</body>
+</html>

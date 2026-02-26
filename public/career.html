@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Career Board — PetroGuide Pro</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/" class="navbar-brand">
+      <div class="logo-icon">⛽</div>
+      PetroGuide<span class="sub"> Pro</span>
+    </a>
+    <ul class="navbar-nav">
+      <li><a href="/learn">Learn</a></li>
+      <li><a href="/hazards">Hazards</a></li>
+      <li><a href="/careers" class="active">Careers</a></li>
+    </ul>
+    <div class="navbar-actions" id="navActions">
+      <a href="/auth/login" class="btn btn-outline">Log In</a>
+      <a href="/auth/register" class="btn btn-primary">Get Started</a>
+    </div>
+  </nav>
+
+  <div class="page-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-section">Navigation</div>
+      <ul class="sidebar-menu">
+        <li><a href="/dashboard"><span class="menu-icon">📊</span> Dashboard</a></li>
+        <li><a href="/learn"><span class="menu-icon">🎓</span> Learning Modules</a></li>
+        <li><a href="/hazards"><span class="menu-icon">⚠️</span> Hazard Reports</a></li>
+        <li><a href="/careers" class="active"><span class="menu-icon">💼</span> Career Board</a></li>
+      </ul>
+      <div class="sidebar-section" style="margin-top:1rem;">Job Type</div>
+      <ul class="sidebar-menu">
+        <li><a href="#" onclick="filterType('')"><span class="menu-icon">📋</span> All Types</a></li>
+        <li><a href="#" onclick="filterType('full-time')"><span class="menu-icon">🏢</span> Full-Time</a></li>
+        <li><a href="#" onclick="filterType('internship')"><span class="menu-icon">🎓</span> Internships</a></li>
+        <li><a href="#" onclick="filterType('contract')"><span class="menu-icon">📝</span> Contract</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <div class="page-header">
+        <div>
+          <h1>💼 Career Board</h1>
+          <p>Petroleum industry jobs and internships in Ghana and beyond</p>
+        </div>
+      </div>
+
+      <div class="filter-bar">
+        <button class="filter-btn active" onclick="filterType('')">All Positions</button>
+        <button class="filter-btn" onclick="filterType('full-time')">🏢 Full-Time</button>
+        <button class="filter-btn" onclick="filterType('internship')">🎓 Internship</button>
+        <button class="filter-btn" onclick="filterType('contract')">📝 Contract</button>
+        <button class="filter-btn" onclick="filterCat('drilling')">⛏ Drilling</button>
+        <button class="filter-btn" onclick="filterCat('reservoir')">🪨 Reservoir</button>
+        <button class="filter-btn" onclick="filterCat('safety')">🦺 Safety</button>
+        <button class="filter-btn" onclick="filterCat('data')">💻 Data Science</button>
+      </div>
+
+      <div id="careersContainer">
+        <div class="loading"><div class="spinner"></div> Loading jobs...</div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Job Detail Modal -->
+  <div class="modal-overlay" id="jobModal">
+    <div class="modal" style="max-width:640px;">
+      <div class="modal-header">
+        <h2 id="jobModalTitle">Job Title</h2>
+        <button class="modal-close" onclick="closeJobModal()">✕</button>
+      </div>
+      <div id="jobModalBody"></div>
+    </div>
+  </div>
+
+  <script>
+    let allCareers = [];
+    let currentType = '';
+    let currentCat = '';
+
+    async function loadCareers() {
+      const res = await fetch('/api/careers');
+      const data = await res.json();
+      allCareers = data.data || [];
+      renderCareers(allCareers);
+    }
+
+    function renderCareers(careers) {
+      const container = document.getElementById('careersContainer');
+      if (!careers.length) {
+        container.innerHTML = '<p style="color:var(--text-light);">No positions found.</p>';
+        return;
+      }
+      container.innerHTML = `<div class="careers-grid">${careers.map(c => {
+        const typeClass = c.type.replace('-','');
+        const daysLeft = c.deadline ? Math.ceil((new Date(c.deadline) - new Date()) / 86400000) : null;
+        return `
+        <div class="career-card" onclick="openJob(${JSON.stringify(c).replace(/"/g,'&quot;')})">
+          <div class="career-header">
+            <div>
+              <div class="career-company">🏢 ${c.company}</div>
+              <h3>${c.title}</h3>
+            </div>
+            <span class="type-badge type-${c.type}">${c.type}</span>
+          </div>
+          <div class="career-meta">
+            <span>📍 ${c.location}</span>
+            <span>🏷 ${c.category}</span>
+          </div>
+          <p class="career-desc">${c.description.substring(0, 120)}...</p>
+          <div class="career-footer">
+            <span class="salary">${c.salary?.currency || 'GHS'} ${c.salary?.min?.toLocaleString()} – ${c.salary?.max?.toLocaleString()}/mo</span>
+            ${daysLeft !== null ? `<span class="deadline">⏰ ${daysLeft} days left</span>` : ''}
+          </div>
+        </div>`;
+      }).join('')}</div>`;
+    }
+
+    function filterType(type) {
+      currentType = type;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      applyFilters();
+    }
+
+    function filterCat(cat) {
+      currentCat = cat;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      applyFilters();
+    }
+
+    function applyFilters() {
+      let filtered = allCareers;
+      if (currentType) filtered = filtered.filter(c => c.type === currentType);
+      if (currentCat) filtered = filtered.filter(c => c.category === currentCat);
+      renderCareers(filtered);
+    }
+
+    function openJob(c) {
+      document.getElementById('jobModalTitle').textContent = c.title;
+      const daysLeft = c.deadline ? Math.ceil((new Date(c.deadline) - new Date()) / 86400000) : null;
+      document.getElementById('jobModalBody').innerHTML = `
+        <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:1.25rem; flex-wrap:wrap;">
+          <span class="type-badge type-${c.type}">${c.type}</span>
+          <span style="font-size:0.85rem; color:var(--text-light);">🏢 ${c.company}</span>
+          <span style="font-size:0.85rem; color:var(--text-light);">📍 ${c.location}</span>
+        </div>
+        <p style="margin-bottom:1.25rem; color:var(--text-light); font-size:0.9rem; line-height:1.7;">${c.description}</p>
+        
+        ${c.requirements?.length ? `
+        <div style="margin-bottom:1.25rem;">
+          <h3 style="font-size:1rem; margin-bottom:0.75rem; color:var(--primary);">📋 Requirements</h3>
+          <ul style="list-style:none; display:flex; flex-direction:column; gap:0.5rem;">
+            ${c.requirements.map(r => `<li style="font-size:0.85rem; color:var(--text-light); padding-left:1.25rem; position:relative;">✅ ${r}</li>`).join('')}
+          </ul>
+        </div>` : ''}
+
+        ${c.benefits?.length ? `
+        <div style="margin-bottom:1.5rem;">
+          <h3 style="font-size:1rem; margin-bottom:0.75rem; color:var(--primary);">🎁 Benefits</h3>
+          <ul style="list-style:none; display:flex; flex-direction:column; gap:0.5rem;">
+            ${c.benefits.map(b => `<li style="font-size:0.85rem; color:var(--text-light);">⭐ ${b}</li>`).join('')}
+          </ul>
+        </div>` : ''}
+
+        <div style="background:#f8fafc; border-radius:10px; padding:1.25rem; margin-bottom:1.5rem; display:flex; gap:2rem; flex-wrap:wrap;">
+          <div>
+            <div style="font-size:0.75rem; color:var(--text-light); margin-bottom:0.25rem;">Salary</div>
+            <div style="font-weight:700; color:var(--primary);">${c.salary?.currency} ${c.salary?.min?.toLocaleString()} – ${c.salary?.max?.toLocaleString()}/month</div>
+          </div>
+          ${daysLeft !== null ? `
+          <div>
+            <div style="font-size:0.75rem; color:var(--text-light); margin-bottom:0.25rem;">Deadline</div>
+            <div style="font-weight:700; color:${daysLeft < 7 ? 'var(--danger)' : 'var(--primary)'};">${daysLeft} days remaining</div>
+          </div>` : ''}
+        </div>
+
+        <button onclick="applyNow('${c.title}','${c.company}')" class="btn btn-primary w-full" style="justify-content:center; padding:0.75rem;">
+          Apply Now →
+        </button>
+      `;
+      document.getElementById('jobModal').classList.add('open');
+    }
+
+    function closeJobModal() { document.getElementById('jobModal').classList.remove('open'); }
+
+    function applyNow(title, company) {
+      alert(`Application for "${title}" at ${company} submitted! In production, this would redirect to the company's application portal or collect your CV.`);
+      closeJobModal();
+    }
+
+    // Nav auth check
+    fetch('/api/me').then(r => r.json()).then(d => {
+      if (d.user) {
+        document.getElementById('navActions').innerHTML = `
+          <a href="/dashboard" class="btn btn-outline">Dashboard</a>
+          <button onclick="fetch('/auth/logout',{method:'POST'}).then(()=>location.href='/')" class="btn btn-primary btn-sm">Log Out</button>
+        `;
+      }
+    });
+
+    loadCareers();
+  </script>
+    <script src="/petroai-widget.js"></script>
+</body>
+</html>
