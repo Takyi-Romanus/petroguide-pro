@@ -79,7 +79,7 @@ A comprehensive web platform designed for petroleum engineering students, profes
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/Takyi-Romanus/petroguide-pro.git
+git clone https://github.com/Takyi-Romanus/projects-public.git
 cd petroguide-pro
 ```
 
