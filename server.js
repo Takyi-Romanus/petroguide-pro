@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
+const MongoStore = require('connect-mongo');
 const flash = require('connect-flash');
 const morgan = require('morgan');
 const methodOverride = require('method-override');
@@ -28,6 +29,10 @@ app.use(session({
   secret: process.env.SESSION_SECRET || 'petroguide_secret',
   resave: false,
   saveUninitialized: false,
+  store: new MongoStore({
+    mongoUrl: process.env.MONGO_URI || 'mongodb://localhost:27017/petroguide_pro',
+    touchAfter: 24 * 3600 // lazy session update (in seconds)
+  }),
   cookie: { maxAge: 24 * 60 * 60 * 1000 } // 24 hours
 }));
 
