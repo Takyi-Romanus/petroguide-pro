@@ -17,7 +17,20 @@ router.get('/register', redirectIfAuth, (req, res) => {
 // POST /auth/register
 router.post('/register', async (req, res) => {
   try {
-    const { fullName, email, password, role } = req.body;
+    const { fullName, email, password, confirmPassword, role } = req.body;
+    
+    // Validation
+    if (!fullName || !email || !password || !confirmPassword) {
+      return res.status(400).json({ success: false, message: 'All fields are required' });
+    }
+    
+    if (password !== confirmPassword) {
+      return res.status(400).json({ success: false, message: 'Passwords do not match' });
+    }
+    
+    if (password.length < 6) {
+      return res.status(400).json({ success: false, message: 'Password must be at least 6 characters' });
+    }
     
     const existing = await User.findOne({ email });
     if (existing) {
@@ -35,7 +48,7 @@ router.post('/register', async (req, res) => {
 
     res.json({ success: true, redirect: '/dashboard' });
   } catch (err) {
-    console.error(err);
+    console.error('Registration error:', err);
     res.status(500).json({ success: false, message: 'Registration failed' });
   }
 });
@@ -45,8 +58,19 @@ router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
     
+    if (!email || !password) {
+      return res.status(400).json({ success: false, message: 'Email and password are required' });
+    }
+    
     const user = await User.findOne({ email });
-    if (!user || !(await user.comparePassword(password))) {
+    if (!user) {
+      console.warn(`Login attempt with non-existent email: ${email}`);
+      return res.status(401).json({ success: false, message: 'Invalid email or password' });
+    }
+    
+    const isPasswordValid = await user.comparePassword(password);
+    if (!isPasswordValid) {
+      console.warn(`Failed login attempt for user: ${email}`);
       return res.status(401).json({ success: false, message: 'Invalid email or password' });
     }
 
@@ -56,10 +80,11 @@ router.post('/login', async (req, res) => {
       email: user.email,
       role: user.role
     };
-
+    
+    console.log(`User logged in: ${email}`);
     res.json({ success: true, redirect: '/dashboard' });
   } catch (err) {
-    console.error(err);
+    console.error('Login error:', err);
     res.status(500).json({ success: false, message: 'Login failed' });
   }
 });
