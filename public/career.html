@@ -83,7 +83,7 @@
     let currentCat = '';
 
     async function loadCareers() {
-      const res = await fetch('/api/careers');
+      const res = await fetch('/api/careers', { credentials: 'include' });
       const data = await res.json();
       allCareers = data.data || [];
       renderCareers(allCareers);
@@ -193,11 +193,11 @@
     }
 
     // Nav auth check
-    fetch('/api/me').then(r => r.json()).then(d => {
+    fetch('/api/me', { credentials: 'include' }).then(r => r.json()).then(d => {
       if (d.user) {
         document.getElementById('navActions').innerHTML = `
           <a href="/dashboard" class="btn btn-outline">Dashboard</a>
-          <button onclick="fetch('/auth/logout',{method:'POST'}).then(()=>location.href='/')" class="btn btn-primary btn-sm">Log Out</button>
+          <button onclick="fetch('/auth/logout',{method:'POST',credentials:'include'}).then(()=>location.href='/')" class="btn btn-primary btn-sm">Log Out</button>
         `;
       }
     });

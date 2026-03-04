@@ -1,5 +1,5 @@
  // Update navbar for logged-in user
-    fetch('/api/me').then(r => r.json()).then(data => {
+    fetch('/api/me', { credentials: 'include' }).then(r => r.json()).then(data => {
       if (data.user) {
         document.getElementById('navActions').innerHTML = `
           <a href="/dashboard" class="btn btn-outline">Dashboard</a>
@@ -9,7 +9,7 @@
     });
 
     // Load live stats
-    fetch('/api/stats').then(r => r.json()).then(data => {
+    fetch('/api/stats', { credentials: 'include' }).then(r => r.json()).then(data => {
       if (data.success) {
         document.getElementById('statUsers').textContent = data.data.users.toLocaleString();
         document.getElementById('statModules').textContent = data.data.modules;
@@ -19,6 +19,6 @@
     });
 
     async function logout() {
-      await fetch('/auth/logout', { method: 'POST' });
+      await fetch('/auth/logout', { method: 'POST', credentials: 'include' });
       window.location.href = '/';
     }

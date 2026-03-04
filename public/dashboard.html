@@ -111,7 +111,7 @@
 
     async function init() {
       // Check auth
-      const meRes = await fetch('/api/me');
+      const meRes = await fetch('/api/me', { credentials: 'include' });
       const meData = await meRes.json();
       if (!meData.user) { window.location.href = '/auth/login'; return; }
       currentUser = meData.user;
@@ -120,7 +120,7 @@
       document.getElementById('welcomeMsg').textContent = `Welcome back, ${currentUser.fullName.split(' ')[0]}! 👋`;
 
       // Load stats
-      const statsRes = await fetch('/api/stats');
+      const statsRes = await fetch('/api/stats', { credentials: 'include' });
       const statsData = await statsRes.json();
       if (statsData.success) {
         document.getElementById('statUsers').textContent = statsData.data.users.toLocaleString();
@@ -130,7 +130,7 @@
       }
 
       // Load hazards
-      const hRes = await fetch('/api/hazards');
+      const hRes = await fetch('/api/hazards', { credentials: 'include' });
       const hData = await hRes.json();
       const container = document.getElementById('recentHazards');
       if (hData.success && hData.data.length) {
@@ -156,7 +156,7 @@
     }
 
     async function logout() {
-      await fetch('/auth/logout', { method: 'POST' });
+      await fetch('/auth/logout', { method: 'POST', credentials: 'include' });
       window.location.href = '/';
     }
 

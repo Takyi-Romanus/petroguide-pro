@@ -96,7 +96,7 @@
     const categoryEmojis = { drilling:'⛏', reservoir:'🪨', production:'🏭', safety:'🦺', environment:'🌿', digital:'💻' };
 
     async function loadModules() {
-      const res = await fetch('/api/modules');
+      const res = await fetch('/api/modules', { credentials: 'include' });
       const data = await res.json();
       allModules = data.data || [];
       renderModules(allModules);
@@ -185,11 +185,11 @@
     }
 
     // Nav auth check
-    fetch('/api/me').then(r => r.json()).then(d => {
+    fetch('/api/me', { credentials: 'include' }).then(r => r.json()).then(d => {
       if (d.user) {
         document.getElementById('navActions').innerHTML = `
           <a href="/dashboard" class="btn btn-outline">Dashboard</a>
-          <button onclick="fetch('/auth/logout',{method:'POST'}).then(()=>location.href='/')" class="btn btn-primary btn-sm">Log Out</button>
+          <button onclick="fetch('/auth/logout',{method:'POST',credentials:'include'}).then(()=>location.href='/')" class="btn btn-primary btn-sm">Log Out</button>
         `;
       }
     });

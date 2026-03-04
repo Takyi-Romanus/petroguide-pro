@@ -140,7 +140,7 @@
     let currentSev = '';
 
     async function loadHazards() {
-      const res = await fetch('/api/hazards');
+      const res = await fetch('/api/hazards', { credentials: 'include' });
       const data = await res.json();
       allHazards = data.data || [];
       
@@ -209,7 +209,7 @@
       btn.textContent = 'Submitting...'; btn.disabled = true;
 
       try {
-        const res = await fetch('/api/hazards', {
+        const res = await fetch('/api/hazards', { credentials: 'include',
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ title, category, severity, location, description, reportedByName })
@@ -232,11 +232,11 @@
     }
 
     // Nav auth check
-    fetch('/api/me').then(r => r.json()).then(d => {
+    fetch('/api/me', { credentials: 'include' }).then(r => r.json()).then(d => {
       if (d.user) {
         document.getElementById('navActions').innerHTML = `
           <a href="/dashboard" class="btn btn-outline">Dashboard</a>
-          <button onclick="fetch('/auth/logout',{method:'POST'}).then(()=>location.href='/')" class="btn btn-primary btn-sm">Log Out</button>
+          <button onclick="fetch('/auth/logout',{method:'POST',credentials:'include'}).then(()=>location.href='/')" class="btn btn-primary btn-sm">Log Out</button>
         `;
       }
     });
