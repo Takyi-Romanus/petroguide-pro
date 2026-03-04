@@ -32,8 +32,14 @@ app.use(session({
   store: new MongoStore({
     mongoUrl: process.env.MONGO_URI || 'mongodb://localhost:27017/petroguide_pro',
     touchAfter: 24 * 3600 // lazy session update (in seconds)
+  }).on('error', (err) => {
+    console.error('MongoStore error:', err);
   }),
-  cookie: { maxAge: 24 * 60 * 60 * 1000 } // 24 hours
+  cookie: { 
+    maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production'
+  }
 }));
 
 app.use(flash());
@@ -78,8 +84,10 @@ app.use((req, res) => {
 
 // ─── Error Handler ─────────────────────────────────────────────────────────
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ error: 'Something went wrong!' });
+  console.error('Unhandled error:', err);
+  console.error('Error message:', err.message);
+  console.error('Stack:', err.stack);
+  res.status(500).json({ error: err.message || 'Something went wrong!' });
 });
 
 // ─── Start Server ──────────────────────────────────────────────────────────

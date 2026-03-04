@@ -46,10 +46,12 @@ router.post('/register', async (req, res) => {
       role: user.role
     };
 
+    console.log(`User registered successfully: ${email}`);
     res.json({ success: true, redirect: '/dashboard' });
   } catch (err) {
-    console.error('Registration error:', err);
-    res.status(500).json({ success: false, message: 'Registration failed' });
+    console.error('Registration error:', err.message);
+    console.error('Stack:', err.stack);
+    res.status(500).json({ success: false, message: err.message || 'Registration failed' });
   }
 });
 
