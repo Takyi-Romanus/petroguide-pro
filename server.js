@@ -28,7 +28,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
   secret: process.env.SESSION_SECRET || 'petroguide_secret',
   resave: false,
-  saveUninitialized: false,
+  saveUninitialized: true,
   store: new MongoStore({
     mongoUrl: process.env.MONGO_URI || 'mongodb://localhost:27017/petroguide_pro',
     touchAfter: 24 * 3600 // lazy session update (in seconds)
@@ -38,6 +38,7 @@ app.use(session({
   cookie: { 
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
     httpOnly: true,
+    sameSite: 'lax',
     secure: process.env.NODE_ENV === 'production'
   }
 }));

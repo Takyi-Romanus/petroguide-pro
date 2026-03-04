@@ -35,6 +35,7 @@ const SEED_CAREERS = [
 
 // ─── Session helper ─────────────────────────────────────────────────────────
 router.get('/me', (req, res) => {
+  console.log('GET /api/me - Session ID:', req.sessionID, 'User:', req.session.user ? req.session.user.email : 'none');
   res.json({ user: req.session.user || null });
 });
 

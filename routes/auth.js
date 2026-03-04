@@ -46,8 +46,15 @@ router.post('/register', async (req, res) => {
       role: user.role
     };
 
-    console.log(`User registered successfully: ${email}`);
-    res.json({ success: true, redirect: '/dashboard' });
+    // Force session save
+    req.session.save((err) => {
+      if (err) {
+        console.error('Session save error on registration:', err);
+        return res.status(500).json({ success: false, message: 'Session save failed' });
+      }
+      console.log(`✅ User registered and logged in: ${email}, Session ID: ${req.sessionID}`);
+      res.json({ success: true, redirect: '/dashboard' });
+    });
   } catch (err) {
     console.error('Registration error:', err.message);
     console.error('Stack:', err.stack);
@@ -83,8 +90,15 @@ router.post('/login', async (req, res) => {
       role: user.role
     };
     
-    console.log(`User logged in: ${email}`);
-    res.json({ success: true, redirect: '/dashboard' });
+    // Force session save
+    req.session.save((err) => {
+      if (err) {
+        console.error('Session save error on login:', err);
+        return res.status(500).json({ success: false, message: 'Session save failed' });
+      }
+      console.log(`✅ User logged in successfully: ${email}, Session ID: ${req.sessionID}`);
+      res.json({ success: true, redirect: '/dashboard' });
+    });
   } catch (err) {
     console.error('Login error:', err);
     res.status(500).json({ success: false, message: 'Login failed' });
@@ -93,8 +107,11 @@ router.post('/login', async (req, res) => {
 
 // POST /auth/logout
 router.post('/logout', (req, res) => {
-  req.session.destroy();
-  res.json({ success: true, redirect: '/' });
+  req.session.destroy((err) => {
+    if (err) console.error('Session destroy error:', err);
+    console.log('User logged out');
+    res.json({ success: true, redirect: '/' });
+  });
 });
 
 module.exports = router;
