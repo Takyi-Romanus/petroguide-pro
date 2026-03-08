@@ -12,12 +12,288 @@ try {
 
 // ─── Seed Data (used when DB is unavailable or empty) ─────────────────────
 const SEED_MODULES = [
-  { _id:'m1', title:'Petroleum Engineering Basics', slug:'petroleum-basics', description:'Foundations of petroleum engineering: rock properties, fluid mechanics, and formation evaluation.', category:'reservoir', level:'beginner', duration:45, enrolledCount:324, rating:4.8, tags:['fundamentals','reservoir','basics'] },
-  { _id:'m2', title:'Drilling Operations & Safety', slug:'drilling-safety', description:'Learn rotary drilling operations, bit selection, mud engineering and critical safety protocols.', category:'drilling', level:'intermediate', duration:60, enrolledCount:218, rating:4.7, tags:['drilling','safety','operations'] },
-  { _id:'m3', title:'Reservoir Simulation Fundamentals', slug:'reservoir-simulation', description:'Introduction to numerical reservoir simulation, grid types, and fluid flow modeling.', category:'reservoir', level:'advanced', duration:90, enrolledCount:142, rating:4.9, tags:['simulation','reservoir','advanced'] },
-  { _id:'m4', title:'Well Completion & Stimulation', slug:'well-completion', description:'Techniques for casing, cementing, perforation, hydraulic fracturing and acidizing.', category:'production', level:'intermediate', duration:75, enrolledCount:197, rating:4.6, tags:['completion','stimulation','production'] },
-  { _id:'m5', title:'HSE in Petroleum Operations', slug:'hse-petroleum', description:'Health, Safety and Environment management in oil and gas — risk assessment, PPE, emergency response.', category:'safety', level:'beginner', duration:40, enrolledCount:412, rating:4.9, tags:['safety','HSE','environment'] },
-  { _id:'m6', title:'Petroleum Data Analytics', slug:'data-analytics', description:'Using Python, Power BI and machine learning for production optimization and reservoir insights.', category:'digital', level:'intermediate', duration:80, enrolledCount:256, rating:4.8, tags:['data','analytics','python','ML'] },
+  {
+    _id:'m1',
+    title:'1. Introduction to the Petroleum Industry',
+    slug:'intro-petroleum-industry',
+    description:'Learn what petroleum is, explore its rich history, understand its global economic impact, and discover the complete petroleum value chain from upstream to downstream operations.',
+    category:'upstream',
+    level:'beginner',
+    duration:90,
+    enrolledCount:587,
+    rating:4.9,
+    tags:['fundamentals','industry','overview'],
+    overview:'This foundational module introduces you to the petroleum industry\'s essential concepts and structure. You\'ll understand what petroleum is, how it formed, its historical development, economic significance, and the complete supply chain.',
+    keyTopics:[
+      { topic:'What is Petroleum?', description:'Understanding crude oil composition, natural gas, condensate, and petroleum products. Learn about hydrocarbon types, formation processes, and classification systems.' },
+      { topic:'History of the Petroleum Industry', description:'From the first commercial oil well in 1859 to modern offshore operations. Understand key milestones, technological advances, and global expansion.' },
+      { topic:'Importance of Petroleum in the Global Economy', description:'Petroleum\'s role in energy production, transportation, chemicals, and manufacturing. Explore economic impact, geopolitical implications, and market dynamics.' },
+      { topic:'Petroleum Value Chain', description:'The complete journey from extraction to consumer—learn about Upstream, Midstream, and Downstream operations and their interconnectedness.' },
+      { topic:'Upstream Operations', description:'Exploration, drilling, production, and reservoir management. Understand how we find and extract petroleum.' },
+      { topic:'Midstream Operations', description:'Transportation via pipelines, tankers, and railcars. Storage facilities and trading hubs that connect producers to refiners.' },
+      { topic:'Downstream Operations', description:'Refining crude oil into products, marketing, and distribution to consumers.' }
+    ],
+    resources:[
+      { title:'BP Energy Review 2024', url:'https://www.bp.com/en/global/corporate/energy-economics/energy-outlook.html', type:'Report' },
+      { title:'OPEC Petroleum Industry Overview', url:'https://www.opec.org/opec_web/en/about_us/169.htm', type:'Guide' },
+      { title:'World Bank Oil & Gas Data', url:'https://www.worldbank.org/en/topic/extractiveindustries/brief/oil-and-gas', type:'Data' },
+      { title:'CourseEra: Petroleum Engineering Essentials', url:'https://www.coursera.org/learn/petroleum-engineering', type:'Course' },
+      { title:'SPE (Society of Petroleum Engineers) Introduction', url:'https://www.spe.org/en/learn/', type:'Learning' },
+      { title:'TED Talk: The Future of Oil & Gas', url:'https://www.ted.com', type:'Video' }
+    ]
+  },
+  {
+    _id:'m2',
+    title:'2. Petroleum Exploration & Drilling',
+    slug:'exploration-drilling',
+    description:'Master the techniques for locating petroleum reserves and executing drilling operations, including geological surveys, seismic exploration, rig types, drilling processes, and well completion methods.',
+    category:'drilling',
+    level:'intermediate',
+    duration:120,
+    enrolledCount:412,
+    rating:4.8,
+    tags:['drilling','exploration','operations'],
+    overview:'Discover how petroleum professionals locate oil and gas deposits and drill wells to access them. This module covers exploration techniques, drilling operations, and well completion strategies.',
+    keyTopics:[
+      { topic:'Geological Surveys', description:'Understanding subsurface geology, sedimentary basins, structural and stratigraphic traps. Learn how geologists map potential petroleum systems.' },
+      { topic:'Seismic Exploration', description:'2D and 3D seismic data acquisition and interpretation. Understanding seismic reflection principles to map subsurface features and identify drilling prospects.' },
+      { topic:'Types of Drilling Rigs', description:'Onshore rigs, offshore floating rigs (jackups, semisubs, drillships). Learn about rig capabilities, limitations, and operational environments.' },
+      { topic:'Drilling Process', description:'Well planning, wellbore design, casing design, mud engineering, circulation systems, pressure management, and drilling hazards.' },
+      { topic:'Well Completion Methods', description:'Open hole completion, cased hole completion, perforating, gravel packing, and artificial lift installation.' }
+    ],
+    resources:[
+      { title:'Schlumberger: Exploration & Production Guide', url:'https://www.slb.com/resource-library', type:'Technical' },
+      { topic:'SPE Drilling Engineering Handbook', url:'https://www.spe.org/publications/', type:'Handbook' },
+      { title:'IHS Markit Exploration Database', url:'https://www.ihsmarkit.com/products/exploration-production.html', type:'Database' },
+      { title:'Udemy: Drilling Operations Course', url:'https://www.udemy.com/course/drilling/', type:'Course' },
+      { title:'YouTube: Seismic Interpretation Fundamentals', url:'https://www.youtube.com/results?search_query=seismic+interpretation', type:'Video' },
+      { title:'IADC (International Association of Drilling Contractors)', url:'https://www.iadc.org/', type:'Organization' }
+    ]
+  },
+  {
+    _id:'m3',
+    title:'3. Reservoir Engineering',
+    slug:'reservoir-engineering',
+    description:'Understand reservoir characteristics including rock properties, porosity, permeability, petroleum traps, fluid flow dynamics, and comprehensive reservoir management strategies.',
+    category:'reservoir',
+    level:'intermediate',
+    duration:105,
+    enrolledCount:356,
+    rating:4.7,
+    tags:['reservoir','engineering','fundamentals'],
+    overview:'Reservoir engineers are key to petroleum development. Learn how reservoirs store and produce oil and gas, and how professionals manage them for optimal recovery.',
+    keyTopics:[
+      { topic:'Reservoir Rocks', description:'Sandstones, carbonates, and shales as petroleum reservoirs. Understanding mineral composition, cementation, and depositional environments.' },
+      { topic:'Porosity and Permeability', description:'What makes rocks capable of storing and producing hydrocarbons. Types of porosity (primary and secondary), permeability variations, and measurement methods.' },
+      { topic:'Oil and Gas Traps', description:'Structural traps (anticlines, faults), stratigraphic traps (pinch-outs, unconformities). Understanding seal formations and trap geometry.' },
+      { topic:'Fluid Flow in Reservoirs', description:'Darcy\'s law, multiphase flow, relative permeability, capillary pressure. How oil and gas move through rock formations.' },
+      { topic:'Reservoir Management', description:'Primary, secondary, and tertiary recovery mechanisms. Production optimization, pressure maintenance, and enhanced oil recovery (EOR) techniques.' }
+    ],
+    resources:[
+      { title:'Ahmed\'s Petroleum Reservoir Engineering Textbook', url:'https://www.elsevier.com/books/petroleum-reservoir-engineering/ahmed/978-0-08-102224-1', type:'Textbook' },
+      { title:'SPE Reservoir Engineering Resource Center', url:'https://www.spe.org/en/learn/', type:'Learning' },
+      { title:'Core Laboratories Formation Evaluation', url:'https://www.corelab.com/services/formation-evaluation', type:'Technical' },
+      { title:'Udacity: Reservoir Simulation Course', url:'https://www.udacity.com/course/reservoir-engineering', type:'Course' },
+      { title:'Open University of Netherlands: Subsurface Geology', url:'https://www.ou.nl/', type:'Course' },
+      { title:'Petrowiki - Reservoir Basics', url:'https://petrowiki.org', type:'Wiki' }
+    ]
+  },
+  {
+    _id:'m4',
+    title:'4. Production Engineering',
+    slug:'production-engineering',
+    description:'Learn oil and gas production methods, artificial lift systems, surface facilities design, fluid separation processes, and production optimization techniques.',
+    category:'production',
+    level:'intermediate',
+    duration:110,
+    enrolledCount:334,
+    rating:4.8,
+    tags:['production','engineering','operations'],
+    overview:'Production engineers maximize the rate and recovery of petroleum from wells. This module covers the methods, equipment, and strategies used in modern production operations.',
+    keyTopics:[
+      { topic:'Oil and Gas Production Methods', description:'Primary production (natural energy), secondary recovery (water/gas injection), and tertiary recovery (EOR). Understanding production decline and recovery factors.' },
+      { topic:'Artificial Lift Systems', description:'Sucker rod pumping, electric submersible pumps (ESP), gas lift, and jet pumps. Selecting appropriate lift methods for different well conditions.' },
+      { topic:'Surface Production Facilities', description:'Wellhead equipment, manifolds, separators, desalters, compressors, and storage tanks. Processing produced fluids at surface.' },
+      { topic:'Separation of Oil, Gas, and Water', description:'Two-stage and three-stage separation. Understanding emulsion breaking, water treatment, and gas recovery technology.' },
+      { topic:'Production Optimization', description:'Nodal analysis, debottlenecking, managing pressure drop, and production surveillance. Techniques to maximize production efficiently.' }
+    ],
+    resources:[
+      { title:'Tarek Ahmed - Modern Production Operations', url:'https://www.elsevier.com/books/modern-production-operations/ahmed/978-0-08-102224-1', type:'Textbook' },
+      { title:'Halliburton Production Engineering Guides', url:'https://www.halliburton.com/en/careers/college-recruiting', type:'Technical' },
+      { title:'Baker Hughes Equipment Specifications', url:'https://www.bakerhughes.com/exploration-production', type:'Technical' },
+      { title:'LinkedIn Learning: Production Operations', url:'https://www.linkedin.com/learning', type:'Course' },
+      { title:'OnePetro: Production Engineering Papers', url:'https://www.onepetro.org/', type:'Database' },
+      { title:'YouTube: ESP Pump Operations', url:'https://www.youtube.com/results?search_query=ESP+pump+petroleum', type:'Video' }
+    ]
+  },
+  {
+    _id:'m5',
+    title:'5. Petroleum Processing & Refining',
+    slug:'petroleum-refining',
+    description:'Explore crude oil refining processes, fractional distillation, petroleum product generation, and petrochemicals production.',
+    category:'downstream',
+    level:'intermediate',
+    duration:100,
+    enrolledCount:298,
+    rating:4.6,
+    tags:['refining','downstream','processing'],
+    overview:'Refining transforms crude oil into useful products. Learn the chemistry and engineering behind fuel production, lubrication oils, and chemical feedstocks.',
+    keyTopics:[
+      { topic:'Crude Oil Refining', description:'Assaying crude oil for sulfur content, API gravity, and component analysis. Understanding crude types and their processing requirements.' },
+      { topic:'Fractional Distillation', description:'Separation of crude oil by boiling points. Vacuum distillation, cracking processes (thermal and catalytic), and reforming.' },
+      { topic:'Petroleum Products', description:'Gasoline (petrol), diesel, kerosene, fuel oil, LPG, and jet fuel specifications. Understanding octane rating, cetane number, and flash point.' },
+      { topic:'Petrochemicals', description:'Production of ethylene, propylene, and aromatics. Derivative chemicals used in plastics, fertilizers, and synthetic materials.' },
+      { topic:'Refining Economics & Efficiency', description:'Hydrotreating, hydrocracking, and coking processes. Nelson complexity index and refining margins.' }
+    ],
+    resources:[
+      { title:'Petroleum Refining: Technology and Economics by James Speight', url:'https://www.elsevier.com/books/petroleum-refining-technology-and-economics/speight/978-0-12-415145-6', type:'Textbook' },
+      { title:'RANSI: Refining Tutorials', url:'https://www.ransi.com/resources/', type:'Tutorial' },
+      { title:'American Fuel & Petrochemical Manufacturers', url:'https://www.afpm.org/', type:'Association' },
+      { title:'Coursera: Oil Refining Process', url:'https://www.coursera.org', type:'Course' },
+      { title:'YouTube: Crude Oil Distillation Animation', url:'https://www.youtube.com/results?search_query=crude+oil+distillation', type:'Video' },
+      { title:'Energy Institute: Petroleum Processing', url:'https://www.energyinst.org/', type:'Learning' }
+    ]
+  },
+  {
+    _id:'m6',
+    title:'6. Health, Safety & Environment (HSE)',
+    slug:'hse-petroleum',
+    description:'Master workplace safety, personal protective equipment, hazard identification, emergency response procedures, and oil spill management in petroleum operations.',
+    category:'safety',
+    level:'beginner',
+    duration:85,
+    enrolledCount:673,
+    rating:4.9,
+    tags:['safety','HSE','compliance'],
+    overview:'Safety is paramount in petroleum operations. Learn to identify hazards, protect yourself and others, and respond to emergencies effectively.',
+    keyTopics:[
+      { topic:'Workplace Safety Practices', description:'Risk assessment, job safety analysis (JSA), LOTO (Lockout/Tagout), confined space procedures, and hot work permits.' },
+      { topic:'Personal Protective Equipment (PPE)', description:'Hard hats, safety glasses, gloves, steel-toed boots, hearing protection, and respiratory equipment. When to use each type and maintenance.' },
+      { topic:'Hazard Identification', description:'Chemical hazards (hydrogen sulfide, benzene), physical hazards (pressure, temperature, noise), biological hazards, and ergonomic risks.' },
+      { topic:'Emergency Response', description:'Fire response, medical evacuation, evacuation procedures, and incident command systems. First aid and emergency communication.' },
+      { topic:'Oil Spill Management', description:'Spill prevention, containment, cleanup, and remediation. Environmental compliance and regulatory requirements (EPA, OSPAR, MARPOL).' }
+    ],
+    resources:[
+      { title:'OSHA Petroleum Industry Safety Guidelines', url:'https://www.osha.gov/oils-gases', type:'Regulatory' },
+      { title:'NEBOSH IGC Course Content', url:'https://www.nebosh.org.uk/qualifications/igc/', type:'Certification' },
+      { title:'International Maritime Organization (IMO)', url:'https://www.imo.org/', type:'Regulatory' },
+      { title:'Global Industry Analysts: HSE Practice Guide', url:'https://www.strategyr.com/', type:'Guide' },
+      { title:'YouTube: HSE in Oil & Gas Operations', url:'https://www.youtube.com/results?search_query=HSE+oil+gas', type:'Video' },
+      { title:'SafeStart: Safety Awareness Training', url:'https://www.safestart.com/', type:'Course' }
+    ]
+  },
+  {
+    _id:'m7',
+    title:'7. Environmental Engineering in Petroleum',
+    slug:'environmental-engineering',
+    description:'Address pollution control, waste management, environmental assessment, climate change impacts, and sustainable petroleum operations.',
+    category:'environment',
+    level:'intermediate',
+    duration:95,
+    enrolledCount:267,
+    rating:4.7,
+    tags:['environment','sustainability','engineering'],
+    overview:'Environmental responsibility is critical to modern petroleum operations. Learn to minimize environmental impact and operate sustainably.',
+    keyTopics:[
+      { topic:'Pollution Control', description:'Air quality management, VOC emissions reduction, water treatment, and soil remediation. Flaring minimization and methane recovery.' },
+      { topic:'Waste Management', description:'Hazardous waste classification, disposal methods, recycling programs, and waste minimization strategies in E&P operations.' },
+      { topic:'Environmental Impact Assessment', description:'EIA procedures, baseline studies, impact prediction, and mitigation measures. Stakeholder engagement and public consultation.' },
+      { topic:'Climate Change Effects', description:'Oil industry carbon footprint, greenhouse gas emissions, net-zero commitments, and climate-related energy transition.' },
+      { topic:'Sustainable Petroleum Operations', description:'Green completions, flaring reduction, renewable energy integration, circular economy principles, and ESG compliance.' }
+    ],
+    resources:[
+      { title:'IPIECA Environmental Standards', url:'https://www.ipieca.org/environment/', type:'Standards' },
+      { title:'EPA Oil & Gas Environmental Compliance', url:'https://www.epa.gov/oil-gas-operations', type:'Regulatory' },
+      { title:'World Bank: Environmental & Social Safeguards', url:'https://www.worldbank.org/en/topic/safeguards', type:'Framework' },
+      { title:'Udemy: Environmental Engineering Fundamentals', url:'https://www.udemy.com/course/environmental-engineering/', type:'Course' },
+      { title:'Nature: Climate Science & Energy Transition', url:'https://www.nature.com/', type:'Journal' },
+      { title:'UN Environmental Programme: Oil & Gas Report', url:'https://www.unep.org/', type:'Report' }
+    ]
+  },
+  {
+    _id:'m8',
+    title:'8. Petroleum Equipment & Technology',
+    slug:'petroleum-technology',
+    description:'Explore drilling equipment, pumps, compressors, pipelines, digital oilfield systems, automation, and AI applications in petroleum.',
+    category:'digital',
+    level:'advanced',
+    duration:125,
+    enrolledCount:289,
+    rating:4.8,
+    tags:['technology','equipment','digital'],
+    overview:'Modern petroleum operations rely on advanced equipment and digital technology. Learn about the tools and systems that drive efficiency and safety.',
+    keyTopics:[
+      { topic:'Drilling Equipment', description:'Drill strings, drill bits, BHA (bottom hole assembly), mud pumps, and drawworks. Understanding equipment specifications and capabilities.' },
+      { topic:'Pumps and Compressors', description:'Centrifugal and positive displacement pumps. Gas and air compressors. Reciprocating, screw, and centrifugal compressor types.' },
+      { topic:'Pipelines', description:'Pipeline design, materials, corrosion protection, inspection methods (pigging), and maintenance. Subsea pipeline systems.' },
+      { topic:'Digital Oilfield Technology', description:'Real-time monitoring systems, SCADA, data acquisition, cloud platforms, and integration of sensors and telemetry.' },
+      { topic:'Automation & AI in Petroleum', description:'Automated drilling systems, predictive maintenance using machine learning, production optimization algorithms, and autonomous systems.' }
+    ],
+    resources:[
+      { title:'API (American Petroleum Institute) Standards', url:'https://www.api.org/standards', type:'Standards' },
+      { title:'Weatherford Equipment Catalog', url:'https://www.weatherford.com/', type:'Technical' },
+      { title:'Siemens Energy: Digital Solutions in Oil & Gas', url:'https://new.siemens.com/global/en/company/sustainability/environmental-protection/energy-efficiency/digital-solutions.html', type:'Technology' },
+      { title:'Coursera: Industry 4.0 and Digital Oilfield', url:'https://www.coursera.org', type:'Course' },
+      { title:'LinkedIn Learning: Artificial Intelligence for Industry', url:'https://www.linkedin.com/learning', type:'Course' },
+      { title:'MIT: Digital Transformation in Energy', url:'https://energy.mit.edu/', type:'Research' }
+    ]
+  },
+  {
+    _id:'m9',
+    title:'9. Energy Transition & Sustainability',
+    slug:'energy-transition',
+    description:'Understand the future of energy, clean energy concepts, carbon reduction strategies, SDGs alignment, and sustainable petroleum practices.',
+    category:'environment',
+    level:'advanced',
+    duration:110,
+    enrolledCount:301,
+    rating:4.9,
+    tags:['sustainability','energy','future'],
+    overview:'The petroleum industry is transforming. Learn about renewable energy, carbon neutrality, and how petroleum can play a role in a sustainable future.',
+    keyTopics:[
+      { topic:'Future of Energy', description:'Energy demand projections, renewable energy growth, electrification, hydrogen economy, and hybrid energy systems.' },
+      { topic:'Clean Energy Concepts', description:'Solar, wind, geothermal, and hydroelectric power. Energy storage solutions and grid modernization.' },
+      { topic:'Carbon Reduction', description:'Carbon capture and storage (CCS), carbon pricing mechanisms, and carbon footprint reduction strategies.' },
+      { topic:'Agenda 2030 & SDGs', description:'UN Sustainable Development Goals (SDG 7: Affordable Energy, SDG 12: Responsible Consumption, SDG 13: Climate Action).' },
+      { topic:'Sustainable Petroleum Practices', description:'Renewable fuel integration, biofuels, synthetic fuels, and responsible energy sourcing.' }
+    ],
+    resources:[
+      { title:'IEA: World Energy Outlook 2024', url:'https://www.iea.org/reports/world-energy-outlook-2024', type:'Report' },
+      { title:'UN Sustainable Development Goals', url:'https://sdgs.un.org/', type:'Framework' },
+      { title:'Climate Change 2023: Synthesis Report (IPCC)', url:'https://www.ipcc.ch/', type:'Report' },
+      { title:'edX: Renewable Energy Engineering', url:'https://www.edx.org/learn/renewable-energy', type:'Course' },
+      { title:'TED-Ed: Energy & Climate', url:'https://www.youtube.com/teded', type:'Video' },
+      { title:'World Economic Forum: Energy Transition', url:'https://www.weforum.org/focus/energy-transition', type:'Research' }
+    ]
+  },
+  {
+    _id:'m10',
+    title:'10. Career Pathways in Petroleum',
+    slug:'career-pathways',
+    description:'Explore petroleum engineering roles, required skills, internship guidance, industry certifications, and career advancement opportunities.',
+    category:'career',
+    level:'beginner',
+    duration:75,
+    enrolledCount:534,
+    rating:4.8,
+    tags:['career','professional','development'],
+    overview:'Plan your career in petroleum. Learn about different roles, qualifications needed, and how to advance in the industry.',
+    keyTopics:[
+      { topic:'Petroleum Engineering Roles', description:'Reservoir engineer, drilling engineer, production engineer, completion engineer, HSE manager, project manager, and data scientist positions.' },
+      { topic:'Required Skills', description:'Technical skills: engineering principles, software (ECLIPSE, ANSYS, Python). Soft skills: communication, teamwork, leadership, problem-solving.' },
+      { topic:'Internship Guidance', description:'Finding opportunities, interview preparation, what employers look for, making the most of your internship experience.' },
+      { topic:'Industry Certifications', description:'SPE certifications, NEBOSH, IWCF (Well Control), PMP (Project Management), and vendor certifications (Schlumberger, Weatherford, Baker Hughes).' },
+      { topic:'Career Opportunities', description:'Entry-level positions, mid-career advancement, international opportunities, entrepreneurship, and research/academic paths.' }
+    ],
+    resources:[
+      { title:'SPE: Career Development & Resources', url:'https://www.spe.org/en/careers/', type:'Career' },
+      { title:'LinkedIn: Petroleum Jobs & Networking', url:'https://www.linkedin.com/jobs/oil-gas-petroleum-jobs/', type:'JobBoard' },
+      { title:'Petroleum Club Recruitment', url:'https://www.petroleumclub.com/', type:'Network' },
+      { title:'IMEC: Regional Job Board', url:'https://www.imecghana.org/', type:'JobBoard' },
+      { title:'Coursera: Professional Development Certificates', url:'https://www.coursera.org/professional-certificates', type:'Certification' },
+      { title:'edX: Career Certificates in Data Science & Engineering', url:'https://www.edx.org/professional-certificate', type:'Certification' }
+    ]
+  }
 ];
 
 const SEED_HAZARDS = [

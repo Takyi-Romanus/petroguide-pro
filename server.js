@@ -62,7 +62,7 @@ app.engine('html', (filePath, options, callback) => {
   fs.readFile(filePath, (err, content) => {
     if (err) return callback(err);
     let rendered = content.toString();
-    // Simple template variable replacement
+
     Object.keys(options).forEach(key => {
       if (typeof options[key] === 'string') {
         rendered = rendered.replace(new RegExp(`{{${key}}}`, 'g'), options[key]);

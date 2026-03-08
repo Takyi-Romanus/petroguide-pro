@@ -150,27 +150,75 @@
 
     function openModule(m) {
       document.getElementById('modalTitle').textContent = m.title;
+      
+      let keyTopicsHTML = '';
+      if (m.keyTopics && m.keyTopics.length) {
+        keyTopicsHTML = `
+          <div style="background:#f8fafc; border-radius:10px; padding:1.5rem; margin-bottom:1.5rem;">
+            <h3 style="font-size:1.1rem; margin-bottom:1rem; color:var(--primary);">📚 Key Topics & Descriptions</h3>
+            <div style="display:flex; flex-direction:column; gap:1rem;">
+              ${m.keyTopics.map(kt => `
+                <div style="border-left:3px solid var(--primary); padding-left:1rem; padding-right:1rem;">
+                  <h4 style="margin:0 0 0.4rem 0; color:#0d47a1; font-size:0.95rem;">• ${kt.topic}</h4>
+                  <p style="margin:0; color:var(--text-light); font-size:0.9rem;">${kt.description}</p>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+      
+      let resourcesHTML = '';
+      if (m.resources && m.resources.length) {
+        resourcesHTML = `
+          <div style="background:#fff3e0; border-radius:10px; padding:1.5rem; margin-bottom:1.5rem;">
+            <h3 style="font-size:1.1rem; margin-bottom:1rem; color:#e65100;">🔗 Recommended Learning Resources</h3>
+            <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:0.75rem;">
+              ${m.resources.map((r, i) => `
+                <a href="${r.url}" target="_blank" style="display:flex; align-items:center; gap:0.75rem; padding:1rem; background:white; border-radius:8px; border:1px solid #ffe0b2; text-decoration:none; color:inherit; transition:all 0.2s;">
+                  <span style="flex-shrink:0;">🌐</span>
+                  <div style="flex:1; min-width:0;">
+                    <div style="font-weight:600; color:#0d47a1; font-size:0.9rem; word-break:break-word;">${r.title}</div>
+                    <div style="font-size:0.75rem; color:var(--text-light);">${r.type || 'External Resource'}</div>
+                  </div>
+                </a>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+      
       document.getElementById('modalBody').innerHTML = `
-        <div style="margin-bottom:1rem;">
-          <span class="badge badge-${m.level}" style="margin-right:0.5rem;">${m.level}</span>
-          <span style="font-size:0.8rem; color:var(--text-light);">⏱ ${m.duration} min &nbsp; ⭐ ${m.rating} &nbsp; 👥 ${m.enrolledCount} enrolled</span>
+        <div style="max-height:75vh; overflow-y:auto; padding-right:0.5rem;">
+          <div style="margin-bottom:1rem;">
+            <span class="badge badge-${m.level}" style="margin-right:0.5rem;">${m.level}</span>
+            <span style="font-size:0.8rem; color:var(--text-light);">⏱ ${m.duration} min &nbsp; ⭐ ${m.rating} &nbsp; 👥 ${m.enrolledCount} enrolled</span>
+          </div>
+          <p style="margin-bottom:1rem; color:var(--text-light); font-size:0.95rem;">${m.description}</p>
+          <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom:1.5rem;">
+            ${(m.tags || []).map(t => `<span style="background:#e3f2fd; padding:0.3rem 0.8rem; border-radius:4px; font-size:0.75rem; color:#0d47a1; font-weight:500;">${t}</span>`).join('')}
+          </div>
+          
+          ${m.overview ? `
+            <div style="background:#e8f5e9; border-radius:10px; padding:1.5rem; margin-bottom:1.5rem;">
+              <h3 style="font-size:1.1rem; margin:0 0 0.75rem 0; color:#1b5e20;">📖 Module Overview</h3>
+              <p style="margin:0; color:var(--text-dark); font-size:0.9rem;">${m.overview}</p>
+            </div>
+          ` : ''}
+          
+          ${keyTopicsHTML}
+          
+          ${resourcesHTML}
+          
+          <div style="display:flex; gap:0.75rem;">
+            <button onclick="startModule('${m._id}')" class="btn btn-primary" style="flex:1; padding:0.75rem; border:none; cursor:pointer;">
+              🚀 Start Module
+            </button>
+            <button onclick="closeModal()" class="btn btn-outline" style="padding:0.75rem 1.5rem; border:1px solid black; cursor:pointer;">
+              Close
+            </button>
+          </div>
         </div>
-        <p style="margin-bottom:1rem; color:var(--text-light); font-size:0.9rem;">${m.description}</p>
-        <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom:1.5rem;">
-          ${(m.tags || []).map(t => `<span style="background:#f1f5f9; padding:0.2rem 0.6rem; border-radius:4px; font-size:0.75rem;">${t}</span>`).join('')}
-        </div>
-        <div style="background:#f8fafc; border-radius:10px; padding:1.5rem; margin-bottom:1.5rem;">
-          <h3 style="font-size:1rem; margin-bottom:0.75rem; color:var(--primary);">📋 What You'll Learn</h3>
-          <ul style="list-style:none; display:flex; flex-direction:column; gap:0.5rem;">
-            <li>✅ Core ${m.category} engineering concepts</li>
-            <li>✅ Industry best practices and standards</li>
-            <li>✅ Real-world case studies and applications</li>
-            <li>✅ Interactive quizzes to test your knowledge</li>
-          </ul>
-        </div>
-        <button onclick="startModule('${m._id}')" class="btn btn-primary" style="width:100%; justify-content:center; padding:0.75rem;">
-          🚀 Start Module
-        </button>
       `;
       document.getElementById('moduleModal').classList.add('open');
     }
