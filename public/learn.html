@@ -34,12 +34,15 @@
       </ul>
       <div class="sidebar-section" style="margin-top:1rem;">Categories</div>
       <ul class="sidebar-menu">
-        <li><a href="#" onclick="filterCat('drilling')"><span class="menu-icon">🔩</span> Drilling</a></li>
-        <li><a href="#" onclick="filterCat('reservoir')"><span class="menu-icon">🪨</span> Reservoir</a></li>
-        <li><a href="#" onclick="filterCat('production')"><span class="menu-icon">🏭</span> Production</a></li>
+        <li><a href="#" onclick="filterCat('Introduction')"><span class="menu-icon">🎓</span> Introduction</a></li>
+        <li><a href="#" onclick="filterCat('Exploration')"><span class="menu-icon">🛰️</span> Exploration</a></li>
+        <li><a href="#" onclick="filterCat('Reservoir')"><span class="menu-icon">🪨</span> Reservoir</a></li>
+        <li><a href="#" onclick="filterCat('Production')"><span class="menu-icon"> 🏭 </span> Production</a></li>
+        <li><a href="#" onclick="filterCat('Refining')"><span class="menu-icon">🧪</span> Refining</a></li>
         <li><a href="#" onclick="filterCat('safety')"><span class="menu-icon">🦺</span> Safety & HSE</a></li>
-        <li><a href="#" onclick="filterCat('environment')"><span class="menu-icon">🌿</span> Environment</a></li>
-        <li><a href="#" onclick="filterCat('digital')"><span class="menu-icon">💻</span> Digital & Data</a></li>
+        <li><a href="#" onclick="filterCat('environment')"><span class="menu-icon">🌍</span> Environment</a></li>
+        <li><a href="#" onclick="filterCat('Equipment')"><span class="menu-icon">⛽</span> Equipment</a></li>
+        <li><a href="#" onclick="filterCat('Energy Transition')"><span class="menu-icon">🔋</span> Energy Transition</a></li>
       </ul>
     </aside>
 
@@ -62,14 +65,17 @@
         </select>
       </div>
 
-      <div class="filter-bar" id="catFilter">
+      <div class="filter filter-bar" id="catFilter">
         <button class="filter-btn active" onclick="filterCat('')">All Categories</button>
-        <button class="filter-btn" onclick="filterCat('drilling')">⛏ Drilling</button>
-        <button class="filter-btn" onclick="filterCat('reservoir')">🪨 Reservoir</button>
-        <button class="filter-btn" onclick="filterCat('production')">🏭 Production</button>
+        <button class="filter-btn" onclick="filterCat('Introduction')">🎓 Introduction</button>
+        <button class="filter-btn" onclick="filterCat('Exploration')"> 🛰️ Exploration</button>
+        <button class="filter-btn" onclick="filterCat('Reservoir')">🪨 Reservoir</button>
+        <button class="filter-btn" onclick="filterCat('Production')">🏭 Production</button>
+        <button class="filter-btn" onclick="filterCat('Refining')">🧪 Refining</button>
         <button class="filter-btn" onclick="filterCat('safety')">🦺 Safety</button>
-        <button class="filter-btn" onclick="filterCat('environment')">🌿 Environment</button>
-        <button class="filter-btn" onclick="filterCat('digital')">💻 Digital</button>
+        <button class="filter-btn" onclick="filterCat('environment')">🌍 Environment</button>
+        <button class="filter-btn" onclick="filterCat('Equipment')">⚙️ Equipment</button>
+        <button class="filter-btn" onclick="filterCat('Energy')">🔋Energy</button>
       </div>
 
       <div id="modulesContainer">
@@ -90,99 +96,548 @@
   </div>
 
   <script>
-    let allModules = [];
     let currentCat = '';
 
-    const categoryEmojis = { drilling:'⛏', reservoir:'🪨', production:'🏭', safety:'🦺', environment:'🌿', digital:'💻' };
+    const categoryEmojis = {
+  introduction: "⛽",
+  exploration: "🛰️",
+  reservoir: "🪨",
+  production: "🏭",
+  refining: "🧪",
+  safety: "🦺",
+  environment: "🌍",
+  equipment: "⚙️",
+  energy: "🔋",
+  careers: "👨‍💼"
+};
 
-    async function loadModules() {
-      const res = await fetch('/api/modules', { credentials: 'include' });
-      const data = await res.json();
-      allModules = data.data || [];
-      renderModules(allModules);
-    }
+    function loadModules() {
+  renderModules(allModules);
+}
 
-    function renderModules(modules) {
-      const container = document.getElementById('modulesContainer');
-      if (!modules.length) {
-        container.innerHTML = '<p style="color:var(--text-light);">No modules found.</p>';
-        return;
-      }
-      container.innerHTML = `<div class="modules-grid">${modules.map(m => `
-        <div class="module-card" onclick="openModule(${JSON.stringify(m).replace(/"/g,'&quot;')})">
+   let allModules = [
+
+{
+  _id: "mod1",
+  title: "Introduction to the Petroleum Industry",
+  category: "introduction",
+  level: "beginner",
+  duration: 25,
+  rating: 4.8,
+  enrolledCount: 1200,
+  description: "Learn the foundations of petroleum, its history, and its importance in the global energy economy.",
+  tags: ["petroleum", "energy", "industry"],
+  overview: "This module introduces the petroleum industry, explaining how oil and gas are formed, why they are important globally, and how the petroleum value chain works from exploration to refining.",
+  keyTopics: [
+    { topic: "What is Petroleum", description: "Petroleum is a naturally occurring fossil fuel composed of hydrocarbons formed from ancient organic matter under heat and pressure." },
+    { topic: "History of the Petroleum Industry", description: "Explores how the oil industry evolved from early discoveries to modern global production." },
+    { topic: "Importance in the Global Economy", description: "Petroleum fuels transportation, manufacturing, and global trade." },
+    { topic: "Petroleum Value Chain", description: "Explains upstream, midstream, and downstream sectors of the industry." }
+  ]
+},
+
+{
+  _id: "mod2",
+  title: "Petroleum Exploration & Drilling",
+  category: "exploration",
+  level: "intermediate",
+  duration: 35,
+  rating: 4.7,
+  enrolledCount: 900,
+  description: "Discover how geologists and engineers locate oil and gas reserves and drill wells to extract them.",
+  tags: ["exploration", "drilling", "geology"],
+  overview: "This module explores the technologies and processes used to locate and drill petroleum reservoirs beneath the earth's surface.",
+  keyTopics: [
+    { topic: "Geological Surveys", description: "Geologists study rock formations and structures to locate potential oil reservoirs." },
+    { topic: "Seismic Exploration", description: "Seismic waves are used to map underground structures and identify hydrocarbon deposits." },
+    { topic: "Types of Drilling Rigs", description: "Different rigs such as land rigs, offshore rigs, and floating rigs are used in drilling." },
+    { topic: "Drilling Process", description: "Step-by-step explanation of drilling wells into the earth." },
+    { topic: "Well Completion", description: "Techniques used to prepare wells for safe oil and gas production." }
+  ]
+},
+
+{
+  _id: "mod3",
+  title: "Reservoir Engineering Fundamentals",
+  category: "reservoir",
+  level: "intermediate",
+  duration: 30,
+  rating: 4.6,
+  enrolledCount: 740,
+  description: "Understand how hydrocarbons are stored underground and how engineers manage reservoirs.",
+  tags: ["reservoir", "porosity", "permeability"],
+  overview: "Reservoir engineering focuses on understanding underground oil and gas reservoirs and maximizing hydrocarbon recovery.",
+  keyTopics: [
+    { topic: "Reservoir Rocks", description: "Rocks such as sandstone and limestone that store hydrocarbons." },
+    { topic: "Porosity", description: "The ability of rock to store fluids in pore spaces." },
+    { topic: "Permeability", description: "The ability of rock to allow fluids to flow through it." },
+    { topic: "Oil & Gas Traps", description: "Geological structures that prevent hydrocarbons from escaping." },
+    { topic: "Reservoir Management", description: "Strategies used to maintain pressure and maximize recovery." }
+  ]
+},
+
+{
+  _id: "mod4",
+  title: "Production Engineering",
+  category: "production",
+  level: "intermediate",
+  duration: 30,
+  rating: 4.6,
+  enrolledCount: 680,
+  description: "Learn how oil and gas are extracted and processed at the surface.",
+  tags: ["production", "oil wells", "engineering"],
+  overview: "Production engineering focuses on extracting hydrocarbons efficiently and managing surface facilities.",
+  keyTopics: [
+    { topic: "Oil & Gas Production Methods", description: "Primary, secondary, and enhanced oil recovery techniques." },
+    { topic: "Artificial Lift Systems", description: "Pump jacks and gas lift used when natural pressure is insufficient." },
+    { topic: "Surface Facilities", description: "Equipment used to handle produced fluids." },
+    { topic: "Oil-Gas-Water Separation", description: "Processes used to separate fluids from wells." }
+  ]
+},
+
+{
+  _id: "mod5",
+  title: "Petroleum Refining & Processing",
+  category: "refining",
+  level: "beginner",
+  duration: 25,
+  rating: 4.5,
+  enrolledCount: 820,
+  description: "Learn how crude oil is converted into useful fuels and petrochemicals.",
+  tags: ["refining", "distillation"],
+  overview: "This module explains refinery operations and how crude oil becomes gasoline, diesel, jet fuel, and chemicals.",
+  keyTopics: [
+    { topic: "Crude Oil Refining", description: "Overview of refinery processes." },
+    { topic: "Fractional Distillation", description: "Separation of crude oil components based on boiling point." },
+    { topic: "Petroleum Products", description: "Gasoline, diesel, LPG, jet fuel, and lubricants." },
+    { topic: "Petrochemicals", description: "Petroleum-based chemicals used to make plastics and fertilizers." }
+  ]
+},
+
+{
+  _id: "mod6",
+  title: "Health, Safety & Environment (HSE)",
+  category: "safety",
+  level: "beginner",
+  duration: 20,
+  rating: 4.9,
+  enrolledCount: 1500,
+  description: "Understand safety practices and risk management in petroleum operations.",
+  tags: ["safety", "HSE"],
+  overview: "HSE ensures safe working conditions and environmental protection in petroleum operations.",
+  keyTopics: [
+    { topic: "Workplace Safety", description: "Procedures that protect workers in oil fields." },
+    { topic: "Personal Protective Equipment", description: "Helmets, gloves, safety boots, and protective clothing." },
+    { topic: "Hazard Identification", description: "Recognizing and managing potential risks." },
+    { topic: "Emergency Response", description: "Procedures for accidents and oil spills." }
+  ]
+},
+
+{
+  _id: "mod7",
+  title: "Environmental Engineering in Petroleum",
+  category: "environment",
+  level: "intermediate",
+  duration: 25,
+  rating: 4.6,
+  enrolledCount: 600,
+  description: "Learn how environmental engineers reduce pollution and environmental damage in petroleum operations.",
+  tags: ["environment", "sustainability"],
+  overview: "Focuses on environmental protection in oil and gas production.",
+  keyTopics: [
+    { topic: "Pollution Control", description: "Technologies that reduce emissions and contamination." },
+    { topic: "Waste Management", description: "Handling drilling waste and refinery by-products." },
+    { topic: "Environmental Impact Assessment", description: "Evaluating environmental risks before projects." },
+    { topic: "Climate Change Effects", description: "Impact of fossil fuels on climate systems." }
+  ]
+},
+
+{
+  _id: "mod8",
+  title: "Petroleum Equipment & Technology",
+  category: "equipment",
+  level: "intermediate",
+  duration: 30,
+  rating: 4.5,
+  enrolledCount: 550,
+  description: "Explore the equipment and technology used in petroleum production.",
+  tags: ["technology", "equipment"],
+  overview: "Covers machinery and digital technology used across oil and gas operations.",
+  keyTopics: [
+    { topic: "Drilling Equipment", description: "Drill bits, derricks, mud pumps, and drilling systems." },
+    { topic: "Pumps & Compressors", description: "Equipment used to move fluids and gases." },
+    { topic: "Pipelines", description: "Infrastructure used to transport oil and gas." },
+    { topic: "Digital Oilfield", description: "Use of sensors and data analytics in oil production." }
+  ]
+},
+
+{
+  _id: "mod9",
+  title: "Energy Transition & Sustainability",
+  category: "energy",
+  level: "beginner",
+  duration: 20,
+  rating: 4.7,
+  enrolledCount: 770,
+  description: "Understand the future of energy and the transition to cleaner systems.",
+  tags: ["energy transition", "sustainability"],
+  overview: "Explores how petroleum companies adapt to renewable energy and carbon reduction goals.",
+  keyTopics: [
+    { topic: "Future of Energy", description: "Global trends in energy demand." },
+    { topic: "Clean Energy", description: "Renewable energy technologies." },
+    { topic: "Carbon Reduction", description: "Methods used to lower carbon emissions." },
+    { topic: "Sustainable Petroleum", description: "Strategies for responsible energy production." }
+  ]
+},
+
+{
+  _id: "mod10",
+  title: "Careers in Petroleum Engineering",
+  category: "careers",
+  level: "beginner",
+  duration: 15,
+  rating: 4.8,
+  enrolledCount: 1300,
+  description: "Explore career opportunities and required skills in the petroleum industry.",
+  tags: ["careers", "petroleum engineering"],
+  overview: "Provides career guidance for students interested in petroleum engineering and energy industries.",
+  keyTopics: [
+    { topic: "Petroleum Engineering Roles", description: "Drilling engineers, reservoir engineers, and production engineers." },
+    { topic: "Required Skills", description: "Technical and analytical skills needed in the field." },
+    { topic: "Internship Guidance", description: "How students gain industry experience." },
+    { topic: "Industry Certifications", description: "Professional credentials for petroleum engineers." }
+  ]
+},
+
+{
+  _id: "mod11",
+  title: "Introduction to the Petroleum Industry",
+  category: "introduction",
+  level: "beginner",
+  duration: 12,
+  rating: 4.7,
+  enrolledCount: 1600,
+  description: "Understand the structure and importance of the petroleum industry.",
+  tags: ["petroleum", "oil and gas", "industry"],
+  overview: "Introduces the petroleum industry, its sectors, and how oil and gas move from reservoirs to consumers.",
+  keyTopics: [
+    { topic: "Overview of Petroleum Industry", description: "Understanding how oil and gas are explored, produced, and distributed." },
+    { topic: "Upstream Sector", description: "Exploration and production of oil and gas resources." },
+    { topic: "Midstream Sector", description: "Transportation and storage of crude oil and natural gas." },
+    { topic: "Downstream Sector", description: "Refining crude oil into fuels and petrochemical products." }
+  ]
+},
+
+{
+  _id: "mod12",
+  title: "Petroleum Exploration Techniques",
+  category: "exploration",
+  level: "beginner",
+  duration: 18,
+  rating: 4.8,
+  enrolledCount: 1400,
+  description: "Learn how geologists locate oil and gas reservoirs underground.",
+  tags: ["exploration", "seismic", "geology"],
+  overview: "Explains the techniques used to identify potential oil and gas reservoirs beneath the Earth's surface.",
+  keyTopics: [
+    { topic: "Seismic Surveys", description: "Using sound waves to map underground rock formations." },
+    { topic: "Geological Mapping", description: "Studying rock layers and structural formations." },
+    { topic: "Exploration Data Analysis", description: "Using computers and data processing to interpret subsurface data." },
+    { topic: "Hydrocarbon Prospect Identification", description: "Identifying areas likely to contain oil and gas." }
+  ]
+},
+
+{
+  _id: "mod13",
+  title: "Reservoir Rocks and Fluid Storage",
+  category: "reservoir",
+  level: "beginner",
+  duration: 20,
+  rating: 4.9,
+  enrolledCount: 1200,
+  description: "Learn about reservoir rocks that store hydrocarbons underground.",
+  tags: ["reservoir", "porosity", "permeability"],
+  overview: "Explains how rock formations store oil and gas and the geological conditions necessary for reservoirs.",
+  keyTopics: [
+    { topic: "Types of Reservoir Rocks", description: "Sandstone, limestone, and dolomite reservoirs." },
+    { topic: "Porosity", description: "The storage capacity of reservoir rocks." },
+    { topic: "Permeability", description: "The ability of fluids to flow through rock pores." },
+    { topic: "Reservoir Characteristics", description: "Understanding rock properties affecting hydrocarbon recovery." }
+  ]
+},
+
+{
+  _id: "mod14",
+  title: "Oil and Gas Traps",
+  category: "reservoir",
+  level: "intermediate",
+  duration: 16,
+  rating: 4.8,
+  enrolledCount: 980,
+  description: "Understand geological structures that trap hydrocarbons.",
+  tags: ["reservoir", "geology", "traps"],
+  overview: "Explores how hydrocarbons accumulate in underground traps formed by geological processes.",
+  keyTopics: [
+    { topic: "Structural Traps", description: "Anticline, fault, and salt dome traps." },
+    { topic: "Stratigraphic Traps", description: "Pinch-out and unconformity traps." },
+    { topic: "Cap Rock and Seals", description: "Impermeable rocks that prevent hydrocarbon escape." },
+    { topic: "Hydrocarbon Migration", description: "Movement of oil and gas from source rock to reservoir." }
+  ]
+},
+
+{
+  _id: "mod15",
+  title: "Drilling Engineering Fundamentals",
+  category: "equipment",
+  level: "intermediate",
+  duration: 22,
+  rating: 4.9,
+  enrolledCount: 1100,
+  description: "Learn the fundamentals of drilling oil and gas wells.",
+  tags: ["drilling", "rig", "petroleum engineering"],
+  overview: "Introduces drilling processes, drilling rigs, and the equipment used to reach underground reservoirs.",
+  keyTopics: [
+    { topic: "Purpose of Drilling", description: "Creating pathways for oil and gas extraction." },
+    { topic: "Drilling Methods", description: "Rotary drilling, directional drilling, and core drilling." },
+    { topic: "Drill String Components", description: "Drill pipe, drill collars, and bottom hole assembly." },
+    { topic: "Drilling Fluid Systems", description: "Functions of drilling mud in well operations." }
+  ]
+},
+
+{
+  _id: "mod16",
+  title: "Drilling Rig Systems",
+  category: "equipment",
+  level: "intermediate",
+  duration: 20,
+  rating: 4.8,
+  enrolledCount: 950,
+  description: "Explore the main systems used in petroleum drilling rigs.",
+  tags: ["drilling rig", "equipment", "engineering"],
+  overview: "Explains the main systems that make up a drilling rig and their functions during well construction.",
+  keyTopics: [
+    { topic: "Power System", description: "Generating energy required for drilling operations." },
+    { topic: "Hoisting System", description: "Raising and lowering drill strings and equipment." },
+    { topic: "Rotating System", description: "Providing rotational force to drill bits." },
+    { topic: "Circulating System", description: "Circulating drilling mud to remove rock cuttings." }
+  ]
+},
+
+{
+  _id: "mod17",
+  title: "Oil and Gas Production Methods",
+  category: "production",
+  level: "intermediate",
+  duration: 18,
+  rating: 4.9,
+  enrolledCount: 1050,
+  description: "Understand how hydrocarbons are extracted from reservoirs.",
+  tags: ["production", "oil recovery", "petroleum"],
+  overview: "Explains primary, secondary, and tertiary recovery techniques used to extract oil and gas.",
+  keyTopics: [
+    { topic: "Primary Recovery", description: "Production driven by natural reservoir energy." },
+    { topic: "Secondary Recovery", description: "Using water or gas injection to maintain reservoir pressure." },
+    { topic: "Enhanced Oil Recovery", description: "Advanced recovery techniques including thermal and chemical methods." },
+    { topic: "Reservoir Pressure Management", description: "Maintaining pressure for sustained production." }
+  ]
+},
+
+{
+  _id: "mod18",
+  title: "Artificial Lift Systems",
+  category: "production",
+  level: "intermediate",
+  duration: 17,
+  rating: 4.8,
+  enrolledCount: 870,
+  description: "Learn how artificial lift systems help bring oil to the surface.",
+  tags: ["production", "artificial lift", "petroleum"],
+  overview: "Introduces artificial lift technologies used when natural reservoir pressure declines.",
+  keyTopics: [
+    { topic: "Rod Pumps", description: "Common mechanical pumps used in oil wells." },
+    { topic: "Electric Submersible Pumps", description: "High-capacity pumps installed deep in wells." },
+    { topic: "Gas Lift Systems", description: "Using injected gas to lift oil to the surface." },
+    { topic: "Progressive Cavity Pumps", description: "Systems designed for heavy oil production." }
+  ]
+},
+
+{
+  _id: "mod19",
+  title: "Surface Production Facilities",
+  category: "production",
+  level: "intermediate",
+  duration: 16,
+  rating: 4.7,
+  enrolledCount: 920,
+  description: "Understand how oil and gas are processed after reaching the surface.",
+  tags: ["production", "processing", "facilities"],
+  overview: "Explains how surface facilities treat, separate, and prepare hydrocarbons for transportation.",
+  keyTopics: [
+    { topic: "Wellheads and Christmas Trees", description: "Equipment used to control well flow." },
+    { topic: "Separators", description: "Separating oil, gas, and water from the wellstream." },
+    { topic: "Storage Tanks", description: "Temporary storage of crude oil before transportation." },
+    { topic: "Compression and Pumping Systems", description: "Boosting pressure for transportation." }
+  ]
+},
+
+{
+  _id: "mod20",
+  title: "Health, Safety and Environment (HSE)",
+  category: "safety",
+  level: "beginner",
+  duration: 14,
+  rating: 4.9,
+  enrolledCount: 1500,
+  description: "Learn about safety practices and environmental protection in petroleum operations.",
+  tags: ["HSE", "safety", "environment"],
+  overview: "Introduces health, safety, and environmental management systems used in the oil and gas industry.",
+  keyTopics: [
+    { topic: "Workplace Safety", description: "Preventing accidents in drilling and production operations." },
+    { topic: "Environmental Protection", description: "Reducing pollution and environmental damage." },
+    { topic: "Hazard Identification", description: "Recognizing and managing operational risks." },
+    { topic: "Emergency Response Systems", description: "Preparedness for accidents such as spills and fires." }
+  ]
+},
+
+{
+  _id: "mod21",
+  title: "Petroleum Processing and Refining",
+  category: "refining",
+  level: "intermediate",
+  duration: 18,
+  rating: 4.8,
+  enrolledCount: 880,
+  description: "Understand how crude oil is refined into useful products.",
+  tags: ["refining", "petroleum", "processing"],
+  overview: "Explains refining technologies used to convert crude oil into fuels and petrochemicals.",
+  keyTopics: [
+    { topic: "Distillation Process", description: "Separating crude oil into different fractions." },
+    { topic: "Catalytic Cracking", description: "Breaking large hydrocarbons into lighter fuels." },
+    { topic: "Hydroprocessing", description: "Removing impurities from petroleum products." },
+    { topic: "Petrochemical Production", description: "Producing plastics, fertilizers, and chemicals." }
+  ]
+},
+
+{
+  _id: "mod22",
+  title: "Energy Transition and Future Energy Systems",
+  category: "energy",
+  level: "beginner",
+  duration: 15,
+  rating: 4.7,
+  enrolledCount: 760,
+  description: "Explore the future of energy and emerging technologies in the petroleum industry.",
+  tags: ["energy", "transition", "technology"],
+  overview: "Discusses how petroleum engineering is evolving to support cleaner energy systems.",
+  keyTopics: [
+    { topic: "Carbon Capture and Storage", description: "Reducing carbon emissions from fossil fuel operations." },
+    { topic: "Hydrogen Energy Systems", description: "Using underground reservoirs for hydrogen storage." },
+    { topic: "Geothermal Energy", description: "Applying petroleum drilling knowledge to geothermal energy." },
+    { topic: "Digital Oilfield Technology", description: "Using AI and sensors for smarter oilfield operations." }
+  ]
+}
+
+
+];
+
+function renderModules(modules) {
+  const container = document.getElementById('modulesContainer');
+
+  if (!modules.length) {
+    container.innerHTML = `<p style="color:#888">No modules found</p>`;
+    return;
+  }
+
+  container.innerHTML = `
+    <div class="modules-grid">
+      ${modules.map(m => `
+        <div class="module-card" onclick='openModule(${JSON.stringify(m)})'>
           <div class="module-thumb ${m.category}">
-            <span style="color:white; font-size:3rem;">${categoryEmojis[m.category] || '📚'}</span>
+            <span style="font-size:2.5rem">${categoryEmojis[m.category] || "📚"}</span>
           </div>
+
           <div class="module-info">
             <div class="module-category">${m.category.toUpperCase()}</div>
             <h3>${m.title}</h3>
-            <p>${m.description.substring(0, 100)}...</p>
+            <p>${m.description}</p>
+
             <div class="module-meta">
-              <span>⏱ ${m.duration} min &nbsp; ⭐ ${m.rating}</span>
-              <span class="badge badge-${m.level}">${m.level}</span>
+              ⏱ ${m.duration} min | ⭐ ${m.rating}
             </div>
           </div>
         </div>
-      `).join('')}</div>`;
-    }
+      `).join("")}
+    </div>
+  `;
+}
 
-    function filterCat(cat) {
-      currentCat = cat;
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      const btns = document.querySelectorAll('.filter-btn');
-      btns.forEach(b => { if (b.textContent.toLowerCase().includes(cat || 'all')) b.classList.add('active'); });
-      applyFilters();
-    }
+function filterCat(cat) {
+  currentCat = cat.toLowerCase();
+  applyFilters();
+}
 
-    function searchModules() { applyFilters(); }
+function searchModules(){
+  applyFilters();
+}
 
-    function applyFilters() {
-      const search = document.getElementById('searchInput').value.toLowerCase();
-      const level = document.getElementById('levelFilter').value;
-      let filtered = allModules;
-      if (currentCat) filtered = filtered.filter(m => m.category === currentCat);
-      if (level) filtered = filtered.filter(m => m.level === level);
-      if (search) filtered = filtered.filter(m =>
-        m.title.toLowerCase().includes(search) || m.description.toLowerCase().includes(search)
-      );
-      renderModules(filtered);
-    }
+function applyFilters(){
 
-    function openModule(m) {
-      document.getElementById('modalTitle').textContent = m.title;
-      document.getElementById('modalBody').innerHTML = `
-        <div style="margin-bottom:1rem;">
-          <span class="badge badge-${m.level}" style="margin-right:0.5rem;">${m.level}</span>
-          <span style="font-size:0.8rem; color:var(--text-light);">⏱ ${m.duration} min &nbsp; ⭐ ${m.rating} &nbsp; 👥 ${m.enrolledCount} enrolled</span>
-        </div>
-        <p style="margin-bottom:1rem; color:var(--text-light); font-size:0.9rem;">${m.description}</p>
-        <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom:1.5rem;">
-          ${(m.tags || []).map(t => `<span style="background:#f1f5f9; padding:0.2rem 0.6rem; border-radius:4px; font-size:0.75rem;">${t}</span>`).join('')}
-        </div>
-        <div style="background:#f8fafc; border-radius:10px; padding:1.5rem; margin-bottom:1.5rem;">
-          <h3 style="font-size:1rem; margin-bottom:0.75rem; color:var(--primary);">📋 What You'll Learn</h3>
-          <ul style="list-style:none; display:flex; flex-direction:column; gap:0.5rem;">
-            <li>✅ Core ${m.category} engineering concepts</li>
-            <li>✅ Industry best practices and standards</li>
-            <li>✅ Real-world case studies and applications</li>
-            <li>✅ Interactive quizzes to test your knowledge</li>
-          </ul>
-        </div>
-        <button onclick="startModule('${m._id}')" class="btn btn-primary" style="width:100%; justify-content:center; padding:0.75rem;">
-          🚀 Start Module
-        </button>
-      `;
-      document.getElementById('moduleModal').classList.add('open');
-    }
+  const search = document.getElementById("searchInput").value.toLowerCase();
+  const level = document.getElementById("levelFilter").value;
 
-    function closeModal() {
-      document.getElementById('moduleModal').classList.remove('open');
-    }
+  let filtered = allModules;
 
-    function startModule(id) {
-      alert('Module player coming soon! You would begin the interactive lesson here with videos, readings, and quizzes.');
-      closeModal();
-    }
+  if(currentCat){
+    filtered = filtered.filter(m => m.category === currentCat);
+  }
+
+  if(level){
+    filtered = filtered.filter(m => m.level === level);
+  }
+
+  if(search){
+    filtered = filtered.filter(m =>
+      m.title.toLowerCase().includes(search) ||
+      m.description.toLowerCase().includes(search)
+    );
+  }
+
+  renderModules(filtered);
+}
+
+function openModule(m){
+
+document.getElementById("modalTitle").textContent = m.title;
+
+document.getElementById("modalBody").innerHTML = `
+
+<p>${m.description}</p>
+
+<h3>Topics</h3>
+
+<ul>
+${m.keyTopics.map(t => `<li><b>${t.topic}</b> — ${t.description}</li>`).join("")}
+</ul>
+
+<button onclick="startModule('${m._id}')" class="btn btn-primary">
+Start Module
+</button>
+
+`;
+
+document.getElementById("moduleModal").classList.add("open");
+
+}
+
+function closeModal(){
+document.getElementById("moduleModal").classList.remove("open");
+}
+
+function startModule(id){
+alert("Module player coming soon");
+closeModal();
+}
+
 
     // Nav auth check
     fetch('/api/me', { credentials: 'include' }).then(r => r.json()).then(d => {

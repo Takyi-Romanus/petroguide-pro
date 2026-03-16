@@ -50,14 +50,14 @@
       </div>
 
       <div class="filter-bar">
-        <button class="filter-btn active" onclick="filterType('')">All Positions</button>
-        <button class="filter-btn" onclick="filterType('full-time')">🏢 Full-Time</button>
-        <button class="filter-btn" onclick="filterType('internship')">🎓 Internship</button>
-        <button class="filter-btn" onclick="filterType('contract')">📝 Contract</button>
-        <button class="filter-btn" onclick="filterCat('drilling')">⛏ Drilling</button>
-        <button class="filter-btn" onclick="filterCat('reservoir')">🪨 Reservoir</button>
-        <button class="filter-btn" onclick="filterCat('safety')">🦺 Safety</button>
-        <button class="filter-btn" onclick="filterCat('data')">💻 Data Science</button>
+        <button class="filter-btn active" onclick="filterType('', this)">All Positions</button>
+        <button class="filter-btn" onclick="filterType('full-time', this)">🏢 Full-Time</button>
+        <button class="filter-btn" onclick="filterType('internship', this)">🎓 Internship</button>
+        <button class="filter-btn" onclick="filterType('contract', this)">📝 Contract</button>
+        <button class="filter-btn" onclick="filterCat('drilling', this)">⛏ Drilling</button>
+        <button class="filter-btn" onclick="filterCat('reservoir', this)">🪨 Reservoir</button>
+        <button class="filter-btn" onclick="filterCat('safety', this)">🦺 Safety</button>
+        <button class="filter-btn" onclick="filterCat('data', this)">💻 Data Science</button>
       </div>
 
       <div id="careersContainer">
@@ -71,7 +71,8 @@
     <div class="modal" style="max-width:640px;">
       <div class="modal-header">
         <h2 id="jobModalTitle">Job Title</h2>
-        <button class="modal-close" onclick="closeJobModal()">✕</button>
+        <a href="${c.applyLink}" target="_blank" class="btn btn-primary w-full" style="justify-content:center; padding:0.75rem;">Apply on Company Website →</a>
+        <button onclick="closeJobModal()" class="modal-close">&times;</button>
       </div>
       <div id="jobModalBody"></div>
     </div>
@@ -120,15 +121,24 @@
       }).join('')}</div>`;
     }
 
-    function filterType(type) {
+    function filterType(type, btn) {
       currentType = type;
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      // Only update active state among type buttons (first 4)
+      document.querySelectorAll('.filter-btn').forEach((b, i) => {
+        if (i < 4) b.classList.remove('active');
+      });
+      if (btn) btn.classList.add('active');
       applyFilters();
     }
 
-    function filterCat(cat) {
-      currentCat = cat;
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    function filterCat(cat, btn) {
+      // Toggle off if same category clicked again
+      currentCat = currentCat === cat ? '' : cat;
+      // Only update active state among category buttons (last 4)
+      document.querySelectorAll('.filter-btn').forEach((b, i) => {
+        if (i >= 4) b.classList.remove('active');
+      });
+      if (currentCat && btn) btn.classList.add('active');
       applyFilters();
     }
 
@@ -136,6 +146,12 @@
       let filtered = allCareers;
       if (currentType) filtered = filtered.filter(c => c.type === currentType);
       if (currentCat) filtered = filtered.filter(c => c.category === currentCat);
+
+      const container = document.getElementById('careersContainer');
+      if (!filtered.length) {
+        container.innerHTML = '<p style="color:var(--text-light)">No jobs available for this filter.</p>';
+        return;
+      }
       renderCareers(filtered);
     }
 

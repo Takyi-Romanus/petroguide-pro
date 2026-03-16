@@ -27,10 +27,352 @@ const SEED_HAZARDS = [
 ];
 
 const SEED_CAREERS = [
-  { _id:'c1', title:'Reservoir Engineer', company:'Ghana National Petroleum Corporation', location:'Accra, Ghana', type:'full-time', category:'reservoir', description:'Join GNPC to model and simulate reservoir performance for offshore fields. You will analyze production data and optimize recovery strategies.', requirements:['BSc Petroleum/Chemical Engineering','3+ years reservoir simulation experience','Proficiency in Eclipse or CMG'], benefits:['Competitive salary','Health insurance','Professional development'], salary:{min:8000,max:15000,currency:'GHS'}, deadline: new Date(Date.now()+30*86400000) },
-  { _id:'c2', title:'Drilling Engineering Intern', company:'TotalEnergies Ghana', location:'Takoradi, Ghana', type:'internship', category:'drilling', description:'6-month internship supporting drilling operations on the Jubilee field. Work alongside experienced drilling engineers on live projects.', requirements:['3rd/4th year Petroleum Engineering student','Strong academic record','Willingness to work offshore'], benefits:['Monthly stipend','Offshore allowance','Mentorship program'], salary:{min:2500,max:3500,currency:'GHS'}, deadline: new Date(Date.now()+14*86400000) },
-  { _id:'c3', title:'HSE Officer', company:'Springfield Exploration & Production', location:'Accra, Ghana', type:'full-time', category:'safety', description:'Enforce health, safety and environmental standards across upstream operations. Conduct risk assessments and safety audits.', requirements:['BSc Engineering or Science','NEBOSH certification preferred','2+ years oil & gas HSE experience'], benefits:['Insurance','Transport allowance','Bonus scheme'], salary:{min:6000,max:10000,currency:'GHS'}, deadline: new Date(Date.now()+21*86400000) },
-  { _id:'c4', title:'Petroleum Data Scientist', company:'Aker Energy Ghana', location:'Remote / Accra', type:'full-time', category:'data', description:'Apply machine learning and advanced analytics to production data. Build predictive models for well performance and failure detection.', requirements:['BSc Engineering/Computer Science','Python & ML experience','Knowledge of petroleum operations'], benefits:['Remote work option','Training budget','Stock options'], salary:{min:10000,max:18000,currency:'GHS'}, deadline: new Date(Date.now()+45*86400000) },
+
+{
+_id:'c1',
+title:'Reservoir Engineer',
+company:'Ghana National Petroleum Corporation (GNPC)',
+location:'Accra, Ghana',
+type:'full-time',
+category:'reservoir',
+description:'Work with GNPC to model and simulate reservoir performance for offshore petroleum fields. You will analyze production data, build reservoir models, and optimize hydrocarbon recovery strategies.',
+requirements:[
+'BSc Petroleum Engineering, Chemical Engineering or related field',
+'3+ years experience in reservoir engineering',
+'Proficiency in reservoir simulation tools (Eclipse, CMG, or Petrel)'
+],
+benefits:[
+'Competitive salary',
+'Health insurance',
+'Professional development programs'
+],
+salary:{min:8000,max:15000,currency:'GHS'},
+applyLink:'https://www.gnpcghana.com/careers',
+deadline:new Date(Date.now()+30*86400000)
+},
+
+{
+_id:'c2',
+title:'Drilling Engineering Intern',
+company:'TotalEnergies Ghana',
+location:'Takoradi, Ghana',
+type:'internship',
+category:'drilling',
+description:'6-month internship supporting offshore drilling operations on the Jubilee Field. Interns assist drilling engineers with well planning, monitoring drilling performance, and safety compliance.',
+requirements:[
+'3rd or 4th year Petroleum Engineering student',
+'Strong academic record',
+'Willingness to work offshore'
+],
+benefits:[
+'Monthly stipend',
+'Offshore allowance',
+'Mentorship from senior engineers'
+],
+salary:{min:2500,max:3500,currency:'GHS'},
+applyLink:'https://careers.totalenergies.com',
+deadline:new Date(Date.now()+14*86400000)
+},
+
+{
+_id:'c3',
+title:'Health, Safety & Environment (HSE) Officer',
+company:'Springfield Exploration & Production',
+location:'Accra, Ghana',
+type:'full-time',
+category:'safety',
+description:'Ensure compliance with health, safety, and environmental regulations across upstream operations. Conduct risk assessments, safety audits, and emergency response planning.',
+requirements:[
+'BSc Engineering, Environmental Science, or related discipline',
+'NEBOSH certification preferred',
+'2+ years experience in oil & gas safety management'
+],
+benefits:[
+'Insurance coverage',
+'Transport allowance',
+'Performance bonus scheme'
+],
+salary:{min:6000,max:10000,currency:'GHS'},
+applyLink:'https://springfieldgroup.com/careers',
+deadline:new Date(Date.now()+21*86400000)
+},
+
+{
+_id:'c4',
+title:'Petroleum Data Scientist',
+company:'Aker Energy Ghana',
+location:'Remote / Accra',
+type:'full-time',
+category:'data',
+description:'Use machine learning and advanced analytics to analyze drilling and production data. Build predictive models for well performance, equipment failure detection, and reservoir optimization.',
+requirements:[
+'BSc Engineering, Data Science, or Computer Science',
+'Strong Python programming skills',
+'Knowledge of machine learning techniques'
+],
+benefits:[
+'Remote work option',
+'Training and development budget',
+'Stock options'
+],
+salary:{min:10000,max:18000,currency:'GHS'},
+applyLink:'https://akerenergy.com/careers',
+deadline:new Date(Date.now()+45*86400000)
+},
+
+{
+_id:'c5',
+title:'Petroleum Engineering Intern',
+company:'ExxonMobil',
+location:'Accra, Ghana',
+type:'internship',
+category:'reservoir',
+description:'Work alongside ExxonMobil engineers to assist in reservoir analysis, well performance monitoring, and production optimization for offshore operations.',
+requirements:[
+'Currently studying Petroleum or Mechanical Engineering',
+'Basic reservoir engineering knowledge',
+'Strong analytical and problem-solving skills'
+],
+benefits:[
+'Hands-on industry experience',
+'Mentorship from senior engineers',
+'Opportunity for graduate recruitment'
+],
+salary:{min:3000,max:5000,currency:'GHS'},
+applyLink:'https://corporate.exxonmobil.com/careers',
+deadline:new Date(Date.now()+35*86400000)
+},
+
+{
+_id:'c6',
+title:'Drilling Engineer',
+company:'Schlumberger (SLB)',
+location:'Takoradi, Ghana',
+type:'full-time',
+category:'drilling',
+description:'Design and supervise drilling programs for offshore wells. Monitor drilling operations to ensure efficiency, safety, and compliance with operational standards.',
+requirements:[
+'BSc Petroleum Engineering or Mechanical Engineering',
+'Experience with drilling operations',
+'Knowledge of drilling software tools'
+],
+benefits:[
+'International training programs',
+'Health insurance',
+'Career progression opportunities'
+],
+salary:{min:15000,max:25000,currency:'GHS'},
+applyLink:'https://careers.slb.com',
+deadline:new Date(Date.now()+40*86400000)
+},
+
+{
+_id:'c7',
+title:'Reservoir Simulation Engineer',
+company:'Tullow Oil',
+location:'Jubilee Field, Ghana',
+type:'full-time',
+category:'reservoir',
+description:'Develop reservoir simulation models to forecast production and optimize hydrocarbon recovery from offshore petroleum reservoirs.',
+requirements:[
+'Petroleum Engineering degree',
+'Experience with reservoir simulation software',
+'Strong analytical skills'
+],
+benefits:[
+'Offshore allowances',
+'Global training opportunities',
+'Health insurance'
+],
+salary:{min:14000,max:22000,currency:'GHS'},
+applyLink:'https://www.tullowoil.com/careers',
+deadline:new Date(Date.now()+50*86400000)
+},
+
+{
+_id:'c8',
+title:'Offshore Safety Supervisor',
+company:'Halliburton',
+location:'Sekondi-Takoradi, Ghana',
+type:'contract',
+category:'safety',
+description:'Supervise offshore safety procedures and ensure compliance with international HSE standards during drilling and production activities.',
+requirements:[
+'BSc Engineering or Environmental Science',
+'NEBOSH or OSHA certification',
+'Experience with offshore safety operations'
+],
+benefits:[
+'Offshore allowances',
+'International certification support',
+'Accommodation during offshore rotation'
+],
+salary:{min:12000,max:20000,currency:'GHS'},
+applyLink:'https://jobs.halliburton.com',
+deadline:new Date(Date.now()+28*86400000)
+},
+
+{
+_id:'c9',
+title:'Energy Data Analyst',
+company:'Shell',
+location:'Remote / Lagos',
+type:'full-time',
+category:'data',
+description:'Analyze petroleum production datasets using advanced analytics and AI models to improve operational efficiency and predictive maintenance.',
+requirements:[
+'Degree in Data Science, Engineering, or Computer Science',
+'Python, SQL, and data visualization experience',
+'Understanding of energy industry data'
+],
+benefits:[
+'Remote work flexibility',
+'Global collaboration opportunities',
+'Professional development programs'
+],
+salary:{min:13000,max:21000,currency:'GHS'},
+applyLink:'https://www.shell.com/careers',
+deadline:new Date(Date.now()+60*86400000)
+},
+
+{
+_id:'c10',
+title:'Drilling Operations Engineer',
+company:'Baker Hughes',
+location:'Takoradi, Ghana',
+type:'full-time',
+category:'drilling',
+description:'Coordinate drilling operations, monitor well performance, and ensure safe and efficient drilling execution on offshore rigs.',
+requirements:[
+'BSc Petroleum or Mechanical Engineering',
+'Understanding of drilling operations',
+'Strong problem-solving ability'
+],
+benefits:[
+'Global career mobility',
+'Training programs',
+'Health coverage'
+],
+salary:{min:12000,max:20000,currency:'GHS'},
+applyLink:'https://careers.bakerhughes.com',
+deadline:new Date(Date.now()+40*86400000)
+},
+
+{
+_id:'c11',
+title:'Well Logging Engineer',
+company:'Schlumberger (SLB)',
+location:'Takoradi, Ghana',
+type:'contract',
+category:'drilling',
+description:'Perform well logging operations and analyze subsurface formation data to support drilling and reservoir evaluation.',
+requirements:[
+'Petroleum Engineering or Geology degree',
+'Understanding of well logging tools',
+'Ability to work offshore rotations'
+],
+benefits:[
+'Offshore allowances',
+'Technical certification programs',
+'Accommodation during rotation'
+],
+salary:{min:10000,max:18000,currency:'GHS'},
+applyLink:'https://careers.slb.com',
+deadline:new Date(Date.now()+32*86400000)
+},
+
+{
+_id:'c12',
+title:'Reservoir Modeling Engineer',
+company:'Kosmos Energy',
+location:'Accra, Ghana',
+type:'full-time',
+category:'reservoir',
+description:'Develop advanced reservoir simulation models to forecast production and support field development decisions.',
+requirements:[
+'Petroleum Engineering degree',
+'Experience with reservoir modeling software',
+'Strong analytical skills'
+],
+benefits:[
+'Career development programs',
+'International exposure',
+'Performance bonuses'
+],
+salary:{min:14000,max:22000,currency:'GHS'},
+applyLink:'https://www.kosmosenergy.com/careers',
+deadline:new Date(Date.now()+50*86400000)
+},
+
+{
+_id:'c13',
+title:'Production Optimization Engineer',
+company:'Tullow Oil',
+location:'Jubilee Field, Ghana',
+type:'full-time',
+category:'reservoir',
+description:'Monitor well production and optimize field output using reservoir analysis and production engineering techniques.',
+requirements:[
+'Petroleum Engineering degree',
+'Knowledge of production systems',
+'Strong data analysis skills'
+],
+benefits:[
+'Offshore allowances',
+'Health insurance',
+'Training opportunities'
+],
+salary:{min:15000,max:23000,currency:'GHS'},
+applyLink:'https://www.tullowoil.com/careers',
+deadline:new Date(Date.now()+46*86400000)
+},
+
+{
+_id:'c14',
+title:'Digital Oilfield Engineer',
+company:'Shell',
+location:'Remote / Lagos',
+type:'full-time',
+category:'data',
+description:'Develop digital solutions for oilfield operations using AI, automation, and predictive analytics to improve operational efficiency.',
+requirements:[
+'Computer Science or Engineering degree',
+'Python or data engineering experience',
+'Understanding of oilfield data systems'
+],
+benefits:[
+'Remote work',
+'AI and cloud training',
+'International collaboration'
+],
+salary:{min:16000,max:25000,currency:'GHS'},
+applyLink:'https://www.shell.com/careers',
+deadline:new Date(Date.now()+55*86400000)
+},
+
+{
+_id:'c15',
+title:'Energy Data Engineer',
+company:'Chevron',
+location:'Remote',
+type:'full-time',
+category:'data',
+description:'Build data pipelines and analytics systems to support petroleum exploration, drilling optimization, and production forecasting.',
+requirements:[
+'Data Engineering or Computer Science degree',
+'SQL, Python, and cloud experience',
+'Understanding of energy datasets'
+],
+benefits:[
+'Remote work flexibility',
+'Training budget',
+'Health benefits'
+],
+salary:{min:17000,max:26000,currency:'GHS'},
+applyLink:'https://careers.chevron.com',
+deadline:new Date(Date.now()+60*86400000)
+}
+
 ];
 
 // ─── Session helper ─────────────────────────────────────────────────────────

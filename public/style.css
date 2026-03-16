@@ -613,14 +613,38 @@ textarea.form-control { min-height: 100px; resize: vertical; }
 .page-header p { color: var(--text-light); font-size: 0.9rem; margin-top: 0.25rem; }
 
 /* ─── Filter Bar ─── */
+.filter {
+  flex: 0 0 auto;
+  width: max-content;
+  padding: 8px 16px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  background: #f5f5f5;
+  cursor: pointer;
+  font-size: 14px;
+  scroll-behavior: smooth;
+  
+}
+
 .filter-bar {
-  display: flex; gap: 0.75rem; flex-wrap: wrap;
+  display: inline-block;
+  gap: 0.5rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  scrollbar-width: none;
+  flex-wrap: wrap;
   margin-bottom: 1.5rem;
+  padding: 0.5rem 0;
+}
+
+.filter::-webkit-scrollbar {
+  display: none;
 }
 
 .filter-btn {
-  padding: 0.4rem 1rem;
-  border: 1.5px solid var(--border);
+  padding: 0.4rem .5rem;
+  border: 1px solid var(--border);
   border-radius: 100px;
   font-size: 0.8rem; font-weight: 600;
   cursor: pointer; background: white;
