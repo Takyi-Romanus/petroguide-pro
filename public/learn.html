@@ -7,650 +7,676 @@
   <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-  <nav class="navbar">
-    <a href="/" class="navbar-brand">
-      <div class="logo-icon">⛽</div>
-      PetroGuide<span class="sub"> Pro</span>
-    </a>
-    <ul class="navbar-nav">
-      <li><a href="/learn" class="active">Learn</a></li>
-      <li><a href="/hazards">Hazards</a></li>
-      <li><a href="/careers">Careers</a></li>
-    </ul>
-    <div class="navbar-actions" id="navActions">
-      <a href="/auth/login" class="btn btn-outline">Log In</a>
-      <a href="/auth/register" class="btn btn-primary">Get Started</a>
-    </div>
-  </nav>
 
-  <div class="page-wrapper">
-    <aside class="sidebar">
-      <div class="sidebar-section">Explore</div>
-      <ul class="sidebar-menu">
-        <li><a href="/dashboard"><span class="menu-icon">📊</span> Dashboard</a></li>
-        <li><a href="/learn" class="active"><span class="menu-icon">🎓</span> Learning Modules</a></li>
-        <li><a href="/hazards"><span class="menu-icon">⚠️</span> Hazard Reports</a></li>
-        <li><a href="/careers"><span class="menu-icon">💼</span> Career Board</a></li>
-      </ul>
-      <div class="sidebar-section" style="margin-top:1rem;">Categories</div>
-      <ul class="sidebar-menu">
-        <li><a href="#" onclick="filterCat('Introduction')"><span class="menu-icon">🎓</span> Introduction</a></li>
-        <li><a href="#" onclick="filterCat('Exploration')"><span class="menu-icon">🛰️</span> Exploration</a></li>
-        <li><a href="#" onclick="filterCat('Reservoir')"><span class="menu-icon">🪨</span> Reservoir</a></li>
-        <li><a href="#" onclick="filterCat('Production')"><span class="menu-icon"> 🏭 </span> Production</a></li>
-        <li><a href="#" onclick="filterCat('Refining')"><span class="menu-icon">🧪</span> Refining</a></li>
-        <li><a href="#" onclick="filterCat('safety')"><span class="menu-icon">🦺</span> Safety & HSE</a></li>
-        <li><a href="#" onclick="filterCat('environment')"><span class="menu-icon">🌍</span> Environment</a></li>
-        <li><a href="#" onclick="filterCat('Equipment')"><span class="menu-icon">⛽</span> Equipment</a></li>
-        <li><a href="#" onclick="filterCat('Energy Transition')"><span class="menu-icon">🔋</span> Energy Transition</a></li>
-      </ul>
-    </aside>
-
-    <main class="main-content">
-      <div class="page-header">
-        <div>
-          <h1>🎓 Learning Modules</h1>
-          <p>Interactive petroleum engineering courses for students and professionals</p>
-        </div>
-      </div>
-
-      <!-- Search & Filter -->
-      <div style="display:flex; gap:1rem; margin-bottom:1.5rem; flex-wrap:wrap;">
-        <input type="text" id="searchInput" class="form-control" placeholder="🔍 Search modules..." style="max-width:320px;" oninput="searchModules()">
-        <select id="levelFilter" class="form-control" style="max-width:160px;" onchange="applyFilters()">
-          <option value="">All Levels</option>
-          <option value="beginner">Beginner</option>
-          <option value="intermediate">Intermediate</option>
-          <option value="advanced">Advanced</option>
-        </select>
-      </div>
-
-      <div class="filter filter-bar" id="catFilter">
-        <button class="filter-btn active" onclick="filterCat('')">All Categories</button>
-        <button class="filter-btn" onclick="filterCat('Introduction')">🎓 Introduction</button>
-        <button class="filter-btn" onclick="filterCat('Exploration')"> 🛰️ Exploration</button>
-        <button class="filter-btn" onclick="filterCat('Reservoir')">🪨 Reservoir</button>
-        <button class="filter-btn" onclick="filterCat('Production')">🏭 Production</button>
-        <button class="filter-btn" onclick="filterCat('Refining')">🧪 Refining</button>
-        <button class="filter-btn" onclick="filterCat('safety')">🦺 Safety</button>
-        <button class="filter-btn" onclick="filterCat('environment')">🌍 Environment</button>
-        <button class="filter-btn" onclick="filterCat('Equipment')">⚙️ Equipment</button>
-        <button class="filter-btn" onclick="filterCat('Energy')">🔋Energy</button>
-      </div>
-
-      <div id="modulesContainer">
-        <div class="loading"><div class="spinner"></div> Loading modules...</div>
-      </div>
-    </main>
+<!-- ── NAVBAR ─────────────────────────────── -->
+<nav class="navbar">
+  <a href="/" class="navbar-brand">
+    <div class="logo-icon">⛽</div>
+    PetroGuide<span class="sub"> Pro</span>
+  </a>
+  <ul class="navbar-nav">
+    <li><a href="/learn" class="active">Learn</a></li>
+    <li><a href="/careers">Careers</a></li>
+  </ul>
+  <div class="navbar-actions" id="navActions">
+    <a href="/auth/login" class="btn btn-outline">Log In</a>
+    <a href="/auth/register" class="btn btn-primary">Get Started</a>
   </div>
+  <button class="nav-toggle" onclick="document.querySelector('.navbar-nav').classList.toggle('open')">☰</button>
+</nav>
 
-  <!-- Module Detail Modal -->
-  <div class="modal-overlay" id="moduleModal">
-    <div class="modal">
-      <div class="modal-header">
-        <h2 id="modalTitle">Module Title</h2>
+<!-- ── LAYOUT ──────────────────────────────── -->
+<div class="page-wrapper">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-section">Navigate</div>
+    <ul class="sidebar-menu">
+      <li><a href="/dashboard"><span class="menu-icon">📊</span> Dashboard</a></li>
+      <li><a href="/learn" class="active"><span class="menu-icon">🎓</span> Learning Modules</a></li>
+      <li><a href="/careers"><span class="menu-icon">💼</span> Career Board</a></li>
+    </ul>
+    <div class="sidebar-section" style="margin-top:1.25rem">Categories</div>
+    <ul class="sidebar-menu" id="sidebarCats">
+      <li><a href="#" onclick="sidebarFilter('');return false"><span class="menu-icon">📋</span> All Modules</a></li>
+      <li><a href="#" onclick="sidebarFilter('introduction');return false"><span class="menu-icon">🎓</span> Introduction</a></li>
+      <li><a href="#" onclick="sidebarFilter('exploration');return false"><span class="menu-icon">🛰️</span> Exploration</a></li>
+      <li><a href="#" onclick="sidebarFilter('reservoir');return false"><span class="menu-icon">🪨</span> Reservoir</a></li>
+      <li><a href="#" onclick="sidebarFilter('production');return false"><span class="menu-icon">🏭</span> Production</a></li>
+      <li><a href="#" onclick="sidebarFilter('refining');return false"><span class="menu-icon">🧪</span> Refining</a></li>
+      <li><a href="#" onclick="sidebarFilter('safety');return false"><span class="menu-icon">🦺</span> Safety & HSE</a></li>
+      <li><a href="#" onclick="sidebarFilter('environment');return false"><span class="menu-icon">🌍</span> Environment</a></li>
+      <li><a href="#" onclick="sidebarFilter('equipment');return false"><span class="menu-icon">⚙️</span> Equipment</a></li>
+      <li><a href="#" onclick="sidebarFilter('energy');return false"><span class="menu-icon">🔋</span> Energy Transition</a></li>
+    </ul>
+  </aside>
+
+  <!-- Main -->
+  <main class="main-content">
+    <div class="page-header">
+      <div>
+        <h1>🎓 Learning Modules</h1>
+        <p>30 interactive petroleum engineering courses for students and professionals</p>
+      </div>
+      <span id="countBadge" style="font-size:.85rem;color:var(--text-muted);font-weight:500;white-space:nowrap;"></span>
+    </div>
+
+    <!-- Search & Filter -->
+    <div class="search-row">
+      <div class="search-input-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" class="form-control" placeholder="Search modules…" oninput="applyFilters()">
+      </div>
+      <select id="levelFilter" class="form-control" style="max-width:160px" onchange="applyFilters()">
+        <option value="">All Levels</option>
+        <option value="beginner">Beginner</option>
+        <option value="intermediate">Intermediate</option>
+        <option value="advanced">Advanced</option>
+      </select>
+    </div>
+
+    <div class="filter-bar">
+      <button class="filter-btn active" onclick="filterCat('',this)">All</button>
+      <button class="filter-btn" onclick="filterCat('introduction',this)">🎓 Introduction</button>
+      <button class="filter-btn" onclick="filterCat('exploration',this)">🛰️ Exploration</button>
+      <button class="filter-btn" onclick="filterCat('reservoir',this)">🪨 Reservoir</button>
+      <button class="filter-btn" onclick="filterCat('production',this)">🏭 Production</button>
+      <button class="filter-btn" onclick="filterCat('refining',this)">🧪 Refining</button>
+      <button class="filter-btn" onclick="filterCat('safety',this)">🦺 Safety</button>
+      <button class="filter-btn" onclick="filterCat('environment',this)">🌍 Environment</button>
+      <button class="filter-btn" onclick="filterCat('equipment',this)">⚙️ Equipment</button>
+      <button class="filter-btn" onclick="filterCat('energy',this)">🔋 Energy</button>
+    </div>
+
+    <div id="modulesContainer">
+      <div class="loading"><div class="spinner"></div></div>
+    </div>
+  </main>
+</div>
+
+<!-- Module Modal -->
+<div class="modal-overlay" id="moduleModal" onclick="handleOverlayClick(event)">
+  <div class="modal">
+    <div class="modal-hero" id="modalHero"></div>
+    <div class="modal-body">
+      <div class="modal-header-row">
+        <h2 id="modalTitle"></h2>
         <button class="modal-close" onclick="closeModal()">✕</button>
       </div>
+      <div class="modal-badges" id="modalBadges"></div>
+      <div class="info-grid" id="modalInfoGrid"></div>
       <div id="modalBody"></div>
+      <button onclick="startModule()" class="btn btn-primary w-full" style="margin-top:1.25rem;padding:.8rem;">
+        🚀 Start Module
+      </button>
     </div>
   </div>
+</div>
 
-  <script>
-    let currentCat = '';
+<script>
+/* ══════════════════════════════════
+   DATA — 30 Learning Modules
+══════════════════════════════════ */
+const MODULES = [
+/* ── Introduction ─────────────────────────────── */
+{id:'m01', title:'Introduction to the Petroleum Industry', category:'introduction', level:'beginner', duration:25, rating:4.8, enrolled:1420,
+ description:'Discover the foundations of petroleum, its history, and its central role in the global energy economy.',
+ tags:['petroleum','energy','industry','value chain'],
+ overview:'This module introduces the petroleum industry, explaining how oil and gas are formed, why they are important globally, and how the petroleum value chain works from exploration to refining.',
+ topics:[
+   {t:'What is Petroleum', d:'A naturally occurring fossil fuel composed of hydrocarbons formed from ancient organic matter under heat and pressure over millions of years.'},
+   {t:'History of the Industry', d:'From early kerosene lamps to modern global production — how the oil industry evolved since the 1850s.'},
+   {t:'Global Economic Importance', d:'Petroleum fuels transportation, manufacturing, agriculture, and global trade across every continent.'},
+   {t:'The Petroleum Value Chain', d:'Understanding upstream, midstream, and downstream sectors and how they connect.'},
+   {t:'Key Industry Players', d:'National oil companies, international oil companies, oilfield service companies, and regulators.'}
+ ]},
 
-    const categoryEmojis = {
-  introduction: "⛽",
-  exploration: "🛰️",
-  reservoir: "🪨",
-  production: "🏭",
-  refining: "🧪",
-  safety: "🦺",
-  environment: "🌍",
-  equipment: "⚙️",
-  energy: "🔋",
-  careers: "👨‍💼"
-};
+{id:'m02', title:'Petroleum Geology Fundamentals', category:'introduction', level:'beginner', duration:20, rating:4.7, enrolled:1100,
+ description:'Learn how oil and gas are formed geologically and what makes a viable petroleum system.',
+ tags:['geology','formation','source rock','hydrocarbons'],
+ overview:'Covers the geological processes behind petroleum formation — source rocks, migration, and accumulation in traps.',
+ topics:[
+   {t:'Organic Matter and Kerogen', d:'How ancient marine organisms become kerogen and then crude oil and natural gas under burial conditions.'},
+   {t:'Source Rocks', d:'Identifying and evaluating rocks capable of generating hydrocarbons.'},
+   {t:'Migration Pathways', d:'How hydrocarbons move from source rock through permeable carrier beds into traps.'},
+   {t:'Petroleum Systems', d:'The integrated concept linking source, migration, reservoir, trap, and timing.'},
+   {t:'Geological Time Scales', d:'Understanding when key petroleum-generating events occurred in Earth history.'}
+ ]},
 
-    function loadModules() {
-  renderModules(allModules);
-}
+{id:'m03', title:'The Oil & Gas Value Chain', category:'introduction', level:'beginner', duration:18, rating:4.6, enrolled:980,
+ description:'Follow crude oil from underground reservoir to the petrol station — a complete industry overview.',
+ tags:['upstream','midstream','downstream','industry'],
+ overview:'Traces the full journey of petroleum from reservoir to consumer, highlighting key processes and stakeholders at every stage.',
+ topics:[
+   {t:'Upstream: E&P', d:'Exploration, appraisal, and production — the first link in the chain.'},
+   {t:'Midstream: Transport & Storage', d:'Pipelines, tankers, and terminals that move and store crude oil and gas.'},
+   {t:'Downstream: Refining', d:'Converting crude into usable products like petrol, diesel, and petrochemicals.'},
+   {t:'Marketing and Distribution', d:'How refined products reach consumers through retail networks and trading.'},
+   {t:'Economic Drivers', d:'How oil price, supply-demand, and geopolitics shape every stage of the chain.'}
+ ]},
 
-   let allModules = [
+/* ── Exploration ───────────────────────────────── */
+{id:'m04', title:'Petroleum Exploration & Seismic Surveys', category:'exploration', level:'intermediate', duration:35, rating:4.7, enrolled:940,
+ description:'Discover how geologists and geophysicists use seismic technology to locate hidden oil and gas reservoirs.',
+ tags:['exploration','seismic','geology','geophysics'],
+ overview:'Covers the full exploration workflow from basin evaluation to seismic data acquisition, processing, and interpretation.',
+ topics:[
+   {t:'Basin Analysis', d:'Identifying sedimentary basins with prospective petroleum systems using geological maps and well data.'},
+   {t:'Seismic Wave Physics', d:'How sound waves travel through rock formations and reflect at geological boundaries.'},
+   {t:'2D vs 3D Seismic', d:'Differences in data acquisition geometry and the insights each provides.'},
+   {t:'Seismic Data Processing', d:'Migration, filtering, and velocity analysis to create accurate subsurface images.'},
+   {t:'Interpretation and Prospect Generation', d:'Identifying structural and stratigraphic traps from seismic data.'}
+ ]},
 
-{
-  _id: "mod1",
-  title: "Introduction to the Petroleum Industry",
-  category: "introduction",
-  level: "beginner",
-  duration: 25,
-  rating: 4.8,
-  enrolledCount: 1200,
-  description: "Learn the foundations of petroleum, its history, and its importance in the global energy economy.",
-  tags: ["petroleum", "energy", "industry"],
-  overview: "This module introduces the petroleum industry, explaining how oil and gas are formed, why they are important globally, and how the petroleum value chain works from exploration to refining.",
-  keyTopics: [
-    { topic: "What is Petroleum", description: "Petroleum is a naturally occurring fossil fuel composed of hydrocarbons formed from ancient organic matter under heat and pressure." },
-    { topic: "History of the Petroleum Industry", description: "Explores how the oil industry evolved from early discoveries to modern global production." },
-    { topic: "Importance in the Global Economy", description: "Petroleum fuels transportation, manufacturing, and global trade." },
-    { topic: "Petroleum Value Chain", description: "Explains upstream, midstream, and downstream sectors of the industry." }
-  ]
-},
+{id:'m05', title:'Well Logging and Formation Evaluation', category:'exploration', level:'intermediate', duration:28, rating:4.6, enrolled:720,
+ description:'Learn how wireline and LWD tools measure rock and fluid properties to evaluate petroleum-bearing formations.',
+ tags:['well logging','formation evaluation','wireline','petrophysics'],
+ overview:'Explains the suite of logging tools and the interpretation methods used to quantify hydrocarbon potential in drilled wells.',
+ topics:[
+   {t:'Gamma Ray and SP Logs', d:'Identifying lithology and shale content using natural radioactivity and spontaneous potential.'},
+   {t:'Resistivity Logging', d:'Detecting hydrocarbons by measuring formation electrical resistance.'},
+   {t:'Neutron and Density Porosity', d:'Quantifying pore space using nuclear logging tools.'},
+   {t:'Sonic and Image Logs', d:'Measuring acoustic velocity and capturing borehole wall images for fracture analysis.'},
+   {t:'Petrophysical Interpretation', d:'Combining log data to calculate porosity, water saturation, and net pay.'}
+ ]},
 
-{
-  _id: "mod2",
-  title: "Petroleum Exploration & Drilling",
-  category: "exploration",
-  level: "intermediate",
-  duration: 35,
-  rating: 4.7,
-  enrolledCount: 900,
-  description: "Discover how geologists and engineers locate oil and gas reserves and drill wells to extract them.",
-  tags: ["exploration", "drilling", "geology"],
-  overview: "This module explores the technologies and processes used to locate and drill petroleum reservoirs beneath the earth's surface.",
-  keyTopics: [
-    { topic: "Geological Surveys", description: "Geologists study rock formations and structures to locate potential oil reservoirs." },
-    { topic: "Seismic Exploration", description: "Seismic waves are used to map underground structures and identify hydrocarbon deposits." },
-    { topic: "Types of Drilling Rigs", description: "Different rigs such as land rigs, offshore rigs, and floating rigs are used in drilling." },
-    { topic: "Drilling Process", description: "Step-by-step explanation of drilling wells into the earth." },
-    { topic: "Well Completion", description: "Techniques used to prepare wells for safe oil and gas production." }
-  ]
-},
+{id:'m06', title:'Petroleum Geochemistry', category:'exploration', level:'advanced', duration:30, rating:4.5, enrolled:480,
+ description:'Understand the chemical fingerprinting methods used to characterize petroleum systems and oil–source correlations.',
+ tags:['geochemistry','biomarkers','source rock','maturity'],
+ overview:'An advanced look at organic geochemistry techniques used in exploration to de-risk petroleum systems.',
+ topics:[
+   {t:'Total Organic Carbon (TOC)', d:'Measuring organic richness of source rocks to assess generative potential.'},
+   {t:'Rock-Eval Pyrolysis', d:'Quantifying kerogen type and thermal maturity using S1, S2, and Tmax values.'},
+   {t:'Biomarker Analysis', d:'Molecular fossils that reveal oil origin, biodegradation, and correlation to source.'},
+   {t:'Fluid Inclusion Studies', d:'Trapping ancient pore fluids to reconstruct burial and migration history.'},
+   {t:'Oil–Source Correlation', d:'Matching produced crude to its source rock using geochemical fingerprints.'}
+ ]},
 
-{
-  _id: "mod3",
-  title: "Reservoir Engineering Fundamentals",
-  category: "reservoir",
-  level: "intermediate",
-  duration: 30,
-  rating: 4.6,
-  enrolledCount: 740,
-  description: "Understand how hydrocarbons are stored underground and how engineers manage reservoirs.",
-  tags: ["reservoir", "porosity", "permeability"],
-  overview: "Reservoir engineering focuses on understanding underground oil and gas reservoirs and maximizing hydrocarbon recovery.",
-  keyTopics: [
-    { topic: "Reservoir Rocks", description: "Rocks such as sandstone and limestone that store hydrocarbons." },
-    { topic: "Porosity", description: "The ability of rock to store fluids in pore spaces." },
-    { topic: "Permeability", description: "The ability of rock to allow fluids to flow through it." },
-    { topic: "Oil & Gas Traps", description: "Geological structures that prevent hydrocarbons from escaping." },
-    { topic: "Reservoir Management", description: "Strategies used to maintain pressure and maximize recovery." }
-  ]
-},
+/* ── Reservoir ─────────────────────────────────── */
+{id:'m07', title:'Reservoir Engineering Fundamentals', category:'reservoir', level:'intermediate', duration:30, rating:4.6, enrolled:760,
+ description:'Understand how hydrocarbons are stored and how engineers manage reservoirs to maximize recovery.',
+ tags:['reservoir','porosity','permeability','drive mechanisms'],
+ overview:'Core reservoir engineering concepts covering rock properties, fluid flow, drive mechanisms, and recovery estimation.',
+ topics:[
+   {t:'Reservoir Rocks', d:'Sandstone, limestone, and dolomite — the primary rock types that store hydrocarbons.'},
+   {t:'Porosity', d:'Total pore space as a fraction of bulk volume, ranging from 5% in tight formations to 30% in quality sands.'},
+   {t:'Permeability', d:'Darcy\'s law and the ability of fluids to flow through connected pore spaces.'},
+   {t:'Fluid Drive Mechanisms', d:'Solution gas drive, gas cap drive, water drive, and gravity drainage.'},
+   {t:'Recovery Factor Estimation', d:'Volumetric and material balance methods for estimating reserves.'}
+ ]},
 
-{
-  _id: "mod4",
-  title: "Production Engineering",
-  category: "production",
-  level: "intermediate",
-  duration: 30,
-  rating: 4.6,
-  enrolledCount: 680,
-  description: "Learn how oil and gas are extracted and processed at the surface.",
-  tags: ["production", "oil wells", "engineering"],
-  overview: "Production engineering focuses on extracting hydrocarbons efficiently and managing surface facilities.",
-  keyTopics: [
-    { topic: "Oil & Gas Production Methods", description: "Primary, secondary, and enhanced oil recovery techniques." },
-    { topic: "Artificial Lift Systems", description: "Pump jacks and gas lift used when natural pressure is insufficient." },
-    { topic: "Surface Facilities", description: "Equipment used to handle produced fluids." },
-    { topic: "Oil-Gas-Water Separation", description: "Processes used to separate fluids from wells." }
-  ]
-},
+{id:'m08', title:'Oil & Gas Traps and Seals', category:'reservoir', level:'intermediate', duration:22, rating:4.7, enrolled:810,
+ description:'Explore the structural and stratigraphic configurations that prevent hydrocarbons from escaping.',
+ tags:['traps','seals','anticline','fault','stratigraphy'],
+ overview:'Detailed analysis of trap geometries with real-world examples from major global oil fields.',
+ topics:[
+   {t:'Anticline Traps', d:'The classic arch-shaped fold where buoyant hydrocarbons accumulate at the crest.'},
+   {t:'Fault Traps', d:'Displacement of permeable reservoir against impermeable rock creates a lateral seal.'},
+   {t:'Salt Dome Traps', d:'Upward-moving salt diapirs pierce and seal surrounding sedimentary layers.'},
+   {t:'Stratigraphic Traps', d:'Pinch-outs, unconformities, and facies changes that trap hydrocarbons without structural deformation.'},
+   {t:'Seal Integrity', d:'Capillary pressure, membrane seals, and risk of seal failure during charging.'}
+ ]},
 
-{
-  _id: "mod5",
-  title: "Petroleum Refining & Processing",
-  category: "refining",
-  level: "beginner",
-  duration: 25,
-  rating: 4.5,
-  enrolledCount: 820,
-  description: "Learn how crude oil is converted into useful fuels and petrochemicals.",
-  tags: ["refining", "distillation"],
-  overview: "This module explains refinery operations and how crude oil becomes gasoline, diesel, jet fuel, and chemicals.",
-  keyTopics: [
-    { topic: "Crude Oil Refining", description: "Overview of refinery processes." },
-    { topic: "Fractional Distillation", description: "Separation of crude oil components based on boiling point." },
-    { topic: "Petroleum Products", description: "Gasoline, diesel, LPG, jet fuel, and lubricants." },
-    { topic: "Petrochemicals", description: "Petroleum-based chemicals used to make plastics and fertilizers." }
-  ]
-},
+{id:'m09', title:'Reservoir Simulation', category:'reservoir', level:'advanced', duration:38, rating:4.5, enrolled:420,
+ description:'Learn how numerical models predict reservoir behavior and guide development decisions.',
+ tags:['simulation','modelling','history matching','forecasting'],
+ overview:'Covers the principles of reservoir simulation — from grid construction to history matching and production forecasting.',
+ topics:[
+   {t:'Grid Architecture', d:'Corner-point, perpendicular bisector (PEBI), and unstructured grids — trade-offs in complexity and accuracy.'},
+   {t:'Fluid Property Modelling', d:'PVT tables, EOS models, and relative permeability curves as simulation inputs.'},
+   {t:'History Matching', d:'Calibrating the model to production and pressure history by adjusting uncertain parameters.'},
+   {t:'Sensitivity Studies', d:'Testing the impact of porosity, permeability, and fluid contacts on forecasts.'},
+   {t:'Development Scenario Comparison', d:'Using simulation to compare infill drilling, EOR, and injection strategies.'}
+ ]},
 
-{
-  _id: "mod6",
-  title: "Health, Safety & Environment (HSE)",
-  category: "safety",
-  level: "beginner",
-  duration: 20,
-  rating: 4.9,
-  enrolledCount: 1500,
-  description: "Understand safety practices and risk management in petroleum operations.",
-  tags: ["safety", "HSE"],
-  overview: "HSE ensures safe working conditions and environmental protection in petroleum operations.",
-  keyTopics: [
-    { topic: "Workplace Safety", description: "Procedures that protect workers in oil fields." },
-    { topic: "Personal Protective Equipment", description: "Helmets, gloves, safety boots, and protective clothing." },
-    { topic: "Hazard Identification", description: "Recognizing and managing potential risks." },
-    { topic: "Emergency Response", description: "Procedures for accidents and oil spills." }
-  ]
-},
+{id:'m10', title:'Reservoir Fluid Properties (PVT)', category:'reservoir', level:'advanced', duration:26, rating:4.4, enrolled:380,
+ description:'Master the pressure-volume-temperature behaviour of oil, gas, and water in reservoir conditions.',
+ tags:['PVT','fluid properties','EOS','phase behaviour'],
+ overview:'Rigorous treatment of petroleum fluid thermodynamics — essential for accurate reservoir and production engineering.',
+ topics:[
+   {t:'Phase Diagrams', d:'Pressure-temperature phase envelopes for oil, gas, and condensate systems.'},
+   {t:'Formation Volume Factor (FVF)', d:'Bo, Bg — quantifying how fluids expand from reservoir to surface conditions.'},
+   {t:'Solution Gas-Oil Ratio (GOR)', d:'Dissolved gas in oil and how it evolves as pressure declines.'},
+   {t:'Viscosity and Density Correlations', d:'Dead oil, live oil, and gas viscosity models from Standing, Beggs & Robinson, and others.'},
+   {t:'Equations of State (EOS)', d:'Peng-Robinson and SRK EOS for modeling complex fluid mixtures.'}
+ ]},
 
-{
-  _id: "mod7",
-  title: "Environmental Engineering in Petroleum",
-  category: "environment",
-  level: "intermediate",
-  duration: 25,
-  rating: 4.6,
-  enrolledCount: 600,
-  description: "Learn how environmental engineers reduce pollution and environmental damage in petroleum operations.",
-  tags: ["environment", "sustainability"],
-  overview: "Focuses on environmental protection in oil and gas production.",
-  keyTopics: [
-    { topic: "Pollution Control", description: "Technologies that reduce emissions and contamination." },
-    { topic: "Waste Management", description: "Handling drilling waste and refinery by-products." },
-    { topic: "Environmental Impact Assessment", description: "Evaluating environmental risks before projects." },
-    { topic: "Climate Change Effects", description: "Impact of fossil fuels on climate systems." }
-  ]
-},
+/* ── Production ──────────────────────────────── */
+{id:'m11', title:'Production Engineering Fundamentals', category:'production', level:'intermediate', duration:30, rating:4.6, enrolled:700,
+ description:'Learn how oil and gas are extracted efficiently from wells and managed at the surface.',
+ tags:['production','wells','artificial lift','optimization'],
+ overview:'Covers the complete production engineering workflow from inflow performance to surface processing.',
+ topics:[
+   {t:'Inflow Performance Relationship (IPR)', d:'Vogel and Darcy models describing reservoir deliverability into the wellbore.'},
+   {t:'Tubing Performance Curve (TPC)', d:'Matching reservoir inflow to wellbore hydraulics to find the natural flow point.'},
+   {t:'Oil & Gas Production Methods', d:'Primary, secondary, and enhanced recovery — when and why each is applied.'},
+   {t:'Artificial Lift Selection', d:'Comparing beam pump, ESP, gas lift, and PCP based on well conditions.'},
+   {t:'Production Optimization', d:'Choke management, rate testing, and wellbore surveillance strategies.'}
+ ]},
 
-{
-  _id: "mod8",
-  title: "Petroleum Equipment & Technology",
-  category: "equipment",
-  level: "intermediate",
-  duration: 30,
-  rating: 4.5,
-  enrolledCount: 550,
-  description: "Explore the equipment and technology used in petroleum production.",
-  tags: ["technology", "equipment"],
-  overview: "Covers machinery and digital technology used across oil and gas operations.",
-  keyTopics: [
-    { topic: "Drilling Equipment", description: "Drill bits, derricks, mud pumps, and drilling systems." },
-    { topic: "Pumps & Compressors", description: "Equipment used to move fluids and gases." },
-    { topic: "Pipelines", description: "Infrastructure used to transport oil and gas." },
-    { topic: "Digital Oilfield", description: "Use of sensors and data analytics in oil production." }
-  ]
-},
+{id:'m12', title:'Artificial Lift Systems', category:'production', level:'intermediate', duration:32, rating:4.7, enrolled:860,
+ description:'Deep dive into the mechanical and hydraulic systems that lift oil when natural reservoir pressure is insufficient.',
+ tags:['artificial lift','ESP','gas lift','pump jack','PCP'],
+ overview:'Systematic comparison of all major artificial lift technologies with design principles and selection criteria.',
+ topics:[
+   {t:'Rod Pump (Pump Jack)', d:'Surface pumping unit drives sucker rod string operating a downhole plunger — reliable and low-cost for shallow wells.'},
+   {t:'Electric Submersible Pump (ESP)', d:'Multi-stage centrifugal pump installed downhole, ideal for high-volume deep wells.'},
+   {t:'Gas Lift', d:'Injecting high-pressure gas aerates produced fluid, reducing density and enabling flow.'},
+   {t:'Progressive Cavity Pump (PCP)', d:'Helical rotor-stator ideal for heavy, viscous, or sandy crude.'},
+   {t:'Hydraulic Jet and Piston Pumps', d:'Surface-powered downhole pumps using high-pressure fluid as the power medium.'}
+ ]},
 
-{
-  _id: "mod9",
-  title: "Energy Transition & Sustainability",
-  category: "energy",
-  level: "beginner",
-  duration: 20,
-  rating: 4.7,
-  enrolledCount: 770,
-  description: "Understand the future of energy and the transition to cleaner systems.",
-  tags: ["energy transition", "sustainability"],
-  overview: "Explores how petroleum companies adapt to renewable energy and carbon reduction goals.",
-  keyTopics: [
-    { topic: "Future of Energy", description: "Global trends in energy demand." },
-    { topic: "Clean Energy", description: "Renewable energy technologies." },
-    { topic: "Carbon Reduction", description: "Methods used to lower carbon emissions." },
-    { topic: "Sustainable Petroleum", description: "Strategies for responsible energy production." }
-  ]
-},
+{id:'m13', title:'Oil, Gas & Water Separation', category:'production', level:'intermediate', duration:20, rating:4.8, enrolled:920,
+ description:'Understand the equipment and physics behind separating the wellstream into usable components.',
+ tags:['separation','separator','processing','wellstream'],
+ overview:'Covers two-phase and three-phase separation, vessel design principles, and downstream treatment requirements.',
+ topics:[
+   {t:'Two-Phase vs Three-Phase Separation', d:'Gas-liquid vs gas-oil-water separation — when each is needed and why.'},
+   {t:'Horizontal vs Vertical Separators', d:'Throughput, footprint, and liquid handling trade-offs between orientations.'},
+   {t:'Emulsion Breaking', d:'Heat, chemicals, and electrostatics to resolve oil-water emulsions.'},
+   {t:'Gas Scrubbing and Mist Extraction', d:'Removing liquid carryover from the gas phase using demisters and centrifugal vanes.'},
+   {t:'Separator Sizing and Retention Time', d:'Liquid and gas capacity design equations and retention time requirements.'}
+ ]},
 
-{
-  _id: "mod10",
-  title: "Careers in Petroleum Engineering",
-  category: "careers",
-  level: "beginner",
-  duration: 15,
-  rating: 4.8,
-  enrolledCount: 1300,
-  description: "Explore career opportunities and required skills in the petroleum industry.",
-  tags: ["careers", "petroleum engineering"],
-  overview: "Provides career guidance for students interested in petroleum engineering and energy industries.",
-  keyTopics: [
-    { topic: "Petroleum Engineering Roles", description: "Drilling engineers, reservoir engineers, and production engineers." },
-    { topic: "Required Skills", description: "Technical and analytical skills needed in the field." },
-    { topic: "Internship Guidance", description: "How students gain industry experience." },
-    { topic: "Industry Certifications", description: "Professional credentials for petroleum engineers." }
-  ]
-},
+{id:'m14', title:'Surface Production Facilities', category:'production', level:'intermediate', duration:24, rating:4.7, enrolled:880,
+ description:'Explore the full surface processing train from wellhead to export pipeline.',
+ tags:['surface facilities','wellhead','christmas tree','metering'],
+ overview:'An integrated look at surface facility design covering flow control, treatment, metering, and utilities.',
+ topics:[
+   {t:'Wellhead and Christmas Tree', d:'High-pressure valves, chokes, and safety systems controlling flow at the wellhead.'},
+   {t:'Flowlines and Manifolds', d:'Gathering produced fluids from multiple wells and routing them to central processing.'},
+   {t:'Produced Water Treatment', d:'De-oiling, filtration, and disposal of produced water to meet environmental standards.'},
+   {t:'Gas Compression and Dehydration', d:'Boosting gas pressure and removing water vapour before export.'},
+   {t:'Fiscal Metering', d:'Accurate measurement of oil and gas volumes for royalties, sales, and allocation.'}
+ ]},
 
-{
-  _id: "mod11",
-  title: "Introduction to the Petroleum Industry",
-  category: "introduction",
-  level: "beginner",
-  duration: 12,
-  rating: 4.7,
-  enrolledCount: 1600,
-  description: "Understand the structure and importance of the petroleum industry.",
-  tags: ["petroleum", "oil and gas", "industry"],
-  overview: "Introduces the petroleum industry, its sectors, and how oil and gas move from reservoirs to consumers.",
-  keyTopics: [
-    { topic: "Overview of Petroleum Industry", description: "Understanding how oil and gas are explored, produced, and distributed." },
-    { topic: "Upstream Sector", description: "Exploration and production of oil and gas resources." },
-    { topic: "Midstream Sector", description: "Transportation and storage of crude oil and natural gas." },
-    { topic: "Downstream Sector", description: "Refining crude oil into fuels and petrochemical products." }
-  ]
-},
+{id:'m15', title:'Enhanced Oil Recovery (EOR)', category:'production', level:'advanced', duration:36, rating:4.6, enrolled:510,
+ description:'Advanced techniques to mobilise and recover oil that primary and secondary methods leave behind.',
+ tags:['EOR','steam injection','CO2','polymer','chemical'],
+ overview:'Comprehensive coverage of thermal, gas, and chemical EOR methods with reservoir suitability criteria.',
+ topics:[
+   {t:'Thermal EOR — Steam Flooding', d:'Injecting steam to heat heavy oil, reduce viscosity, and improve displacement.'},
+   {t:'SAGD (Steam Assisted Gravity Drainage)', d:'Horizontal well pair strategy for oil sands — widely used in Canada and Venezuela.'},
+   {t:'Miscible CO₂ Injection', d:'CO₂ mixes with oil, swells it, and reduces viscosity — effective in light to medium crude.'},
+   {t:'Polymer Flooding', d:'Increasing injection water viscosity with polymer to improve sweep efficiency.'},
+   {t:'Surfactant and ASP Flooding', d:'Reducing interfacial tension with surfactants, alkali, and polymer combinations.'}
+ ]},
 
-{
-  _id: "mod12",
-  title: "Petroleum Exploration Techniques",
-  category: "exploration",
-  level: "beginner",
-  duration: 18,
-  rating: 4.8,
-  enrolledCount: 1400,
-  description: "Learn how geologists locate oil and gas reservoirs underground.",
-  tags: ["exploration", "seismic", "geology"],
-  overview: "Explains the techniques used to identify potential oil and gas reservoirs beneath the Earth's surface.",
-  keyTopics: [
-    { topic: "Seismic Surveys", description: "Using sound waves to map underground rock formations." },
-    { topic: "Geological Mapping", description: "Studying rock layers and structural formations." },
-    { topic: "Exploration Data Analysis", description: "Using computers and data processing to interpret subsurface data." },
-    { topic: "Hydrocarbon Prospect Identification", description: "Identifying areas likely to contain oil and gas." }
-  ]
-},
+/* ── Drilling ──────────────────────────────────── */
+{id:'m16', title:'Drilling Engineering Fundamentals', category:'exploration', level:'intermediate', duration:35, rating:4.8, enrolled:1050,
+ description:'Master the principles of well design, drilling operations, and borehole mechanics.',
+ tags:['drilling','rig','drill bit','well design','mud'],
+ overview:'Covers the complete drilling engineering workflow from well planning to TD, including all major systems and equipment.',
+ topics:[
+   {t:'Drilling Rig Systems', d:'Power, hoisting, rotating, circulating, and well-control systems working in concert.'},
+   {t:'Drill String Design', d:'Drill bit, collars, HWDP, drill pipe — weight and torque calculations for each component.'},
+   {t:'Drilling Fluids (Mud)', d:'WBM, OBM, and SBM systems — functions, properties, and selection criteria.'},
+   {t:'Hydraulics and Pressure Control', d:'ECD, swab/surge, kick detection, and BOP activation procedures.'},
+   {t:'Directional and Horizontal Drilling', d:'Using MWD/LWD and rotary steerable systems to reach target locations.'}
+ ]},
 
-{
-  _id: "mod13",
-  title: "Reservoir Rocks and Fluid Storage",
-  category: "reservoir",
-  level: "beginner",
-  duration: 20,
-  rating: 4.9,
-  enrolledCount: 1200,
-  description: "Learn about reservoir rocks that store hydrocarbons underground.",
-  tags: ["reservoir", "porosity", "permeability"],
-  overview: "Explains how rock formations store oil and gas and the geological conditions necessary for reservoirs.",
-  keyTopics: [
-    { topic: "Types of Reservoir Rocks", description: "Sandstone, limestone, and dolomite reservoirs." },
-    { topic: "Porosity", description: "The storage capacity of reservoir rocks." },
-    { topic: "Permeability", description: "The ability of fluids to flow through rock pores." },
-    { topic: "Reservoir Characteristics", description: "Understanding rock properties affecting hydrocarbon recovery." }
-  ]
-},
+{id:'m17', title:'Well Completion and Stimulation', category:'exploration', level:'advanced', duration:30, rating:4.6, enrolled:560,
+ description:'Learn how completed wells are prepared for production and how underperforming wells are stimulated.',
+ tags:['completion','perforation','hydraulic fracturing','stimulation','casing'],
+ overview:'Covers casing design, cementing, perforation, and stimulation techniques including hydraulic fracturing.',
+ topics:[
+   {t:'Casing Design', d:'Selecting casing grades and weights to withstand collapse, burst, and axial loads.'},
+   {t:'Cementing', d:'Primary cementing to isolate zones and prevent fluid migration behind the casing.'},
+   {t:'Perforation', d:'Shaped charge perforating guns that connect the wellbore to the reservoir.'},
+   {t:'Hydraulic Fracturing', d:'High-pressure fluid creates fractures in tight rock to dramatically improve productivity.'},
+   {t:'Acid Stimulation', d:'Matrix acidizing and acid fracturing to dissolve damage and open natural flow paths in carbonates.'}
+ ]},
 
-{
-  _id: "mod14",
-  title: "Oil and Gas Traps",
-  category: "reservoir",
-  level: "intermediate",
-  duration: 16,
-  rating: 4.8,
-  enrolledCount: 980,
-  description: "Understand geological structures that trap hydrocarbons.",
-  tags: ["reservoir", "geology", "traps"],
-  overview: "Explores how hydrocarbons accumulate in underground traps formed by geological processes.",
-  keyTopics: [
-    { topic: "Structural Traps", description: "Anticline, fault, and salt dome traps." },
-    { topic: "Stratigraphic Traps", description: "Pinch-out and unconformity traps." },
-    { topic: "Cap Rock and Seals", description: "Impermeable rocks that prevent hydrocarbon escape." },
-    { topic: "Hydrocarbon Migration", description: "Movement of oil and gas from source rock to reservoir." }
-  ]
-},
+/* ── Refining ──────────────────────────────────── */
+{id:'m18', title:'Petroleum Refining Processes', category:'refining', level:'intermediate', duration:28, rating:4.8, enrolled:860,
+ description:'From crude oil to usable products — understand the distillation, cracking, and treatment processes at a refinery.',
+ tags:['refining','distillation','cracking','petrochemicals'],
+ overview:'Systematic tour of a modern refinery covering all major conversion units and product streams.',
+ topics:[
+   {t:'Atmospheric Distillation', d:'Separating crude oil into fractions — LPG, naphtha, kerosene, diesel, and atmospheric residue.'},
+   {t:'Vacuum Distillation', d:'Further separation of heavy residue into VGO and vacuum residue at reduced pressure.'},
+   {t:'Fluid Catalytic Cracking (FCC)', d:'Converting heavy VGO into high-value gasoline and light olefins using a catalyst.'},
+   {t:'Hydroprocessing (HDS/HDN)', d:'Removing sulphur, nitrogen, and metals using hydrogen under high pressure.'},
+   {t:'Reforming and Alkylation', d:'Improving octane ratings and producing high-value blending components.'}
+ ]},
 
-{
-  _id: "mod15",
-  title: "Drilling Engineering Fundamentals",
-  category: "equipment",
-  level: "intermediate",
-  duration: 22,
-  rating: 4.9,
-  enrolledCount: 1100,
-  description: "Learn the fundamentals of drilling oil and gas wells.",
-  tags: ["drilling", "rig", "petroleum engineering"],
-  overview: "Introduces drilling processes, drilling rigs, and the equipment used to reach underground reservoirs.",
-  keyTopics: [
-    { topic: "Purpose of Drilling", description: "Creating pathways for oil and gas extraction." },
-    { topic: "Drilling Methods", description: "Rotary drilling, directional drilling, and core drilling." },
-    { topic: "Drill String Components", description: "Drill pipe, drill collars, and bottom hole assembly." },
-    { topic: "Drilling Fluid Systems", description: "Functions of drilling mud in well operations." }
-  ]
-},
+{id:'m19', title:'Petrochemicals and Downstream Products', category:'refining', level:'intermediate', duration:22, rating:4.6, enrolled:680,
+ description:'Explore how petroleum feedstocks are converted into plastics, fertilizers, solvents, and specialty chemicals.',
+ tags:['petrochemicals','plastics','fertilizers','ethylene','polymers'],
+ overview:'The link between refining and the chemical industry — how basic feedstocks become the materials of modern life.',
+ topics:[
+   {t:'Olefin Production (Steam Cracking)', d:'Breaking naphtha or ethane into ethylene and propylene — the building blocks of plastics.'},
+   {t:'Aromatics — BTX', d:'Benzene, toluene, and xylene extracted from reformate for chemical synthesis.'},
+   {t:'Polymer Production', d:'Polyethylene, polypropylene, and PVC — from monomer to finished plastic.'},
+   {t:'Fertilizer Feedstocks', d:'Natural gas as a feedstock for ammonia and urea production via the Haber-Bosch process.'},
+   {t:'Specialty Chemicals', d:'Lubricants, solvents, waxes, and bitumen as high-value refinery products.'}
+ ]},
 
-{
-  _id: "mod16",
-  title: "Drilling Rig Systems",
-  category: "equipment",
-  level: "intermediate",
-  duration: 20,
-  rating: 4.8,
-  enrolledCount: 950,
-  description: "Explore the main systems used in petroleum drilling rigs.",
-  tags: ["drilling rig", "equipment", "engineering"],
-  overview: "Explains the main systems that make up a drilling rig and their functions during well construction.",
-  keyTopics: [
-    { topic: "Power System", description: "Generating energy required for drilling operations." },
-    { topic: "Hoisting System", description: "Raising and lowering drill strings and equipment." },
-    { topic: "Rotating System", description: "Providing rotational force to drill bits." },
-    { topic: "Circulating System", description: "Circulating drilling mud to remove rock cuttings." }
-  ]
-},
+{id:'m20', title:'Refinery Operations and Optimization', category:'refining', level:'advanced', duration:32, rating:4.5, enrolled:410,
+ description:'Advanced refinery planning, linear programming, and margin optimization for complex modern refineries.',
+ tags:['refinery planning','LP optimization','margin','configuration'],
+ overview:'How refineries maximize profit through configuration choices, crude selection, and operational optimization.',
+ topics:[
+   {t:'Nelson Complexity Index', d:'Measuring refinery upgrading capability and understanding the value of conversion units.'},
+   {t:'Linear Programming (LP) Planning', d:'Optimizing crude slate, product yields, and operating conditions using LP models.'},
+   {t:'Crude Selection and Blending', d:'Evaluating crude assays and selecting the most profitable crude mix.'},
+   {t:'Energy Management', d:'Steam, electricity, and hydrogen network optimization to reduce refinery energy intensity.'},
+   {t:'Catalyst Management', d:'Optimising catalyst life, regeneration schedules, and replacement economics.'}
+ ]},
 
-{
-  _id: "mod17",
-  title: "Oil and Gas Production Methods",
-  category: "production",
-  level: "intermediate",
-  duration: 18,
-  rating: 4.9,
-  enrolledCount: 1050,
-  description: "Understand how hydrocarbons are extracted from reservoirs.",
-  tags: ["production", "oil recovery", "petroleum"],
-  overview: "Explains primary, secondary, and tertiary recovery techniques used to extract oil and gas.",
-  keyTopics: [
-    { topic: "Primary Recovery", description: "Production driven by natural reservoir energy." },
-    { topic: "Secondary Recovery", description: "Using water or gas injection to maintain reservoir pressure." },
-    { topic: "Enhanced Oil Recovery", description: "Advanced recovery techniques including thermal and chemical methods." },
-    { topic: "Reservoir Pressure Management", description: "Maintaining pressure for sustained production." }
-  ]
-},
+/* ── Safety & HSE ──────────────────────────────── */
+{id:'m21', title:'Health, Safety & Environment (HSE)', category:'safety', level:'beginner', duration:20, rating:4.9, enrolled:1520,
+ description:'Essential HSE principles for anyone working in or around petroleum operations.',
+ tags:['HSE','safety','health','environment','PPE'],
+ overview:'An accessible introduction to HSE management, hazard identification, and workplace safety in the oil and gas industry.',
+ topics:[
+   {t:'Why HSE Matters', d:'Protecting human life, the environment, and business continuity — the business case for safety.'},
+   {t:'Hazard Identification (HAZID)', d:'Systematic processes for identifying potential hazards before operations begin.'},
+   {t:'Risk Assessment Methods', d:'Qualitative and quantitative risk assessment — likelihood, severity, and risk matrix.'},
+   {t:'Personal Protective Equipment', d:'Hard hats, H₂S monitors, fire-resistant clothing — selection, use, and limitations.'},
+   {t:'Emergency Response Planning', d:'Muster stations, evacuation procedures, and roles in a well-control emergency.'}
+ ]},
 
-{
-  _id: "mod18",
-  title: "Artificial Lift Systems",
-  category: "production",
-  level: "intermediate",
-  duration: 17,
-  rating: 4.8,
-  enrolledCount: 870,
-  description: "Learn how artificial lift systems help bring oil to the surface.",
-  tags: ["production", "artificial lift", "petroleum"],
-  overview: "Introduces artificial lift technologies used when natural reservoir pressure declines.",
-  keyTopics: [
-    { topic: "Rod Pumps", description: "Common mechanical pumps used in oil wells." },
-    { topic: "Electric Submersible Pumps", description: "High-capacity pumps installed deep in wells." },
-    { topic: "Gas Lift Systems", description: "Using injected gas to lift oil to the surface." },
-    { topic: "Progressive Cavity Pumps", description: "Systems designed for heavy oil production." }
-  ]
-},
+{id:'m22', title:'Process Safety Management', category:'safety', level:'intermediate', duration:28, rating:4.7, enrolled:740,
+ description:'Understand the systems and barriers that prevent major process accidents in oil and gas facilities.',
+ tags:['process safety','barriers','HAZOP','bow-tie','LOPA'],
+ overview:'Covers the 14 elements of PSM and the analytical tools used to design robust safety barriers.',
+ topics:[
+   {t:'Layers of Protection Analysis (LOPA)', d:'Semi-quantitative method for verifying that enough independent barriers exist to reduce risk to acceptable levels.'},
+   {t:'HAZOP Study', d:'Hazard and Operability study — systematic what-if analysis using guide words at each process node.'},
+   {t:'Bow-Tie Analysis', d:'Visualizing threats, top events, and consequences with prevention and mitigation barriers.'},
+   {t:'Safety Integrity Level (SIL)', d:'IEC 61511 SIL classification for safety instrumented systems (SIS).'},
+   {t:'Management of Change (MOC)', d:'Ensuring all modifications to plant, procedures, and personnel are safely assessed.'}
+ ]},
 
-{
-  _id: "mod19",
-  title: "Surface Production Facilities",
-  category: "production",
-  level: "intermediate",
-  duration: 16,
-  rating: 4.7,
-  enrolledCount: 920,
-  description: "Understand how oil and gas are processed after reaching the surface.",
-  tags: ["production", "processing", "facilities"],
-  overview: "Explains how surface facilities treat, separate, and prepare hydrocarbons for transportation.",
-  keyTopics: [
-    { topic: "Wellheads and Christmas Trees", description: "Equipment used to control well flow." },
-    { topic: "Separators", description: "Separating oil, gas, and water from the wellstream." },
-    { topic: "Storage Tanks", description: "Temporary storage of crude oil before transportation." },
-    { topic: "Compression and Pumping Systems", description: "Boosting pressure for transportation." }
-  ]
-},
+{id:'m23', title:'Well Control and Blowout Prevention', category:'safety', level:'advanced', duration:34, rating:4.8, enrolled:620,
+ description:'Critical knowledge on kick detection, well control procedures, and BOP systems.',
+ tags:['well control','BOP','kick','blowout','IWCF'],
+ overview:'The theory and practice of maintaining wellbore pressure control during drilling and completion operations.',
+ topics:[
+   {t:'Formation Pressure Fundamentals', d:'Pore pressure, overburden, and fracture gradient — the drilling window explained.'},
+   {t:'Kick Causes and Detection', d:'Early warning signs of an influx — pit gain, flow check, and gas cut mud.'},
+   {t:'Well Control Methods', d:'Driller\'s method, wait-and-weight, and volumetric method for circulating out a kick.'},
+   {t:'Blowout Preventer (BOP) Systems', d:'Annular preventers, pipe rams, blind/shear rams, and the accumulator unit.'},
+   {t:'Deepwater Well Control Challenges', d:'Riser margin, subsea BOP operation, and shallow water flow risks.'}
+ ]},
 
-{
-  _id: "mod20",
-  title: "Health, Safety and Environment (HSE)",
-  category: "safety",
-  level: "beginner",
-  duration: 14,
-  rating: 4.9,
-  enrolledCount: 1500,
-  description: "Learn about safety practices and environmental protection in petroleum operations.",
-  tags: ["HSE", "safety", "environment"],
-  overview: "Introduces health, safety, and environmental management systems used in the oil and gas industry.",
-  keyTopics: [
-    { topic: "Workplace Safety", description: "Preventing accidents in drilling and production operations." },
-    { topic: "Environmental Protection", description: "Reducing pollution and environmental damage." },
-    { topic: "Hazard Identification", description: "Recognizing and managing operational risks." },
-    { topic: "Emergency Response Systems", description: "Preparedness for accidents such as spills and fires." }
-  ]
-},
+/* ── Environment ───────────────────────────────── */
+{id:'m24', title:'Environmental Management in Petroleum', category:'environment', level:'beginner', duration:22, rating:4.7, enrolled:990,
+ description:'Learn how the petroleum industry manages its environmental footprint from exploration to abandonment.',
+ tags:['environment','EIA','oil spill','emissions','biodiversity'],
+ overview:'Comprehensive introduction to environmental management systems, regulatory frameworks, and best practices in E&P.',
+ topics:[
+   {t:'Environmental Impact Assessment (EIA)', d:'Predicting, evaluating, and mitigating significant environmental effects of petroleum projects.'},
+   {t:'Oil Spill Prevention and Response', d:'Spill barriers, containment booms, dispersants, and bioremediation strategies.'},
+   {t:'Greenhouse Gas Emissions', d:'Measuring and reducing methane fugitives, venting, and flaring from oil and gas operations.'},
+   {t:'Produced Water Management', d:'Treatment, reinjection, and safe disposal of water co-produced with hydrocarbons.'},
+   {t:'Biodiversity and Ecosystem Protection', d:'Avoiding and offsetting impacts on sensitive habitats, mangroves, and marine ecosystems.'}
+ ]},
 
-{
-  _id: "mod21",
-  title: "Petroleum Processing and Refining",
-  category: "refining",
-  level: "intermediate",
-  duration: 18,
-  rating: 4.8,
-  enrolledCount: 880,
-  description: "Understand how crude oil is refined into useful products.",
-  tags: ["refining", "petroleum", "processing"],
-  overview: "Explains refining technologies used to convert crude oil into fuels and petrochemicals.",
-  keyTopics: [
-    { topic: "Distillation Process", description: "Separating crude oil into different fractions." },
-    { topic: "Catalytic Cracking", description: "Breaking large hydrocarbons into lighter fuels." },
-    { topic: "Hydroprocessing", description: "Removing impurities from petroleum products." },
-    { topic: "Petrochemical Production", description: "Producing plastics, fertilizers, and chemicals." }
-  ]
-},
+{id:'m25', title:'Gas Flaring Reduction and Control', category:'environment', level:'intermediate', duration:20, rating:4.6, enrolled:600,
+ description:'Understand why gas is flared, its climate impact, and the technologies and policies to reduce it.',
+ tags:['flaring','methane','emissions','gas utilization','climate'],
+ overview:'Explores the causes of gas flaring in E&P, quantification methods, and commercially viable alternatives.',
+ topics:[
+   {t:'Why Gas is Flared', d:'Associated gas volumes, lack of infrastructure, safety relief — the main drivers of flaring.'},
+   {t:'Climate and Health Impacts', d:'CO₂ equivalent emissions from flaring and black carbon effects on local communities.'},
+   {t:'Gas Utilization Alternatives', d:'Gas-to-power, LNG, GTL, CNG, and reinjection as alternatives to flaring.'},
+   {t:'Flare Measurement', d:'Satellite detection, flow meters, and mass balance methods for accurate quantification.'},
+   {t:'Regulatory Landscape', d:'World Bank Zero Routine Flaring Initiative, NDCs, and national regulations.'}
+ ]},
 
-{
-  _id: "mod22",
-  title: "Energy Transition and Future Energy Systems",
-  category: "energy",
-  level: "beginner",
-  duration: 15,
-  rating: 4.7,
-  enrolledCount: 760,
-  description: "Explore the future of energy and emerging technologies in the petroleum industry.",
-  tags: ["energy", "transition", "technology"],
-  overview: "Discusses how petroleum engineering is evolving to support cleaner energy systems.",
-  keyTopics: [
-    { topic: "Carbon Capture and Storage", description: "Reducing carbon emissions from fossil fuel operations." },
-    { topic: "Hydrogen Energy Systems", description: "Using underground reservoirs for hydrogen storage." },
-    { topic: "Geothermal Energy", description: "Applying petroleum drilling knowledge to geothermal energy." },
-    { topic: "Digital Oilfield Technology", description: "Using AI and sensors for smarter oilfield operations." }
-  ]
-}
+/* ── Equipment ─────────────────────────────────── */
+{id:'m26', title:'Petroleum Equipment & Technology', category:'equipment', level:'beginner', duration:25, rating:4.7, enrolled:1080,
+ description:'An illustrated guide to the key equipment used across exploration, drilling, production, and refining.',
+ tags:['equipment','technology','rig','pumps','compressors'],
+ overview:'A practical introduction to the major equipment categories in the petroleum industry and how they work.',
+ topics:[
+   {t:'Drilling Rigs and Components', d:'Derrick, drawworks, rotary table, top drive, mud pumps — structure and function.'},
+   {t:'Downhole Tools', d:'Drill bits, MWD/LWD, rotary steerable systems, and downhole motors.'},
+   {t:'Production Pumps and Compressors', d:'Centrifugal and reciprocating pumps, gas compressors, and their selection criteria.'},
+   {t:'Pipelines and Valves', d:'Pipeline grades, valve types, and their roles in the surface gathering system.'},
+   {t:'Offshore Structures', d:'Jacket platforms, TLPs, FPSOs, and semi-submersibles — each suited to different water depths.'}
+ ]},
 
+{id:'m27', title:'Digital Oilfield Technologies', category:'equipment', level:'intermediate', duration:28, rating:4.8, enrolled:780,
+ description:'How AI, IoT, robotics, and cloud computing are transforming petroleum operations.',
+ tags:['digital','AI','IoT','automation','data analytics'],
+ overview:'The fourth industrial revolution in oil and gas — technologies, applications, and real-world deployment examples.',
+ topics:[
+   {t:'Real-Time Monitoring (RTOC)', d:'Centralised operations centres integrating wellbore data, surface sensors, and production models.'},
+   {t:'AI and Machine Learning in E&P', d:'Seismic interpretation, predictive maintenance, and production optimisation using ML algorithms.'},
+   {t:'Industrial IoT Sensors', d:'Smart sensors measuring pressure, temperature, flow, and vibration at thousands of points.'},
+   {t:'Drone and Robotic Inspection', d:'Unmanned systems for pipeline inspection, rig maintenance, and hazardous area surveys.'},
+   {t:'Cloud and Edge Computing', d:'Processing reservoir data at the edge vs cloud — latency, bandwidth, and security trade-offs.'}
+ ]},
 
+{id:'m28', title:'Pipeline Engineering and Integrity', category:'equipment', level:'intermediate', duration:26, rating:4.6, enrolled:580,
+ description:'Design, operation, and integrity management of oil and gas pipelines onshore and offshore.',
+ tags:['pipeline','integrity','corrosion','inspection','pigging'],
+ overview:'End-to-end pipeline engineering — from route selection and design to corrosion control and smart pigging.',
+ topics:[
+   {t:'Pipeline Design Fundamentals', d:'Wall thickness design (ASME B31.4/B31.8), material selection, and stress analysis.'},
+   {t:'Corrosion Mechanisms', d:'Internal corrosion from CO₂, H₂S, and microbes; external corrosion and cathodic protection.'},
+   {t:'Pigging Operations', d:'Cleaning pigs, geometry pigs, and MFL smart pigs for inspection and cleaning.'},
+   {t:'Flow Assurance', d:'Managing hydrates, wax deposition, and slugging in subsea and onshore systems.'},
+   {t:'Integrity Management Programs', d:'Risk-based inspection, fitness for service, and regulatory compliance frameworks.'}
+ ]},
+
+/* ── Energy Transition ─────────────────────────── */
+{id:'m29', title:'Energy Transition and Carbon Management', category:'energy', level:'beginner', duration:22, rating:4.7, enrolled:820,
+ description:'Explore how the petroleum industry is adapting to the energy transition and net-zero targets.',
+ tags:['energy transition','CCS','hydrogen','net zero','climate'],
+ overview:'A clear-eyed look at the forces reshaping the energy landscape and the roles petroleum engineers can play.',
+ topics:[
+   {t:'Global Energy Transition Drivers', d:'Climate policy, renewable cost reductions, and changing consumer preferences shaping the transition.'},
+   {t:'Carbon Capture and Storage (CCS)', d:'Capturing CO₂ at point sources and injecting it into geological formations for permanent storage.'},
+   {t:'Hydrogen as an Energy Carrier', d:'Blue hydrogen from natural gas with CCS and green hydrogen from electrolysis — production pathways and economics.'},
+   {t:'Geothermal Energy', d:'Applying petroleum drilling and reservoir skills to develop geothermal heat and power systems.'},
+   {t:'Petroleum Industry Net-Zero Strategies', d:'Scope 1/2/3 emissions, methane pledges, and portfolio diversification strategies of major oil companies.'}
+ ]},
+
+{id:'m30', title:'Career Pathways in Petroleum Engineering', category:'energy', level:'beginner', duration:18, rating:4.9, enrolled:1350,
+ description:'A complete guide to building a successful career in the petroleum industry — roles, skills, and progression.',
+ tags:['careers','petroleum engineering','professional development','skills'],
+ overview:'Demystifies career planning in petroleum — from degree choice to specialist roles, certifications, and leadership.',
+ topics:[
+   {t:'Career Roles Overview', d:'Reservoir, drilling, production, geoscience, HSE, and data science roles — scope and day-to-day responsibilities.'},
+   {t:'Academic Pathways', d:'Petroleum, mechanical, chemical, and geoscience degrees as entry routes.'},
+   {t:'Professional Certifications', d:'SPE membership, IWCF well control, ISO HSE, and professional engineering registration.'},
+   {t:'Career Progression Roadmap', d:'Graduate trainee → specialist → technical lead → management — typical timelines and transition points.'},
+   {t:'Opportunities in Africa', d:'Ghana, Nigeria, Angola, Mozambique, and emerging East African basins — regional opportunities and employers.'}
+ ]}
 ];
 
-function renderModules(modules) {
-  const container = document.getElementById('modulesContainer');
+/* ══════════════════════════════════
+   CATEGORY CONFIG
+══════════════════════════════════ */
+const CAT_EMOJI = {
+  introduction:'⛽', exploration:'🛰️', reservoir:'🪨',
+  production:'🏭', refining:'🧪', safety:'🦺',
+  environment:'🌍', equipment:'⚙️', energy:'🔋', careers:'👔'
+};
 
-  if (!modules.length) {
-    container.innerHTML = `<p style="color:#888">No modules found</p>`;
-    return;
-  }
+const LEVEL_LABEL = { beginner:'Beginner', intermediate:'Intermediate', advanced:'Advanced' };
 
-  container.innerHTML = `
-    <div class="modules-grid">
-      ${modules.map(m => `
-        <div class="module-card" onclick='openModule(${JSON.stringify(m)})'>
-          <div class="module-thumb ${m.category}">
-            <span style="font-size:2.5rem">${categoryEmojis[m.category] || "📚"}</span>
-          </div>
+/* ══════════════════════════════════
+   STATE
+══════════════════════════════════ */
+let currentCat = '';
+let currentLevel = '';
+let currentSearch = '';
 
-          <div class="module-info">
-            <div class="module-category">${m.category.toUpperCase()}</div>
-            <h3>${m.title}</h3>
-            <p>${m.description}</p>
-
-            <div class="module-meta">
-              ⏱ ${m.duration} min | ⭐ ${m.rating}
-            </div>
-          </div>
-        </div>
-      `).join("")}
-    </div>
-  `;
-}
-
-function filterCat(cat) {
+/* ══════════════════════════════════
+   FILTER LOGIC
+══════════════════════════════════ */
+function filterCat(cat, btn) {
   currentCat = cat.toLowerCase();
+  // Update filter buttons
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  // Sync sidebar
+  document.querySelectorAll('#sidebarCats a').forEach(a => a.classList.remove('active'));
   applyFilters();
 }
 
-function searchModules(){
+function sidebarFilter(cat) {
+  currentCat = cat.toLowerCase();
+  // Sync filter bar buttons
+  document.querySelectorAll('.filter-btn').forEach(b => {
+    if (b.textContent.toLowerCase().includes(cat) || (!cat && b.textContent.trim() === 'All')) {
+      b.classList.add('active');
+    } else {
+      b.classList.remove('active');
+    }
+  });
   applyFilters();
 }
 
-function applyFilters(){
+function applyFilters() {
+  currentSearch = document.getElementById('searchInput').value.toLowerCase().trim();
+  currentLevel  = document.getElementById('levelFilter').value;
 
-  const search = document.getElementById("searchInput").value.toLowerCase();
-  const level = document.getElementById("levelFilter").value;
-
-  let filtered = allModules;
-
-  if(currentCat){
-    filtered = filtered.filter(m => m.category === currentCat);
-  }
-
-  if(level){
-    filtered = filtered.filter(m => m.level === level);
-  }
-
-  if(search){
+  let filtered = MODULES;
+  if (currentCat)   filtered = filtered.filter(m => m.category === currentCat);
+  if (currentLevel) filtered = filtered.filter(m => m.level === currentLevel);
+  if (currentSearch) {
     filtered = filtered.filter(m =>
-      m.title.toLowerCase().includes(search) ||
-      m.description.toLowerCase().includes(search)
+      m.title.toLowerCase().includes(currentSearch) ||
+      m.description.toLowerCase().includes(currentSearch) ||
+      m.tags.some(t => t.toLowerCase().includes(currentSearch))
     );
   }
 
   renderModules(filtered);
 }
 
-function openModule(m){
+/* ══════════════════════════════════
+   RENDER
+══════════════════════════════════ */
+function renderModules(modules) {
+  const container = document.getElementById('modulesContainer');
+  const badge     = document.getElementById('countBadge');
+  badge.textContent = `${modules.length} module${modules.length !== 1 ? 's' : ''} found`;
 
-document.getElementById("modalTitle").textContent = m.title;
+  if (!modules.length) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">🔍</div>
+        <h3>No modules found</h3>
+        <p>Try adjusting your search or filter</p>
+      </div>`;
+    return;
+  }
 
-document.getElementById("modalBody").innerHTML = `
-
-<p>${m.description}</p>
-
-<h3>Topics</h3>
-
-<ul>
-${m.keyTopics.map(t => `<li><b>${t.topic}</b> — ${t.description}</li>`).join("")}
-</ul>
-
-<button onclick="startModule('${m._id}')" class="btn btn-primary">
-Start Module
-</button>
-
-`;
-
-document.getElementById("moduleModal").classList.add("open");
-
+  container.innerHTML = `<div class="modules-grid">${modules.map(m => moduleCard(m)).join('')}</div>`;
 }
 
-function closeModal(){
-document.getElementById("moduleModal").classList.remove("open");
+function moduleCard(m) {
+  const emoji = CAT_EMOJI[m.category] || '📚';
+  const stars = '★'.repeat(Math.floor(m.rating)) + (m.rating % 1 >= 0.5 ? '½' : '');
+  return `
+  <div class="module-card" onclick='openModule(${JSON.stringify(m).replace(/'/g,"&#39;")})'>
+    <div class="module-thumb ${m.category}">
+      <span style="position:relative;z-index:1">${emoji}</span>
+      <span class="module-level-badge level-${m.level}">${LEVEL_LABEL[m.level]}</span>
+    </div>
+    <div class="module-info">
+      <div class="module-cat-tag">${m.category.toUpperCase()}</div>
+      <h3>${m.title}</h3>
+      <p>${m.description}</p>
+      <div class="module-tags">
+        ${m.tags.slice(0,3).map(t => `<span class="module-tag">${t}</span>`).join('')}
+      </div>
+      <div class="module-meta">
+        <span class="module-meta-item">⏱ ${m.duration} min</span>
+        <span class="module-meta-item" style="color:var(--amber)">★ ${m.rating}</span>
+        <span class="module-meta-item">👥 ${m.enrolled.toLocaleString()}</span>
+      </div>
+    </div>
+  </div>`;
 }
 
-function startModule(id){
-alert("Module player coming soon");
-closeModal();
+/* ══════════════════════════════════
+   MODAL
+══════════════════════════════════ */
+let activeModuleId = null;
+
+function openModule(m) {
+  activeModuleId = m.id;
+  const emoji = CAT_EMOJI[m.category] || '📚';
+
+  document.getElementById('modalHero').className = `modal-hero ${m.category}`;
+  document.getElementById('modalHero').innerHTML = `<span style="position:relative;z-index:1;filter:drop-shadow(0 2px 8px rgba(0,0,0,.3))">${emoji}</span>`;
+
+  document.getElementById('modalTitle').textContent = m.title;
+
+  document.getElementById('modalBadges').innerHTML = `
+    <span class="module-level-badge level-${m.level}" style="font-size:.75rem;padding:.3rem .75rem">${LEVEL_LABEL[m.level]}</span>
+    <span style="font-size:.8rem;color:var(--text-muted);display:flex;align-items:center;gap:.3rem">🏷 ${m.category}</span>
+  `;
+
+  document.getElementById('modalInfoGrid').innerHTML = `
+    <div class="info-cell"><div class="val">⏱ ${m.duration}m</div><div class="lbl">Duration</div></div>
+    <div class="info-cell"><div class="val" style="color:var(--amber)">★ ${m.rating}</div><div class="lbl">Rating</div></div>
+    <div class="info-cell"><div class="val">${m.enrolled >= 1000 ? (m.enrolled/1000).toFixed(1)+'k' : m.enrolled}</div><div class="lbl">Enrolled</div></div>
+  `;
+
+  document.getElementById('modalBody').innerHTML = `
+    <div class="modal-section">
+      <div class="modal-section-title">📖 Overview</div>
+      <p style="font-size:.875rem;color:var(--text-muted);line-height:1.65">${m.overview}</p>
+    </div>
+    <div class="modal-section">
+      <div class="modal-section-title">📋 Key Topics</div>
+      <div class="topics-list">
+        ${m.topics.map(t => `
+        <div class="topic-item">
+          <strong>${t.t}</strong>
+          <p>${t.d}</p>
+        </div>`).join('')}
+      </div>
+    </div>
+    <div class="modal-section">
+      <div class="modal-section-title">🏷 Tags</div>
+      <div class="module-tags">${m.tags.map(t => `<span class="module-tag">${t}</span>`).join('')}</div>
+    </div>
+  `;
+
+  document.getElementById('moduleModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
 }
 
+function closeModal() {
+  document.getElementById('moduleModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
 
-    // Nav auth check
-    fetch('/api/me', { credentials: 'include' }).then(r => r.json()).then(d => {
-      if (d.user) {
-        document.getElementById('navActions').innerHTML = `
-          <a href="/dashboard" class="btn btn-outline">Dashboard</a>
-          <button onclick="fetch('/auth/logout',{method:'POST',credentials:'include'}).then(()=>location.href='/')" class="btn btn-primary btn-sm">Log Out</button>
-        `;
-      }
-    });
+function handleOverlayClick(e) {
+  if (e.target === document.getElementById('moduleModal')) closeModal();
+}
 
-    loadModules();
-  </script>
-    <script src="/petroai-widget.js"></script>
+function startModule() {
+  alert(`Module "${activeModuleId}" — interactive player coming soon! This will launch the full lesson experience.`);
+  closeModal();
+}
+
+/* ══════════════════════════════════
+   INIT
+══════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', () => {
+  renderModules(MODULES);
+  // Nav auth check
+  fetch('/api/me', { credentials:'include' }).then(r => r.json()).then(d => {
+    if (d?.user) {
+      document.getElementById('navActions').innerHTML = `
+        <a href="/dashboard" class="btn btn-outline">Dashboard</a>
+        <button onclick="fetch('/auth/logout',{method:'POST',credentials:'include'}).then(()=>location.href='/')" class="btn btn-primary btn-sm">Log Out</button>
+      `;
+    }
+  }).catch(() => {});
+});
+</script>
+<script src="/petroai-widget.js"></script>
 </body>
 </html>

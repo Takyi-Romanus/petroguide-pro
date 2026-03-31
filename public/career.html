@@ -7,219 +7,574 @@
   <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-  <nav class="navbar">
-    <a href="/" class="navbar-brand">
-      <div class="logo-icon">⛽</div>
-      PetroGuide<span class="sub"> Pro</span>
-    </a>
-    <ul class="navbar-nav">
-      <li><a href="/learn">Learn</a></li>
-      <li><a href="/hazards">Hazards</a></li>
-      <li><a href="/careers" class="active">Careers</a></li>
+
+<!-- ── NAVBAR ─────────────────────────────── -->
+<nav class="navbar">
+  <a href="/" class="navbar-brand">
+    <div class="logo-icon">⛽</div>
+    PetroGuide<span class="sub"> Pro</span>
+  </a>
+  <ul class="navbar-nav">
+    <li><a href="/learn">Learn</a></li>
+    <li><a href="/careers" class="active">Careers</a></li>
+  </ul>
+  <div class="navbar-actions" id="navActions">
+    <a href="/auth/login" class="btn btn-outline">Log In</a>
+    <a href="/auth/register" class="btn btn-primary">Get Started</a>
+  </div>
+  <button class="nav-toggle" onclick="document.querySelector('.navbar-nav').classList.toggle('open')">☰</button>
+</nav>
+
+<!-- ── LAYOUT ──────────────────────────────── -->
+<div class="page-wrapper">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-section">Navigate</div>
+    <ul class="sidebar-menu">
+      <li><a href="/dashboard"><span class="menu-icon">📊</span> Dashboard</a></li>
+      <li><a href="/learn"><span class="menu-icon">🎓</span> Learning Modules</a></li>
+      <li><a href="/careers" class="active"><span class="menu-icon">💼</span> Career Board</a></li>
     </ul>
-    <div class="navbar-actions" id="navActions">
-      <a href="/auth/login" class="btn btn-outline">Log In</a>
-      <a href="/auth/register" class="btn btn-primary">Get Started</a>
+    <div class="sidebar-section" style="margin-top:1.25rem">Job Type</div>
+    <ul class="sidebar-menu">
+      <li><a href="#" onclick="sidebarType('');return false"><span class="menu-icon">📋</span> All Types</a></li>
+      <li><a href="#" onclick="sidebarType('full-time');return false"><span class="menu-icon">🏢</span> Full-Time</a></li>
+      <li><a href="#" onclick="sidebarType('internship');return false"><span class="menu-icon">🎓</span> Internships</a></li>
+      <li><a href="#" onclick="sidebarType('contract');return false"><span class="menu-icon">📝</span> Contract</a></li>
+    </ul>
+    <div class="sidebar-section" style="margin-top:1.25rem">Discipline</div>
+    <ul class="sidebar-menu">
+      <li><a href="#" onclick="sidebarCat('drilling');return false"><span class="menu-icon">⛏</span> Drilling</a></li>
+      <li><a href="#" onclick="sidebarCat('reservoir');return false"><span class="menu-icon">🪨</span> Reservoir</a></li>
+      <li><a href="#" onclick="sidebarCat('production');return false"><span class="menu-icon">🏭</span> Production</a></li>
+      <li><a href="#" onclick="sidebarCat('safety');return false"><span class="menu-icon">🦺</span> Safety/HSE</a></li>
+      <li><a href="#" onclick="sidebarCat('data');return false"><span class="menu-icon">💻</span> Data Science</a></li>
+      <li><a href="#" onclick="sidebarCat('environment');return false"><span class="menu-icon">🌍</span> Environment</a></li>
+      <li><a href="#" onclick="sidebarCat('subsurface');return false"><span class="menu-icon">🗺️</span> Subsurface</a></li>
+    </ul>
+  </aside>
+
+  <!-- Main -->
+  <main class="main-content">
+    <div class="page-header">
+      <div>
+        <h1>💼 Career Board</h1>
+        <p>Petroleum industry jobs and internships in Ghana and beyond</p>
+      </div>
+      <span id="countBadge" style="font-size:.85rem;color:var(--text-muted);font-weight:500;white-space:nowrap;"></span>
     </div>
-  </nav>
 
-  <div class="page-wrapper">
-    <aside class="sidebar">
-      <div class="sidebar-section">Navigation</div>
-      <ul class="sidebar-menu">
-        <li><a href="/dashboard"><span class="menu-icon">📊</span> Dashboard</a></li>
-        <li><a href="/learn"><span class="menu-icon">🎓</span> Learning Modules</a></li>
-        <li><a href="/hazards"><span class="menu-icon">⚠️</span> Hazard Reports</a></li>
-        <li><a href="/careers" class="active"><span class="menu-icon">💼</span> Career Board</a></li>
-      </ul>
-      <div class="sidebar-section" style="margin-top:1rem;">Job Type</div>
-      <ul class="sidebar-menu">
-        <li><a href="#" onclick="filterType('')"><span class="menu-icon">📋</span> All Types</a></li>
-        <li><a href="#" onclick="filterType('full-time')"><span class="menu-icon">🏢</span> Full-Time</a></li>
-        <li><a href="#" onclick="filterType('internship')"><span class="menu-icon">🎓</span> Internships</a></li>
-        <li><a href="#" onclick="filterType('contract')"><span class="menu-icon">📝</span> Contract</a></li>
-      </ul>
-    </aside>
-
-    <main class="main-content">
-      <div class="page-header">
-        <div>
-          <h1>💼 Career Board</h1>
-          <p>Petroleum industry jobs and internships in Ghana and beyond</p>
-        </div>
+    <!-- Search & Filter -->
+    <div class="search-row">
+      <div class="search-input-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" class="form-control" placeholder="Search roles, companies, locations…" oninput="applyFilters()">
       </div>
+      <select id="locationFilter" class="form-control" style="max-width:190px" onchange="applyFilters()">
+        <option value="">All Locations</option>
+        <option value="Accra">Accra, Ghana</option>
+        <option value="Takoradi">Takoradi, Ghana</option>
+        <option value="Kumasi">Kumasi, Ghana</option>
+        <option value="Offshore">Offshore — Ghana</option>
+        <option value="Lagos">Lagos, Nigeria</option>
+        <option value="London">London, UK</option>
+        <option value="Aberdeen">Aberdeen, UK</option>
+        <option value="Remote">Remote</option>
+      </select>
+    </div>
 
-      <div class="filter-bar">
-        <button class="filter-btn active" onclick="filterType('', this)">All Positions</button>
-        <button class="filter-btn" onclick="filterType('full-time', this)">🏢 Full-Time</button>
-        <button class="filter-btn" onclick="filterType('internship', this)">🎓 Internship</button>
-        <button class="filter-btn" onclick="filterType('contract', this)">📝 Contract</button>
-        <button class="filter-btn" onclick="filterCat('drilling', this)">⛏ Drilling</button>
-        <button class="filter-btn" onclick="filterCat('reservoir', this)">🪨 Reservoir</button>
-        <button class="filter-btn" onclick="filterCat('safety', this)">🦺 Safety</button>
-        <button class="filter-btn" onclick="filterCat('data', this)">💻 Data Science</button>
-      </div>
+    <div class="filter-bar">
+      <button class="filter-btn active" onclick="filterType('',this)">All Positions</button>
+      <button class="filter-btn" onclick="filterType('full-time',this)">🏢 Full-Time</button>
+      <button class="filter-btn" onclick="filterType('internship',this)">🎓 Internship</button>
+      <button class="filter-btn" onclick="filterType('contract',this)">📝 Contract</button>
+      <button class="filter-btn" onclick="filterCat('drilling',this)">⛏ Drilling</button>
+      <button class="filter-btn" onclick="filterCat('reservoir',this)">🪨 Reservoir</button>
+      <button class="filter-btn" onclick="filterCat('production',this)">🏭 Production</button>
+      <button class="filter-btn" onclick="filterCat('safety',this)">🦺 Safety</button>
+      <button class="filter-btn" onclick="filterCat('data',this)">💻 Data</button>
+      <button class="filter-btn" onclick="filterCat('subsurface',this)">🗺️ Subsurface</button>
+      <button class="filter-btn" onclick="filterCat('environment',this)">🌍 Environment</button>
+    </div>
 
-      <div id="careersContainer">
-        <div class="loading"><div class="spinner"></div> Loading jobs...</div>
-      </div>
-    </main>
-  </div>
+    <div id="careersContainer">
+      <div class="loading"><div class="spinner"></div></div>
+    </div>
+  </main>
+</div>
 
-  <!-- Job Detail Modal -->
-  <div class="modal-overlay" id="jobModal">
-    <div class="modal" style="max-width:640px;">
-      <div class="modal-header">
-        <h2 id="jobModalTitle">Job Title</h2>
-        <a href="${c.applyLink}" target="_blank" class="btn btn-primary w-full" style="justify-content:center; padding:0.75rem;">Apply on Company Website →</a>
-        <button onclick="closeJobModal()" class="modal-close">&times;</button>
+<!-- Job Detail Modal -->
+<div class="modal-overlay" id="jobModal" onclick="handleOverlayClick(event)">
+  <div class="modal">
+    <div class="modal-hero" id="jobModalHero"></div>
+    <div class="modal-body">
+      <div class="modal-header-row">
+        <h2 id="jobModalTitle"></h2>
+        <button onclick="closeJobModal()" class="modal-close">✕</button>
       </div>
+      <div class="modal-badges" id="jobModalBadges"></div>
+      <div class="info-grid" id="jobInfoGrid"></div>
       <div id="jobModalBody"></div>
+      <button onclick="applyNow()" class="btn btn-primary w-full" style="margin-top:1.25rem;padding:.8rem;">
+        Apply Now →
+      </button>
     </div>
   </div>
+</div>
 
-  <script>
-    let allCareers = [];
-    let currentType = '';
-    let currentCat = '';
+<script>
+/* ══════════════════════════════════
+   DATA — 30 Career Listings
+══════════════════════════════════ */
 
-    async function loadCareers() {
-      const res = await fetch('/api/careers', { credentials: 'include' });
-      const data = await res.json();
-      allCareers = data.data || [];
-      renderCareers(allCareers);
-    }
+// Helper: days from today
+function daysFromNow(d) {
+  const ms = new Date(d) - new Date();
+  return Math.max(0, Math.ceil(ms / 86400000));
+}
 
-    function renderCareers(careers) {
-      const container = document.getElementById('careersContainer');
-      if (!careers.length) {
-        container.innerHTML = '<p style="color:var(--text-light);">No positions found.</p>';
-        return;
-      }
-      container.innerHTML = `<div class="careers-grid">${careers.map(c => {
-        const typeClass = c.type.replace('-','');
-        const daysLeft = c.deadline ? Math.ceil((new Date(c.deadline) - new Date()) / 86400000) : null;
-        return `
-        <div class="career-card" onclick="openJob(${JSON.stringify(c).replace(/"/g,'&quot;')})">
-          <div class="career-header">
-            <div>
-              <div class="career-company">🏢 ${c.company}</div>
-              <h3>${c.title}</h3>
-            </div>
-            <span class="type-badge type-${c.type}">${c.type}</span>
-          </div>
-          <div class="career-meta">
-            <span>📍 ${c.location}</span>
-            <span>🏷 ${c.category}</span>
-          </div>
-          <p class="career-desc">${c.description.substring(0, 120)}...</p>
-          <div class="career-footer">
-            <span class="salary">${c.salary?.currency || 'GHS'} ${c.salary?.min?.toLocaleString()} – ${c.salary?.max?.toLocaleString()}/mo</span>
-            ${daysLeft !== null ? `<span class="deadline">⏰ ${daysLeft} days left</span>` : ''}
-          </div>
-        </div>`;
-      }).join('')}</div>`;
-    }
+const TODAY = new Date();
+function deadline(days) {
+  const d = new Date(TODAY); d.setDate(d.getDate() + days);
+  return d.toISOString().split('T')[0];
+}
 
-    function filterType(type, btn) {
-      currentType = type;
-      // Only update active state among type buttons (first 4)
-      document.querySelectorAll('.filter-btn').forEach((b, i) => {
-        if (i < 4) b.classList.remove('active');
-      });
-      if (btn) btn.classList.add('active');
-      applyFilters();
-    }
+const JOBS = [
+/* ── Full-Time ──────────────────── */
+{id:'j01', title:'Reservoir Engineer', company:'Tullow Oil Ghana', location:'Accra, Ghana',
+ type:'full-time', category:'reservoir', salary:{currency:'GHS', min:12000, max:18000},
+ deadline: deadline(28),
+ description:'Join our subsurface team to evaluate and develop reservoirs in the Jubilee and TEN fields offshore Ghana. You will build simulation models, estimate reserves, and recommend infill drilling opportunities.',
+ requirements:['BSc Petroleum/Chemical Engineering (MSc preferred)', '3+ years reservoir engineering experience', 'Proficiency in Eclipse, Petrel, or CMG', 'SPE membership an advantage'],
+ benefits:['Competitive pension scheme', 'Health and dental insurance', 'Annual performance bonus up to 20%', 'International secondment opportunities']},
 
-    function filterCat(cat, btn) {
-      // Toggle off if same category clicked again
-      currentCat = currentCat === cat ? '' : cat;
-      // Only update active state among category buttons (last 4)
-      document.querySelectorAll('.filter-btn').forEach((b, i) => {
-        if (i >= 4) b.classList.remove('active');
-      });
-      if (currentCat && btn) btn.classList.add('active');
-      applyFilters();
-    }
+{id:'j02', title:'Senior Drilling Engineer', company:'Aker Energy', location:'Offshore — Ghana',
+ type:'full-time', category:'drilling', salary:{currency:'GHS', min:20000, max:30000},
+ deadline: deadline(21),
+ description:'Lead the planning and execution of exploration and development wells in the Pecan field. Oversee contractor management, well programs, and NPT reduction initiatives.',
+ requirements:['BSc Petroleum/Mechanical Engineering', '5+ years drilling engineering experience', 'IWCF Level 3 or IADC well control certification', 'Experience with deepwater drilling preferred'],
+ benefits:['Offshore rotation allowance', 'Expat housing package', 'Annual bonus', 'Career development fund']},
 
-    function applyFilters() {
-      let filtered = allCareers;
-      if (currentType) filtered = filtered.filter(c => c.type === currentType);
-      if (currentCat) filtered = filtered.filter(c => c.category === currentCat);
+{id:'j03', title:'Production Engineer', company:'Ghana National Petroleum Corporation (GNPC)', location:'Accra, Ghana',
+ type:'full-time', category:'production', salary:{currency:'GHS', min:10000, max:15000},
+ deadline: deadline(35),
+ description:'Optimise production from Ghana\'s onshore and offshore assets. Manage artificial lift systems, conduct well tests, and identify production enhancement opportunities.',
+ requirements:['BSc Petroleum or Chemical Engineering', '2+ years production engineering experience', 'Familiarity with Prosper/GAP or Pipesim', 'Strong analytical and reporting skills'],
+ benefits:['Government pension scheme', 'Study leave provisions', 'Housing allowance', 'Annual increment']},
 
-      const container = document.getElementById('careersContainer');
-      if (!filtered.length) {
-        container.innerHTML = '<p style="color:var(--text-light)">No jobs available for this filter.</p>';
-        return;
-      }
-      renderCareers(filtered);
-    }
+{id:'j04', title:'HSE Manager', company:'Schlumberger (SLB)', location:'Takoradi, Ghana',
+ type:'full-time', category:'safety', salary:{currency:'GHS', min:14000, max:22000},
+ deadline: deadline(30),
+ description:'Lead HSE compliance and culture across SLB\'s operations in Western Ghana. Develop safety programs, investigate incidents, and liaise with GNPC and regulatory bodies.',
+ requirements:['BSc Engineering or HSE-related field', 'NEBOSH IGC or equivalent', '5+ years HSE experience in oil & gas', 'ISO 14001/45001 auditor certification preferred'],
+ benefits:['International career progression', 'Health and life insurance', 'Annual leave flights', 'Annual bonus']},
 
-    function openJob(c) {
-      document.getElementById('jobModalTitle').textContent = c.title;
-      const daysLeft = c.deadline ? Math.ceil((new Date(c.deadline) - new Date()) / 86400000) : null;
-      document.getElementById('jobModalBody').innerHTML = `
-        <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:1.25rem; flex-wrap:wrap;">
-          <span class="type-badge type-${c.type}">${c.type}</span>
-          <span style="font-size:0.85rem; color:var(--text-light);">🏢 ${c.company}</span>
-          <span style="font-size:0.85rem; color:var(--text-light);">📍 ${c.location}</span>
-        </div>
-        <p style="margin-bottom:1.25rem; color:var(--text-light); font-size:0.9rem; line-height:1.7;">${c.description}</p>
-        
-        ${c.requirements?.length ? `
-        <div style="margin-bottom:1.25rem;">
-          <h3 style="font-size:1rem; margin-bottom:0.75rem; color:var(--primary);">📋 Requirements</h3>
-          <ul style="list-style:none; display:flex; flex-direction:column; gap:0.5rem;">
-            ${c.requirements.map(r => `<li style="font-size:0.85rem; color:var(--text-light); padding-left:1.25rem; position:relative;">✅ ${r}</li>`).join('')}
-          </ul>
-        </div>` : ''}
+{id:'j05', title:'Data Scientist — Subsurface', company:'Halliburton', location:'Accra, Ghana',
+ type:'full-time', category:'data', salary:{currency:'GHS', min:13000, max:20000},
+ deadline: deadline(45),
+ description:'Apply machine learning and advanced analytics to seismic interpretation, production optimisation, and predictive maintenance projects across West Africa.',
+ requirements:['BSc/MSc Computer Science, Petroleum Engineering, or Applied Mathematics', 'Strong Python/R skills (scikit-learn, TensorFlow)', 'Experience with petroleum domain data preferred', '2+ years data science experience'],
+ benefits:['Learning stipend USD 2,000/year', 'Flexible work arrangement', 'Performance bonus', 'Global project exposure']},
 
-        ${c.benefits?.length ? `
-        <div style="margin-bottom:1.5rem;">
-          <h3 style="font-size:1rem; margin-bottom:0.75rem; color:var(--primary);">🎁 Benefits</h3>
-          <ul style="list-style:none; display:flex; flex-direction:column; gap:0.5rem;">
-            ${c.benefits.map(b => `<li style="font-size:0.85rem; color:var(--text-light);">⭐ ${b}</li>`).join('')}
-          </ul>
-        </div>` : ''}
+{id:'j06', title:'Petroleum Geoscientist', company:'Kosmos Energy', location:'Accra, Ghana',
+ type:'full-time', category:'subsurface', salary:{currency:'GHS', min:14000, max:21000},
+ deadline: deadline(25),
+ description:'Integrated geoscience support for exploration and appraisal programs in the Deepwater Cape Three Points and South Deepwater Tano blocks.',
+ requirements:['MSc Geology, Geophysics, or Petroleum Geoscience', '4+ years exploration geoscience experience', 'Seismic interpretation in Kingdom or Petrel', 'Experience in deepwater environments a plus'],
+ benefits:['Exploration bonus on discovery', 'Comprehensive medical cover', 'Annual CPD fund', 'Relocation support']},
 
-        <div style="background:#f8fafc; border-radius:10px; padding:1.25rem; margin-bottom:1.5rem; display:flex; gap:2rem; flex-wrap:wrap;">
-          <div>
-            <div style="font-size:0.75rem; color:var(--text-light); margin-bottom:0.25rem;">Salary</div>
-            <div style="font-weight:700; color:var(--primary);">${c.salary?.currency} ${c.salary?.min?.toLocaleString()} – ${c.salary?.max?.toLocaleString()}/month</div>
-          </div>
-          ${daysLeft !== null ? `
-          <div>
-            <div style="font-size:0.75rem; color:var(--text-light); margin-bottom:0.25rem;">Deadline</div>
-            <div style="font-weight:700; color:${daysLeft < 7 ? 'var(--danger)' : 'var(--primary)'};">${daysLeft} days remaining</div>
-          </div>` : ''}
-        </div>
+{id:'j07', title:'Pipeline Integrity Engineer', company:'Ghana Gas Company', location:'Takoradi, Ghana',
+ type:'full-time', category:'production', salary:{currency:'GHS', min:9500, max:14000},
+ deadline: deadline(40),
+ description:'Manage integrity programmes for the Western Corridor Gas Infrastructure Project pipelines. Conduct risk assessments, interpret ILI data, and plan remediation activities.',
+ requirements:['BSc Mechanical, Civil, or Pipeline Engineering', '3+ years pipeline integrity experience', 'Familiar with ASME B31.8 and NACE standards', 'ILI data analysis skills required'],
+ benefits:['Government pension', 'Housing allowance', 'Training support', 'Performance bonus']},
 
-        <button onclick="applyNow('${c.title}','${c.company}')" class="btn btn-primary w-full" style="justify-content:center; padding:0.75rem;">
-          Apply Now →
-        </button>
+{id:'j08', title:'Environmental Specialist', company:'Jubilee Partners (GNPC/Tullow/Aker/Kosmos)', location:'Accra, Ghana',
+ type:'full-time', category:'environment', salary:{currency:'GHS', min:9000, max:13500},
+ deadline: deadline(32),
+ description:'Support environmental compliance and biodiversity management across the Jubilee Field Unit. Oversee produced water monitoring, flaring reduction, and EIA follow-up.',
+ requirements:['BSc Environmental Science or related field', '3+ years E&P environmental experience', 'Familiarity with GIIP and IFC Performance Standards', 'Data analysis and reporting proficiency'],
+ benefits:['Health insurance', 'Offshore rotation allowance', 'Annual performance bonus', 'International conference attendance']},
+
+{id:'j09', title:'Process Engineer — Refinery', company:'Tema Oil Refinery (TOR)', location:'Accra, Ghana',
+ type:'full-time', category:'production', salary:{currency:'GHS', min:8500, max:13000},
+ deadline: deadline(50),
+ description:'Optimise refinery unit operations including CDU, VDU, FCC, and hydroprocessing. Lead process improvement projects and develop operating procedures.',
+ requirements:['BSc Chemical or Petroleum Engineering', '2+ years refinery experience preferred', 'HAZOP and P&ID reading skills', 'Proficiency in HYSYS or ASPEN Plus'],
+ benefits:['Annual increment', 'Study assistance', 'Shift allowance', 'Staff fuel discount']},
+
+{id:'j10', title:'Well Completions Engineer', company:'Sapura Energy', location:'Offshore — Ghana',
+ type:'full-time', category:'drilling', salary:{currency:'GHS', min:18000, max:26000},
+ deadline: deadline(18),
+ description:'Design and execute well completion programs for subsea and platform wells offshore Ghana. Manage service company interfaces and ensure safe, efficient operations.',
+ requirements:['BSc Petroleum Engineering', '4+ years completions engineering experience', 'IWCF subsea well control certification', 'Experience with intelligent completions preferred'],
+ benefits:['Offshore rotation pay', 'Travel and accommodation', 'Medical evacuation cover', 'Annual bonus']},
+
+/* ── Contract ───────────────────── */
+{id:'j11', title:'Petrophysicist (Contract)', company:'Wood Group', location:'Accra, Ghana',
+ type:'contract', category:'subsurface', salary:{currency:'GHS', min:16000, max:24000},
+ deadline: deadline(14),
+ description:'12-month contract to perform petrophysical evaluation of exploration wells in the Voltaian Basin. Deliver detailed log interpretation and net pay reports.',
+ requirements:['MSc Petrophysics or Petroleum Geoscience', '5+ years petrophysical experience', 'Proficiency in Techlog or Interactive Petrophysics', 'Experience in frontier basin evaluation preferred'],
+ benefits:['Competitive daily rate', 'Accommodation provided', 'Flight allowance', 'Contract renewal possible']},
+
+{id:'j12', title:'Simulation Engineer (Contract)', company:'Computer Modelling Group (CMG)', location:'Remote / Accra',
+ type:'contract', category:'reservoir', salary:{currency:'USD', min:5000, max:8000},
+ deadline: deadline(20),
+ description:'6-month remote contract to build and history-match a compositional reservoir simulation model for a gas condensate field offshore Ghana.',
+ requirements:['MSc Reservoir Engineering', '4+ years simulation experience (CMG preferred)', 'Strong understanding of PVT and relative permeability', 'Excellent written communication skills'],
+ benefits:['Remote working', 'USD payment', 'Flexible hours', 'Technical mentorship']},
+
+{id:'j13', title:'HSE Auditor (Contract)', company:'Bureau Veritas', location:'Accra / Takoradi',
+ type:'contract', category:'safety', salary:{currency:'GHS', min:10000, max:15000},
+ deadline: deadline(16),
+ description:'Conduct ISO 14001, ISO 45001, and API Q2 audits for petroleum operators and oilfield service companies in Ghana over a 9-month engagement.',
+ requirements:['Certified ISO 14001/45001 Lead Auditor', '5+ years oil & gas HSE experience', 'Strong audit report writing skills', 'Willingness to travel within Ghana'],
+ benefits:['Competitive day rate', 'Transport and subsistence', 'CPD points recognition', 'Extension likely']},
+
+{id:'j14', title:'Rotating Equipment Engineer (Contract)', company:'Baker Hughes', location:'Takoradi, Ghana',
+ type:'contract', category:'production', salary:{currency:'GHS', min:11000, max:17000},
+ deadline: deadline(22),
+ description:'Support operations and maintenance of compressors, pumps, and gas turbines at the Atuabo Gas Processing Plant on a 6-month contract with extension.',
+ requirements:['BSc Mechanical Engineering', '3+ years rotating equipment experience', 'Experience with GE or Siemens turbines preferred', 'API 610 and API 670 familiarity'],
+ benefits:['Accommodation near Atuabo', 'Site allowance', 'Medical cover', 'Contract extension likely']},
+
+{id:'j15', title:'Environmental Impact Consultant (Contract)', company:'ERM Group', location:'Accra, Ghana',
+ type:'contract', category:'environment', salary:{currency:'GHS', min:9000, max:14000},
+ deadline: deadline(38),
+ description:'Deliver EIA studies, environmental monitoring, and stakeholder engagement for upstream petroleum projects in Ghana and West Africa.',
+ requirements:['BSc/MSc Environmental Science or Engineering', '3+ years EIA experience in extractive industries', 'IFC/Equator Principles knowledge', 'French language an advantage for regional projects'],
+ benefits:['Per diem for field work', 'Flexible arrangement', 'International travel', 'Professional development support']},
+
+/* ── Internships ─────────────────── */
+{id:'j16', title:'Reservoir Engineering Intern', company:'Aker Energy', location:'Accra, Ghana',
+ type:'internship', category:'reservoir', salary:{currency:'GHS', min:2500, max:3500},
+ deadline: deadline(28),
+ description:'6-month internship supporting the reservoir engineering team on material balance studies, production allocation, and well test interpretation for the Pecan Field.',
+ requirements:['Final year or recent graduate BSc Petroleum Engineering', 'Proficiency in MS Excel (VBA a plus)', 'Strong mathematical foundation', 'Good communication skills'],
+ benefits:['Monthly stipend', 'Mentorship from senior engineers', 'SPE student membership support', 'Potential conversion to full-time']},
+
+{id:'j17', title:'Drilling Engineering Intern', company:'Schlumberger (SLB)', location:'Accra, Ghana',
+ type:'internship', category:'drilling', salary:{currency:'GHS', min:2200, max:3000},
+ deadline: deadline(21),
+ description:'Join SLB\'s graduate development program and rotate through drilling fluids, bit selection, and well design projects across active Ghana operations.',
+ requirements:['BSc Petroleum or Mechanical Engineering (final year or recent graduate)', 'Strong academic record (2:1 or above)', 'Interest in technology and innovation', 'Teamwork and adaptability'],
+ benefits:['Monthly allowance', 'Structured training program', 'Field visits', 'Global SLB hiring pool consideration']},
+
+{id:'j18', title:'Data Science Intern — E&P Analytics', company:'GNPC', location:'Accra, Ghana',
+ type:'internship', category:'data', salary:{currency:'GHS', min:2000, max:2800},
+ deadline: deadline(35),
+ description:'Support GNPC\'s digital transformation by developing dashboards, building predictive models, and automating production reporting workflows.',
+ requirements:['BSc Computer Science, Statistics, or Petroleum Engineering', 'Python proficiency required', 'Familiarity with Power BI or Tableau', 'Interest in oil and gas domain'],
+ benefits:['Monthly stipend', 'Government mentorship', 'Government exposure and references', 'National service credit eligible']},
+
+{id:'j19', title:'HSE Graduate Trainee', company:'Halliburton', location:'Accra / Takoradi',
+ type:'internship', category:'safety', salary:{currency:'GHS', min:2500, max:3200},
+ deadline: deadline(45),
+ description:'12-month graduate trainee position rotating through HSSE operations support, incident investigation, and safety culture programs across Halliburton\'s Ghana business unit.',
+ requirements:['BSc Safety, Engineering, or Environmental Science', 'NEBOSH IGC (or enrolled) preferred', 'Willingness to travel to operational sites', 'Strong attention to detail'],
+ benefits:['Competitive trainee stipend', 'NEBOSH study support', 'Full-time conversion review', 'International exposure']},
+
+{id:'j20', title:'Geoscience Intern — Exploration', company:'Kosmos Energy', location:'Accra, Ghana',
+ type:'internship', category:'subsurface', salary:{currency:'GHS', min:2800, max:3800},
+ deadline: deadline(18),
+ description:'Work alongside Kosmos\'s exploration team on seismic interpretation, play fairway analysis, and prospect evaluation for West African deepwater blocks.',
+ requirements:['BSc/MSc Geology or Geophysics (final year or recent graduate)', 'Seismic interpretation experience (basic Petrel or Kingdom)', 'Understanding of petroleum systems', 'Analytical mindset'],
+ benefits:['Monthly stipend', 'Structured mentorship', 'Exploration conference attendance', 'Full-time candidate pipeline']},
+
+{id:'j21', title:'Environmental Monitoring Intern', company:'Tullow Oil Ghana', location:'Offshore — Ghana',
+ type:'internship', category:'environment', salary:{currency:'GHS', min:2200, max:3000},
+ deadline: deadline(30),
+ description:'Support offshore environmental monitoring programs including produced water sampling, atmospheric emissions reporting, and biodiversity observation on the FPSO.',
+ requirements:['BSc Environmental Science, Marine Biology, or Chemistry', 'Strong data collection and recording skills', 'Medically fit for offshore work', 'Interest in environmental compliance'],
+ benefits:['Offshore allowance included', 'Marine survival training provided', 'Monthly stipend', 'Rotation to onshore environmental team']},
+
+{id:'j22', title:'Production Operations Intern', company:'Ghana Gas Company', location:'Atuabo, Ghana',
+ type:'internship', category:'production', salary:{currency:'GHS', min:2000, max:2800},
+ deadline: deadline(40),
+ description:'Hands-on internship at the Atuabo Gas Processing Plant. Rotate through gas separation, compression, dehydration, and control room operations.',
+ requirements:['BSc Chemical, Petroleum, or Mechanical Engineering', 'Basic thermodynamics and process knowledge', 'Willingness to work shift rotations', 'Good team player'],
+ benefits:['Accommodation near facility', 'Site allowance', 'Monthly stipend', 'National service eligible']},
+
+{id:'j23', title:'Petroleum Engineering Trainee', company:'TotalEnergies EP Ghana', location:'Accra, Ghana',
+ type:'internship', category:'reservoir', salary:{currency:'GHS', min:3000, max:4200},
+ deadline: deadline(25),
+ description:'TotalEnergies graduate program offering 12-month rotation across reservoir, drilling, and production disciplines supporting the Jubilee and TEN fields.',
+ requirements:['MSc Petroleum or Reservoir Engineering (recent graduate)', 'Strong technical foundation in at least one E&P discipline', 'French language an advantage', 'International career ambition'],
+ benefits:['Competitive trainee package', 'International rotation possible', 'Mentoring from technical experts', 'Permanent role review at 12 months']},
+
+{id:'j24', title:'Pipeline Engineering Intern', company:'Gaslink Ghana', location:'Tema, Ghana',
+ type:'internship', category:'production', salary:{currency:'GHS', min:2000, max:2600},
+ deadline: deadline(55),
+ description:'Support pipeline operations, integrity inspections, and cathodic protection surveys along Ghana\'s natural gas distribution network.',
+ requirements:['BSc Mechanical or Civil Engineering (penultimate or final year)', 'Interest in pipeline systems and infrastructure', 'Basic AutoCAD or GIS skills helpful', 'Valid driver\'s licence'],
+ benefits:['Monthly stipend', 'Field experience', 'Potential national service posting', 'Letters of reference']},
+
+/* ── International ──────────────── */
+{id:'j25', title:'Subsurface Manager', company:'ENI Exploration & Production', location:'Accra, Ghana',
+ type:'full-time', category:'subsurface', salary:{currency:'USD', min:15000, max:22000},
+ deadline: deadline(30),
+ description:'Lead ENI Ghana\'s integrated subsurface team covering geoscience, reservoir engineering, and petrophysics for the Sankofa-Gye Nyame field complex.',
+ requirements:['MSc/PhD Petroleum Geoscience or Reservoir Engineering', '10+ years E&P subsurface experience', 'Proven leadership and people management skills', 'West Africa experience preferred'],
+ benefits:['Expat package', 'International school allowance', 'Annual leave flights', 'Long-term incentive plan']},
+
+{id:'j26', title:'Well Control Specialist', company:'Wild Well Control', location:'Offshore — Ghana',
+ type:'contract', category:'drilling', salary:{currency:'USD', min:10000, max:16000},
+ deadline: deadline(12),
+ description:'Provide well control standby and emergency response services on a rotational basis for offshore operations in the Deepwater Cape Three Points block.',
+ requirements:['IWCF Level 4 / IADC WellCAP Supervisor', '8+ years drilling/completions experience', 'Incident command system training', 'Physically fit for offshore work'],
+ benefits:['USD day rate', 'International rotation', 'Medical evacuation insurance', 'Emergency response equipment provided']},
+
+{id:'j27', title:'Carbon & Climate Analyst', company:'Petroleum Commission of Ghana', location:'Accra, Ghana',
+ type:'full-time', category:'environment', salary:{currency:'GHS', min:8000, max:12000},
+ deadline: deadline(42),
+ description:'Join Ghana\'s upstream regulator to develop GHG reporting frameworks, evaluate carbon offset projects, and advise on energy transition policy for E&P operators.',
+ requirements:['BSc/MSc Environmental Science, Energy Policy, or Engineering', 'Knowledge of GHG accounting (GHG Protocol, IPCC)', 'Policy analysis and report writing skills', 'Passion for climate and energy transition'],
+ benefits:['Government pension', 'Study support', 'International conference participation', 'Policy influence role']},
+
+{id:'j28', title:'Digital Transformation Lead', company:'Weatherford International', location:'Lagos, Nigeria (Regional Role)',
+ type:'full-time', category:'data', salary:{currency:'USD', min:8000, max:14000},
+ deadline: deadline(35),
+ description:'Drive the deployment of Weatherford\'s digital oilfield solutions across West Africa — IoT, cloud analytics, and remote monitoring platforms for operator clients.',
+ requirements:['BSc Engineering + strong technology background', '5+ years in digital or technology roles in O&G', 'Project management (PMP preferred)', 'Willingness to travel across West Africa'],
+ benefits:['Competitive USD salary', 'Regional travel budget', 'Technology certification support', 'Annual bonus up to 15%']},
+
+{id:'j29', title:'Reservoir Data Engineer', company:'bp', location:'London, UK (Hybrid)',
+ type:'full-time', category:'data', salary:{currency:'GBP', min:6500, max:9500},
+ deadline: deadline(28),
+ description:'Build and maintain data pipelines that feed bp\'s reservoir simulation and production forecasting workflows — bridging petroleum engineering and data engineering disciplines.',
+ requirements:['BSc/MSc Petroleum Engineering or Computer Science', 'Strong Python, SQL, and cloud (Azure/AWS) skills', '2+ years experience in O&G data or engineering', 'Understanding of reservoir or production concepts'],
+ benefits:['Hybrid London working', 'Industry-leading benefits', 'Share ownership plan', 'Global talent mobility']},
+
+{id:'j30', title:'Field Engineer Graduate — Drilling', company:'Baker Hughes', location:'Accra, Ghana',
+ type:'full-time', category:'drilling', salary:{currency:'GHS', min:7000, max:10000},
+ deadline: deadline(50),
+ description:"'Baker Hughes' award-winning graduate program for drilling fluids engineers. Structured 18-month technical training followed by field assignment supporting active drill campaigns offshore Ghana.",
+ requirements:['BSc Petroleum, Chemical, or Mechanical Engineering (2025/2026 graduate)', 'Strong academic record', 'Physical fitness for offshore rotations', 'Curiosity, resilience, and team spirit'],
+ benefits:['Full training and certification', 'Global career pathway', 'Health and wellness package', 'Annual review and salary progression']}
+];
+
+/* ══════════════════════════════════
+   CATEGORY COLOURS (hero background)
+══════════════════════════════════ */
+const CAT_STYLE = {
+  drilling:    'background:linear-gradient(135deg,#1a3d5c 0%,#2a6090 100%)',
+  reservoir:   'background:linear-gradient(135deg,#4a2c0a 0%,#9e5c1e 100%)',
+  production:  'background:linear-gradient(135deg,#2a1a4a 0%,#6b3fa0 100%)',
+  safety:      'background:linear-gradient(135deg,#4a1a1a 0%,#b03030 100%)',
+  data:        'background:linear-gradient(135deg,#1a3a4a 0%,#2d7a9e 100%)',
+  environment: 'background:linear-gradient(135deg,#1a3a1a 0%,#2e7a2e 100%)',
+  subsurface:  'background:linear-gradient(135deg,#3a2a1a 0%,#8e6030 100%)',
+};
+
+const CAT_EMOJI = {
+  drilling:'⛏', reservoir:'🪨', production:'🏭',
+  safety:'🦺', data:'💻', environment:'🌍', subsurface:'🗺️'
+};
+
+/* ══════════════════════════════════
+   STATE
+══════════════════════════════════ */
+let currentType = '';
+let currentCat  = '';
+let currentLoc  = '';
+let activeJobId = null;
+
+/* ══════════════════════════════════
+   FILTER LOGIC
+══════════════════════════════════ */
+function filterType(type, btn) {
+  currentType = type;
+  document.querySelectorAll('.filter-btn').forEach((b, i) => { if (i < 4) b.classList.remove('active'); });
+  if (btn) btn.classList.add('active');
+  applyFilters();
+}
+
+function filterCat(cat, btn) {
+  currentCat = currentCat === cat ? '' : cat;
+  document.querySelectorAll('.filter-btn').forEach((b, i) => { if (i >= 4) b.classList.remove('active'); });
+  if (currentCat && btn) btn.classList.add('active');
+  applyFilters();
+}
+
+function sidebarType(type) {
+  currentType = type;
+  applyFilters();
+}
+
+function sidebarCat(cat) {
+  currentCat = cat;
+  applyFilters();
+}
+
+function applyFilters() {
+  const search = document.getElementById('searchInput').value.toLowerCase().trim();
+  currentLoc   = document.getElementById('locationFilter').value;
+
+  let filtered = JOBS;
+  if (currentType) filtered = filtered.filter(j => j.type === currentType);
+  if (currentCat)  filtered = filtered.filter(j => j.category === currentCat);
+  if (currentLoc)  filtered = filtered.filter(j => j.location.includes(currentLoc));
+  if (search)      filtered = filtered.filter(j =>
+    j.title.toLowerCase().includes(search) ||
+    j.company.toLowerCase().includes(search) ||
+    j.location.toLowerCase().includes(search) ||
+    j.description.toLowerCase().includes(search)
+  );
+
+  renderJobs(filtered);
+}
+
+/* ══════════════════════════════════
+   RENDER
+══════════════════════════════════ */
+function renderJobs(jobs) {
+  const container = document.getElementById('careersContainer');
+  const badge     = document.getElementById('countBadge');
+  badge.textContent = `${jobs.length} position${jobs.length !== 1 ? 's' : ''} found`;
+
+  if (!jobs.length) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">💼</div>
+        <h3>No positions found</h3>
+        <p>Try adjusting your filters or search term</p>
+      </div>`;
+    return;
+  }
+
+  container.innerHTML = `<div class="careers-grid">${jobs.map(j => jobCard(j)).join('')}</div>`;
+}
+
+function jobCard(j) {
+  const days = daysFromNow(j.deadline);
+  const urgentClass = days < 7 ? 'urgent' : '';
+  const sal = `${j.salary.currency} ${j.salary.min.toLocaleString()} – ${j.salary.max.toLocaleString()}/mo`;
+  return `
+  <div class="career-card" onclick='openJob(${JSON.stringify(j).replace(/'/g,"&#39;")})'>
+    <div class="career-header">
+      <div>
+        <div class="career-company">🏢 ${j.company}</div>
+        <h3>${j.title}</h3>
+      </div>
+      <span class="type-badge type-${j.type}">${j.type.replace('-',' ')}</span>
+    </div>
+    <div class="career-meta">
+      <span>📍 ${j.location}</span>
+      <span>🏷 ${j.category}</span>
+    </div>
+    <p class="career-desc">${j.description}</p>
+    <div class="career-footer">
+      <span class="salary">💰 ${sal}</span>
+      <span class="deadline ${urgentClass}">⏰ ${days}d left</span>
+    </div>
+  </div>`;
+}
+
+/* ══════════════════════════════════
+   MODAL
+══════════════════════════════════ */
+let activeJob = null;
+
+function openJob(j) {
+  activeJob = j;
+  const days = daysFromNow(j.deadline);
+  const catStyle = CAT_STYLE[j.category] || 'background:linear-gradient(135deg,#1a3d5c,#2a6090)';
+  const emoji = CAT_EMOJI[j.category] || '💼';
+
+  document.getElementById('jobModalHero').style.cssText = catStyle + ';height:120px;display:flex;align-items:center;justify-content:center;font-size:3rem;position:relative;overflow:hidden;';
+  document.getElementById('jobModalHero').innerHTML = `<span style="position:relative;z-index:1;filter:drop-shadow(0 2px 8px rgba(0,0,0,.3))">${emoji}</span>`;
+
+  document.getElementById('jobModalTitle').textContent = j.title;
+
+  document.getElementById('jobModalBadges').innerHTML = `
+    <span class="type-badge type-${j.type}">${j.type.replace('-',' ')}</span>
+    <span style="font-size:.8rem;color:var(--text-muted)">🏢 ${j.company}</span>
+    <span style="font-size:.8rem;color:var(--text-muted)">📍 ${j.location}</span>
+  `;
+
+  document.getElementById('jobInfoGrid').innerHTML = `
+    <div class="info-cell">
+      <div class="val" style="font-size:.9rem;color:var(--teal)">
+        ${j.salary.currency} ${(j.salary.min/1000).toFixed(0)}k–${(j.salary.max/1000).toFixed(0)}k
+      </div>
+      <div class="lbl">Monthly Salary</div>
+    </div>
+    <div class="info-cell">
+      <div class="val" style="font-size:.9rem;color:${days < 7 ? 'var(--danger)' : 'var(--navy)'}">
+        ${days}d left
+      </div>
+      <div class="lbl">Deadline</div>
+    </div>
+    <div class="info-cell">
+      <div class="val" style="font-size:.9rem">${j.category}</div>
+      <div class="lbl">Discipline</div>
+    </div>
+  `;
+
+  document.getElementById('jobModalBody').innerHTML = `
+    <div class="modal-section">
+      <div class="modal-section-title">📋 Role Overview</div>
+      <p style="font-size:.875rem;color:var(--text-muted);line-height:1.65">${j.description}</p>
+    </div>
+    ${j.requirements?.length ? `
+    <div class="modal-section">
+      <div class="modal-section-title">✅ Requirements</div>
+      <div class="topics-list">
+        ${j.requirements.map(r => `
+        <div class="topic-item" style="padding:.55rem .9rem">
+          <p style="font-size:.84rem;margin:0">${r}</p>
+        </div>`).join('')}
+      </div>
+    </div>` : ''}
+    ${j.benefits?.length ? `
+    <div class="modal-section">
+      <div class="modal-section-title">🎁 Benefits</div>
+      <div class="topics-list">
+        ${j.benefits.map(b => `
+        <div class="topic-item" style="padding:.55rem .9rem">
+          <p style="font-size:.84rem;margin:0">⭐ ${b}</p>
+        </div>`).join('')}
+      </div>
+    </div>` : ''}
+  `;
+
+  document.getElementById('jobModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeJobModal() {
+  document.getElementById('jobModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function handleOverlayClick(e) {
+  if (e.target === document.getElementById('jobModal')) closeJobModal();
+}
+
+function applyNow() {
+  if (!activeJob) return;
+  alert(`Application for "${activeJob.title}" at ${activeJob.company} received! In a live environment this would open the company's application portal or collect your CV and cover letter.`);
+  closeJobModal();
+}
+
+/* ══════════════════════════════════
+   INIT
+══════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', () => {
+  renderJobs(JOBS);
+  fetch('/api/me', { credentials:'include' }).then(r => r.json()).then(d => {
+    if (d?.user) {
+      document.getElementById('navActions').innerHTML = `
+        <a href="/dashboard" class="btn btn-outline">Dashboard</a>
+        <button onclick="fetch('/auth/logout',{method:'POST',credentials:'include'}).then(()=>location.href='/')" class="btn btn-primary btn-sm">Log Out</button>
       `;
-      document.getElementById('jobModal').classList.add('open');
     }
-
-    function closeJobModal() { document.getElementById('jobModal').classList.remove('open'); }
-
-    function applyNow(title, company) {
-      alert(`Application for "${title}" at ${company} submitted! In production, this would redirect to the company's application portal or collect your CV.`);
-      closeJobModal();
-    }
-
-    // Nav auth check
-    fetch('/api/me', { credentials: 'include' }).then(r => r.json()).then(d => {
-      if (d.user) {
-        document.getElementById('navActions').innerHTML = `
-          <a href="/dashboard" class="btn btn-outline">Dashboard</a>
-          <button onclick="fetch('/auth/logout',{method:'POST',credentials:'include'}).then(()=>location.href='/')" class="btn btn-primary btn-sm">Log Out</button>
-        `;
-      }
-    });
-
-    loadCareers();
-  </script>
-    <script src="/petroai-widget.js"></script>
+  }).catch(() => {});
+});
+</script>
+<script src="/petroai-widget.js"></script>
 </body>
 </html>

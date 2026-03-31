@@ -14,7 +14,6 @@
     </a>
     <ul class="navbar-nav">
       <li><a href="/learn">Learn</a></li>
-      <li><a href="/hazards">Hazards</a></li>
       <li><a href="/careers">Careers</a></li>
     </ul>
     <div class="navbar-actions">
@@ -30,7 +29,6 @@
       <ul class="sidebar-menu">
         <li><a href="/dashboard" class="active"><span class="menu-icon">📊</span> Dashboard</a></li>
         <li><a href="/learn"><span class="menu-icon">🎓</span> Learning Modules</a></li>
-        <li><a href="/hazards"><span class="menu-icon">⚠️</span> Hazard Reports</a></li>
         <li><a href="/careers"><span class="menu-icon">💼</span> Career Board</a></li>
       </ul>
       <div class="sidebar-section" style="margin-top:1rem;">Account</div>
@@ -66,13 +64,6 @@
           </div>
         </div>
         <div class="dash-stat">
-          <div class="dash-stat-icon ic-red">⚠️</div>
-          <div>
-            <h3 id="statHazards">—</h3>
-            <p>Safety Reports</p>
-          </div>
-        </div>
-        <div class="dash-stat">
           <div class="dash-stat-icon ic-green">💼</div>
           <div>
             <h3 id="statCareers">—</h3>
@@ -88,24 +79,9 @@
         </div>
         <div class="card-body" style="display:flex; gap:1rem; flex-wrap:wrap;">
           <a href="/learn" class="btn btn-primary">🎓 Start Learning</a>
-          <a href="/hazards" class="btn btn-outline" style="border-color:var(--border); color:var(--text);">⚠️ Report Hazard</a>
           <a href="/careers" class="btn btn-outline" style="border-color:var(--border); color:var(--text);">💼 Browse Jobs</a>
         </div>
       </div>
-
-      <!-- Recent Hazards -->
-      <div class="card">
-        <div class="card-header">
-          <h2>⚠️ Recent Safety Reports</h2>
-          <a href="/hazards" class="btn btn-sm btn-outline" style="border-color:var(--border); color:var(--text);">View All</a>
-        </div>
-        <div class="card-body" id="recentHazards">
-          <div class="loading"><div class="spinner"></div> Loading...</div>
-        </div>
-      </div>
-    </main>
-  </div>
-
   <script>
     let currentUser = null;
 
