@@ -556,7 +556,53 @@ function handleOverlayClick(e) {
 
 function applyNow() {
   if (!activeJob) return;
-  alert(`Application for "${activeJob.title}" at ${activeJob.company} received! In a live environment this would open the company's application portal or collect your CV and cover letter.`);
+  
+  // Company → Careers URL mapping
+  const careerUrls = {
+    'Tullow Oil Ghana': 'https://careers.tullowoil.com',
+    'Aker Energy': 'https://www.akerenergy.com/join-our-team/available-positions',
+    'Ghana National Petroleum Corporation (GNPC)': 'https://www.gnpcghana.com/careers/how-to-apply',
+    'Schlumberger (SLB)': 'https://careers.slb.com',
+    'Halliburton': 'https://jobs.halliburton.com',
+    'Kosmos Energy': 'https://www.kosmosenergy.com/join-the-team',
+    'Ghana Gas Company': 'https://www.ghanagas.com.gh/careers',
+    'Tema Oil Refinery (TOR)': 'https://torghana.gov.gh/careers/',
+    'Sapura Energy': 'https://sapuraenergy.com/career/',
+    'Wood Group': 'https://careers.woodgroup.com',
+    'Computer Modelling Group (CMG)': 'https://www.cmgl.ca/careers',
+    'Bureau Veritas': 'https://careers.bureauveritas.com',
+    'ERM Group': 'https://www.erm.com/erm-careers/',
+    'TotalEnergies EP Ghana': 'https://careers.totalenergies.com',
+    'ENI Exploration & Production': 'https://www.eni.com/en-IT/careers.html',
+    'Wild Well Control': 'https://www.wildwell.com/about/careers',
+    'Weatherford International': 'https://www.weatherford.com/careers/',
+    'bp': 'https://www.bp.com/en/global/corporate/careers.html',
+    'Baker Hughes': 'https://careers.bakerhughes.com',
+    'Petroleum Commission of Ghana': 'https://www.petroleumcommission.gov.gh/careers',
+    'Gaslink Ghana': 'https://www.gaslink.com.gh',
+  };
+
+  // Internship-specific routing for SLB and Halliburton
+  let careerUrl = careerUrls[activeJob.company];
+  
+  if (activeJob.type === 'internship') {
+    if (activeJob.company === 'Schlumberger (SLB)') {
+      careerUrl = 'https://careers.slb.com/early-careers/operations';
+    } else if (activeJob.company === 'Halliburton') {
+      careerUrl = 'https://jobs.halliburton.com/content/students-and-recent-graduates/';
+    }
+  }
+
+  // Show confirmation alert
+  alert(`🎉 Forwarding your application for "${activeJob.title}" at ${activeJob.company}.\n\nOpening careers page...`);
+  
+  // Open company careers page in new tab
+  if (careerUrl) {
+    window.open(careerUrl, '_blank');
+  } else {
+    alert(`⚠️ Career page not found for ${activeJob.company}. Please visit their website directly.`);
+  }
+  
   closeJobModal();
 }
 

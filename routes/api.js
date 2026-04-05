@@ -2,10 +2,9 @@ const express = require('express');
 const router = express.Router();
 
 // ─── Try-load models (gracefully handle no DB) ─────────────────────────────
-let Module, Hazard, Career, User;
+let Module, Career, User;
 try {
   Module = require('../models/module');
-  Hazard = require('../models/hazard');
   Career = require('../models/career');
   User   = require('../models/user');
 } catch(e) {}
@@ -18,12 +17,6 @@ const SEED_MODULES = [
   { _id:'m4', title:'Well Completion & Stimulation', slug:'well-completion', description:'Techniques for casing, cementing, perforation, hydraulic fracturing and acidizing.', category:'production', level:'intermediate', duration:75, enrolledCount:197, rating:4.6, tags:['completion','stimulation','production'] },
   { _id:'m5', title:'HSE in Petroleum Operations', slug:'hse-petroleum', description:'Health, Safety and Environment management in oil and gas — risk assessment, PPE, emergency response.', category:'safety', level:'beginner', duration:40, enrolledCount:412, rating:4.9, tags:['safety','HSE','environment'] },
   { _id:'m6', title:'Petroleum Data Analytics', slug:'data-analytics', description:'Using Python, Power BI and machine learning for production optimization and reservoir insights.', category:'digital', level:'intermediate', duration:80, enrolledCount:256, rating:4.8, tags:['data','analytics','python','ML'] },
-];
-
-const SEED_HAZARDS = [
-  { _id:'h1', title:'Gas Leak at Wellhead Valve', description:'Detected methane leak from the master valve packing gland on Well-14. Smell and sensor alarm triggered.', location:'Well Pad A, Block 7', severity:'high', category:'gas_leak', status:'investigating', reportedByName:'Kofi Mensah', createdAt: new Date(Date.now()-3600000) },
-  { _id:'h2', title:'Minor Oil Spill — Storage Area', description:'Approximately 20 litres of crude spilled near Tank T-03. Contained with absorbent boom.', location:'Tank Farm, Zone 2', severity:'medium', category:'spill', status:'resolved', reportedByName:'Ama Osei', createdAt: new Date(Date.now()-86400000) },
-  { _id:'h3', title:'Faulty Pressure Gauge on Separator', description:'Pressure gauge reading erratic — possible sensor failure on the production separator.', location:'Processing Plant, Unit 5', severity:'low', category:'equipment_failure', status:'reported', reportedByName:'Anonymous', createdAt: new Date(Date.now()-7200000) },
 ];
 
 const SEED_CAREERS = [
@@ -449,62 +442,6 @@ router.get('/modules', async (req, res) => {
   }
 });
 
-// ─── Hazards API ────────────────────────────────────────────────────────────
-router.get('/hazard', async (req, res) => {
-  try {
-    let hazards;
-    if (Hazard) {
-      hazards = await Hazard.find().sort({ createdAt: -1 }).lean();
-      if (!hazards.length) {
-        await Hazard.insertMany(SEED_HAZARDS);
-        hazards = await Hazard.find().sort({ createdAt: -1 }).lean();
-      }
-    } else {
-      hazards = SEED_HAZARDS;
-    }
-    res.json({ success: true, data: hazards });
-  } catch (err) {
-    res.json({ success: true, data: SEED_HAZARDS });
-  }
-});
-
-// Alias for /hazard (frontend uses /api/hazards)
-router.get('/hazards', async (req, res) => {
-  try {
-    let hazards;
-    if (Hazard) {
-      hazards = await Hazard.find().sort({ createdAt: -1 }).lean();
-      if (!hazards.length) {
-        await Hazard.insertMany(SEED_HAZARDS);
-        hazards = await Hazard.find().sort({ createdAt: -1 }).lean();
-      }
-    } else {
-      hazards = SEED_HAZARDS;
-    }
-    res.json({ success: true, data: hazards });
-  } catch (err) {
-    res.json({ success: true, data: SEED_HAZARDS });
-  }
-});
-
-router.post('/hazard', async (req, res) => {
-  try {
-    const { title, description, location, severity, category, reportedByName } = req.body;
-    if (Hazard) {
-      const hazard = await Hazard.create({
-        title, description, location, severity, category,
-        reportedBy: req.session.user?._id,
-        reportedByName: reportedByName || req.session.user?.fullName || 'Anonymous'
-      });
-      return res.json({ success: true, data: hazard });
-    }
-    // Fallback — just echo back
-    res.json({ success: true, data: { _id: 'new-' + Date.now(), title, description, location, severity, category, status: 'reported', reportedByName: reportedByName || 'Anonymous', createdAt: new Date() } });
-  } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
-  }
-});
-
 // ─── Careers API ────────────────────────────────────────────────────────────
 router.get('/career', async (req, res) => {
   try {
@@ -621,16 +558,14 @@ router.get('/stats', async (req, res) => {
     let users = 0, modules = 0, hazards = 0, careers = 0;
     if (User) users = await User.countDocuments();
     if (Module) modules = await Module.countDocuments();
-    if (Hazard) hazards = await Hazard.countDocuments();
     if (Career) careers = await Career.countDocuments();
     res.json({ success: true, data: {
       users: users || 1247,
-      modules: modules || 6,
-      hazards: hazards || 3,
-      careers: careers || 4
+      modules: modules || 30,
+      careers: careers || 13
     }});
   } catch (err) {
-    res.json({ success: true, data: { users: 1247, modules: 6, hazards: 3, careers: 4 } });
+    res.json({ success: true, data: { users: 1247, modules: 30, careers: 13 } });
   }
 });
 
