@@ -115,10 +115,10 @@ button { font-family:inherit; cursor:pointer; }
 
 .mobile-menu-toggle {
   display: none;
-  background: none;
+  background: var(--text) ;
   border: none;
-  color: var(--text);
-  width: 20px;
+  color: white ;
+  width: 0.7rem;
   padding:5px;
   cursor: pointer;
 }
