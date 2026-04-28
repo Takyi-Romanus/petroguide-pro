@@ -18,6 +18,17 @@
       }
     });
 
+    document.querySelector('.nav-toggle').addEventListener('click', () => {
+  document.querySelector('.sidebar').classList.toggle('active');
+});
+
+// Close sidebar when clicking a link
+document.querySelectorAll('.sidebar-menu a').forEach(link => {
+  link.addEventListener('click', () => {
+    document.querySelector('.sidebar').classList.remove('active');
+  });
+});
+
     async function logout() {
       await fetch('/auth/logout', { method: 'POST', credentials: 'include' });
       window.location.href = '/';
