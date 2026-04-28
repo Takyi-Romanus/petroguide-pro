@@ -116,7 +116,7 @@ button { font-family:inherit; cursor:pointer; }
 .mobile-menu-toggle {display: none;}
 
 @media (max-width: 768px) {
-            .btn btn-primary {
+            .btn.btn-primary {
                 display: none;
             }
             .mobile-menu-toggle {
@@ -768,31 +768,46 @@ textarea.form-control { min-height:100px; resize:vertical; }
 @media (max-width:768px) {
   .navbar-nav { display:none; }
   .nav-toggle { display:block; }
-
+  .navbar-actions .btn-primary {display: none;}
+  .navbar-actions .btn-outline {display: block;}
+   
   .sidebar { 
-    display:none;
     position:fixed;
     left:0;
     top:var(--nav-h);
     width:100%;
     height:calc(100vh - var(--nav-h));
     z-index:999;
+    overflow-y: auto;
     background:var(--card);
     box-shadow:var(--shadow-lg);
+    transition: transform 0.3s ease;
+    transform: translateX(-100%);
   }
-  .sidebar.active { display:block; }
+  .sidebar.active { display:block;transform:translateX(0); }
    
-  .hero-content { flex-direction:column; padding:3rem 1.5rem 2.5rem; gap:2.5rem; }
+  .hero-content { flex-direction:column; padding:3rem 1.5rem 2.5rem; gap:2rem; }
   .hero-visual  { flex:none; width:100%; }
   .hero-cards   { max-width:100%; }
+  .hero h1 {font-size: clamp(1.4rem, 3.5vw, 2.5rem);}
+  .hero-actions {width: 100%;flex-direction: column;}
+  .hero-actions .btn {width: 100%;}
+  .hero-visual {flex: 1;width: 100%;max-width: 100%;}
+  .hero-cards {grid-template-columns: 1fr;}
+  .hero-card:first-child {grid-column: span 1;}
 
-  .page-wrapper { flex-direction:column; }
+   .page-header { margin-bottom:1rem;}
+   .page-wrapper { flex-direction:column; }
   .main-content { padding:1.25rem 1rem; }
+   .section { padding:2.5rem 1rem;}
 
   .modules-grid, .careers-grid { grid-template-columns:1fr; }
+  .features-grid {grid-template-columns: 1fr;gap: 1rem;}
 
   .dash-stats { grid-template-columns:1fr 1fr; }
-
+   
+  .modal {max-width: 90vw;max-height: 85vh;margin: 1rem;}
+  .modal-body {padding: 1.25rem;}
   .info-grid { grid-template-columns:repeat(3,1fr); }
 
   .search-row { flex-direction:column; }
