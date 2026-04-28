@@ -116,7 +116,7 @@ button { font-family:inherit; cursor:pointer; }
 .mobile-menu-toggle {display: none;}
 
 @media (max-width: 768px) {
-            .get-started {
+            .btn btn-primary {
                 display: none;
             }
             .mobile-menu-toggle {
